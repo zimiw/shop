@@ -1,0 +1,25 @@
+{
+    "productNum": 5,
+    "keywords": [
+        {
+            "name": "奶油",
+            "url": "http://www.baidu.com"
+        },
+        {
+            "name": "面膜",
+            "url": "http://www.baidu.com"
+        },
+        {
+            "name": "花王",
+            "url": "http://www.baidu.com"
+        },
+        {
+            "name": "手表",
+            "url": "http://www.baidu.com"
+        },
+        {
+            "name": "奶",
+            "url": "http://www.baidu.com"
+        }
+    ]
+}

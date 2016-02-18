@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <title>洋流网</title>
+    <script src="../js/avalon.shim.sn.js"></script>
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="../js/data-interface.js"></script>
+</head>
+<body ms-controller="common">
+支付订单号:<input type="text" id="orderId" value="100000010">
+<br>
+支付渠道:<select id="chargeChannel">
+    <option value="upacp_pc" >银联</option>
+    <option value="wx_pub_qr" >微信二维码</option>
+</select>
+<br>
+请求模式:<select id="isAlwaysRequest">
+    <option value="true" >开</option>
+    <option value="false" >关</option>
+</select>
+<br>
+<button onclick="payStart()">支付发起</button>
+<script src="pingpp-pc.js"></script>
+<script>
+
+
+    function payStart() {
+        //window.open("http://localhost:8181/easyshop/test/pay.html?orderId="+$("#orderId").val()+"&channel="+$("#chargeChannel").val(), "_blank");
+        if ($("#chargeChannel").val() == "upacp_pc") {
+            window.open("/easyshop/test/pay.html?orderId="+$("#orderId").val()+"&channel="+$("#chargeChannel").val(), "_blank");
+        }else if ($("#chargeChannel").val() == "wx_pub_qr") {
+            window.open("/easyshop/test/pay2.html?orderId="+$("#orderId").val()+"&channel="+$("#chargeChannel").val(), "_blank");
+        }
+
+        listeningIsHasPaid();
+    }
+
+    function listeningIsHasPaid() {
+        $("#isAlwaysRequest").val() && (window.timer = window.setInterval(checkIsHasPaid,1000));
+    }
+
+    function checkIsHasPaid()
+    {
+        $.ajax({
+            type: "post",
+            //url: DI.baseURL + "/charge/manualCheckIsHasPaid?orderId="+$("#orderId").val(),
+            url: "/easyshop/charge/manualCheckIsHasPaid?orderId="+$("#orderId").val(),
+            dataType: "json",
+            success: function (data) {
+                if (data) {
+                    window.clearInterval(timer);
+                    alert("支付成功");
+                }
+                console.log(data);
+                //debugger;
+            },
+            error: function (err) {
+                //debugger;
+                console.log(err);
+                //alert("网络繁忙,请稍后重试");
+            }
+        });
+    }
+
+</script>
+</body>
+</html>

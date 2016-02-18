@@ -1,0 +1,635 @@
+ <!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <title>洋流网</title>
+
+        <link rel="stylesheet" href="../css/front/reset.css" />
+        <link rel="stylesheet" href="../css/front/personal-account.css" />
+    </head>
+    <body ms-controller="common">
+        <div ms-include-src="'../template/header.html'" data-include-replace="true" data-include-loaded="initHeader"></div>
+        <div ms-include-src="'../template/nav.html'" data-include-replace="true" data-include-loaded="initNav"></div>
+        
+        <div class="wrap" ms-controller="account">
+        	<p class="yl-breadcrum">首页 &gt; 个人中心</p>
+        	<div class="yl-personal">
+        		<div class="left-part">
+        			<ul class="menu-box">
+        				<li>
+                            <a class="title" href="personal_home.html">个人中心</a>
+                        </li>
+                        <li>
+                            <a class="menu order" href="personal_myOrder.html">我的订单</a>
+                        </li>
+                        <li>
+                            <a class="menu favorite" href="personal_myFavorite.html">我的收藏</a>
+                        </li>
+                        <li>
+                            <a class="menu addr" href="personal_addrManage.html">地址管理</a>
+                        </li>
+                        <li>
+                            <a class="menu account sel" href="personal_accountManage.html">账户管理</a>
+                        </li>
+        			</ul>
+        		</div>
+        		<div class="right-part">
+        			<div class="tab-box">
+        				<div class="tabs">
+        					<div class="tab" ms-class="sel: cnt==1">
+        						<a href="javascript:;" ms-click="tab(1)">个人资料 </span></a>
+        					</div>
+        					<div class="tab" ms-class="sel: cnt==2">
+        						<a href="javascript:;" ms-click="tab(2)">账户安全</a>
+        					</div>
+        				</div>
+        				<div class="cnts">
+        					<div class="cnt userinfo" ms-visible="cnt == 1">
+        						<form class="yl-form five" id="form_userinfo" enctype="multipart/form-data">
+	        						<div class="item">
+		        						<label>用户名：</label>
+		        						<p class="form-ctt" name="id">{{userinfo.id}}</p>
+		        					</div>
+		        					<div class="item">
+		        						<label>头像：</label>
+		        						<div class="form-cnt">
+		        						    <div class="yl-uploadimg">
+                                                <img src="../img/defaultHead.jpg">
+                                                <p class="as-btn">点击上传</p>
+                                                <input type="file" name="img">
+                                            </div>
+		        						</div>
+		        					</div>
+		        					<div class="item">
+		        						<label>真实姓名：</label>
+		        						<input class="ipt-form" ms-attr-value="userinfo.name" name="name" />
+		        					</div>
+		        					<div class="item">
+		        						<label>昵称：</label>
+		        						<input class="ipt-form" ms-attr-value="userinfo.nickname" name="nickname" />
+		        					</div>
+		        					<div class="item">
+		        						<label>性别：</label>
+		        						<div class="form-cnt sex-box">
+		        						    <input type="hidden" name="sex" ms-duplex="userinfo.sex" />
+			        						<input type="radio" name="sexchoose" ms-duplex-string="userinfo.sex" value="1" />男
+			        						<input type="radio" name="sexchoose" ms-duplex-string="userinfo.sex" value="2" />女
+		        						</div>
+		        					</div>
+		        					<div class="item">
+		        						<label>手机：</label>
+		        						<p class="form-ctt">{{userinfo.phone}}</p>
+		        						<!--<a class="btn-modify" href="javascript:;" ms-click="mPhoneFunc">修改</a>-->
+		        					</div>
+		        					<div class="item">
+		        						<label>邮箱：</label>
+		        						<p class="form-ctt">{{userinfo.email}}</p>
+		        						<!--<a class="btn-modify" href="javascript:;" ms-click="mEmailFunc">修改</a>-->
+		        					</div>
+		        					<div class="item">
+		        						<label>出生日期：</label>
+		        						<input class="ipt-form" ms-attr-value="userinfo.birth" name="birth" />
+		        					</div>
+		        					<div class="item">
+		        						<label>居住地址：</label>
+		        						<div class="form-cnt">
+    		        						<input class="ipt-form area" placeholder="省/直辖市" ms-duplex="addrInfo.province" name="province" />
+                                            <input class="ipt-form area" placeholder="城市/地区" ms-duplex="addrInfo.city" name="city" />
+                                            <input class="ipt-form area" placeholder="区/县" ms-duplex="addrInfo.district" name="district" />
+		        						</div>
+		        					</div>
+		        					<div class="item">
+		        						<label></label>
+		        						<input class="ipt-form long" placeholder="请输入详细地址" name="street" />
+		        					</div>
+	        					</form>
+	        					<div class="yl-form five">
+		        					<div class="item forBtn">
+		        						<label></label>
+		        						<button class="yl-btn middle" ms-click="submitUserinfo">保存</button>
+		        					</div>
+	        					</div>
+        					</div>
+        					<div class="cnt" ms-visible="cnt == 2">
+        						<div class="safe-info">
+        							<div class="level" ms-class="level{{safe.level}}"></div>
+        							<div class="tips">
+        								<p>建议您启用全部安全设置，以保障账户安全</p>
+        								<p class="last-login"><span>上次登录：</span>{{safe.city}}&nbsp;&nbsp;{{safe.lastdate}}</p>
+        								<p class="modify">非本人登录？<a href="javascript:;">修改密码</a></p>
+        							</div>
+        							<button class="yl-btn" ms-click="reload">重新评测</button>
+        						</div>
+        						<div class="safe-way">
+        							<div class="item">
+        								<p class="icon pwd">{{safe.passwordLevel}}</p>
+        								<p class="name">登录密码</p>
+        								<p class="intro">安全性高的密码可以使账户更安全，建议您定期更换密码</p>
+        								<div class="operate-box">
+        									<a class="link-normal" href="javascript:;" ms-click="mPwdFunc">修改</a>
+        								</div>
+        							</div>
+        							<div class="item">
+        								<p class="icon" ms-class="ok: safe.bindEmail == 1">{{safe.bindEmail | bind}}</p>
+        								<p class="name">绑定邮箱</p>
+        								<p class="intro">验证后可用于邮箱找回密码、接受订单提醒等，保障您的账户更加安全</p>
+        								<div class="operate-box" ms-visible="safe.bindEmail == 0">
+        									<button class="yl-btn-normal" ms-click="bEmailFunc(1)">立即设置</button>
+        								</div>
+        								<div class="operate-box" ms-visible="safe.bindEmail == 1">
+                                            <a class="link-normal" href="javascript:;" ms-click="bEmailFunc(2)">绑定解除</a>
+                                            <a class="link-normal" href="javascript:;" ms-click="mEmailFunc">修改</a>
+                                        </div>
+        							</div>
+        							<div class="item">
+        								<p class="icon ok">{{safe.bindPhone | bind}}</p>
+        								<p class="name">绑定手机</p>
+        								<p class="intro">绑定后可用于手机找回密码、接收手机动态验证码等，是您的账户更加安全</p>
+        								<div class="operate-box">
+        									<a class="link-normal" href="javascript:;" ms-click="mPhoneFunc">修改</a>
+        								</div>
+        							</div>
+        						</div>
+        					</div>
+        				</div>
+        			</div>
+        		</div>
+        	</div>
+        	<!-- 修改手机 -->
+            <div class="popup" ms-visible="mPhone">
+                <div class="popup-bg"></div>
+                <div class="popup-cnt">
+                    <p class="title">修改手机号</p>
+                    <a class="close" href="javascript:;" ms-click="popupClose"></a>
+                    <div class="cnt" ms-visible="mPhoneStep == 1">
+                        <div class="yl-form six">
+                            <div class="item">
+                                <label>手机号码：</label>
+                                <div class="form-cnt">
+                                    <span>{{userinfo.phone}}</span>
+                                    <button class="btn-code" ms-click="sendPhoneMessage">获取短信验证码</button>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <label>短信验证码：</label>
+                                <input class="ipt" ms-duplex="mPhoneCode"></input>
+                            </div>
+                            <div class="item forBtn">
+                                <label></label>
+                                <button class="yl-btn middle" ms-click="mPhoneNext">下一步</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cnt" ms-visible="mPhoneStep == 2">
+                        <div class="yl-form six">
+                            <div class="item">
+                                <label>手机号码：</label>
+                                <div class="form-cnt">
+                                    <input class="ipt short" ms-duplex="mPhoneNew" />
+                                    <button class="btn-code" ms-click="sendPhoneMessage(mPhoneNew)">获取短信验证码</button>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <label>短信验证码：</label>
+                                <input class="ipt" ms-duplex="mPhoneCode"></input>
+                            </div>
+                            <div class="item forBtn">
+                                <label></label>
+                                <button class="yl-btn middle" ms-click="mPhoneSubmit">提交</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        	<!-- 修改邮箱 -->
+            <div class="popup" ms-visible="mEmail">
+                <div class="popup-bg"></div>
+                <div class="popup-cnt">
+                    <p class="title">修改邮箱</p>
+                    <a class="close" href="javascript:;" ms-click="popupClose"></a>
+                    <div class="cnt" ms-visible="mEmailStep == 1">
+                        <div class="yl-form six">
+                            <div class="item">
+                                <label>邮箱：</label>
+                                <div class="form-cnt">
+                                    <span>{{userinfo.email}}</span>
+                                    <button class="btn-code" ms-click="sendEmailMessage">获取邮箱校验码</button>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <label>邮箱校验码：</label>
+                                <input class="ipt" ms-duplex="mEmailCode"></input>
+                            </div>
+                            <div class="item forBtn">
+                                <label></label>
+                                <button class="yl-btn middle" ms-click="mEmailNext">下一步</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cnt" ms-visible="mEmailStep == 2">
+                        <div class="yl-form six">
+                            <div class="item">
+                                <label>新邮箱：</label>
+                                <div class="form-cnt">
+                                    <input class="ipt short" ms-duplex="mEmailNew" />
+                                    <button class="btn-code" ms-click="sendEmailMessage(mPhoneNew)">获取邮箱校验码</button>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <label>邮箱校验码：</label>
+                                <input class="ipt" ms-duplex="mEmailCode"></input>
+                            </div>
+                            <div class="item forBtn">
+                                <label></label>
+                                <button class="yl-btn middle" ms-click="mEmailSubmit">提交</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 绑定邮箱 -->
+            <div class="popup" ms-visible="bEmail">
+                <div class="popup-bg"></div>
+                <div class="popup-cnt">
+                    <p class="title">修改邮箱</p>
+                    <a class="close" href="javascript:;" ms-click="popupClose"></a>
+                    <div class="cnt">
+                        <div class="yl-form six">
+                            <div class="item">
+                                <label>邮箱：</label>
+                                <div class="form-cnt">
+                                    <span ms-visible="bEmailStatus == 2">{{userinfo.email}}</span>
+                                    <input class="ipt short" ms-duplex="mEmailNew" ms-visible="bEmailStatus == 1"></input>
+                                    <button class="btn-code" ms-click="sendEmailMessage">获取邮箱校验码</button>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <label>邮箱校验码：</label>
+                                <input class="ipt" ms-duplex="mEmailCode"></input>
+                            </div>
+                            <div class="item forBtn">
+                                <label></label>
+                                <button class="yl-btn middle" ms-click="bEmailSubmit">完成</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 修改密码 -->
+            <div class="popup" ms-visible="mPwd">
+                <div class="popup-bg"></div>
+                <div class="popup-cnt">
+                    <p class="title">修改密码</p>
+                    <a class="close" href="javascript:;" ms-click="popupClose"></a>
+                    <div class="cnt" ms-visible="mPhoneStep == 1">
+                        <div class="yl-form six">
+                            <div class="item">
+                                <label>手机号码：</label>
+                                <div class="form-cnt">
+                                    <span>{{userinfo.phone}}</span>
+                                    <button class="btn-code" ms-click="sendPhoneMessage">获取短信验证码</button>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <label>短信验证码：</label>
+                                <input class="ipt" ms-duplex="mPhoneCode"></input>
+                            </div>
+                            <div class="item forBtn">
+                                <label></label>
+                                <button class="yl-btn middle" ms-click="mPhoneNext">下一步</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cnt" ms-visible="mPhoneStep == 2">
+                        <div class="yl-form five">
+                            <div class="item">
+                                <label>登录名：</label>
+                                <p class="form-ctt">{{userinfo.id}}</p>
+                            </div>
+                            <div class="item">
+                                <label>新密码：</label>
+                                <div class="form-cnt">
+                                    <input class="ipt" ms-duplex="mPwdNew"></input>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <label>确认密码：</label>
+                                <input class="ipt" ms-duplex="mPwdNew2"></input>
+                            </div>
+                            <div class="item forBtn">
+                                <label></label>
+                                <button class="yl-btn middle" ms-click="mPwdSubmit">提交</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 成功失败 -->
+            <div class="popup status" ms-visible="popupSuccess">
+                <div class="popup-bg"></div>
+                <div class="popup-cnt">
+                    <p class="title">{{popupTitle}}</p>
+                    <a class="close" href="javascript:;" ms-click="popupClose"></a>
+                    <div class="cnt">
+                        <p class="icon" ms-class="fail: !popupSuccessStatus">{{popupSuccessStatus | popupSuccessStatus}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div ms-include-src="'../template/footer.html'" data-include-replace="true"></div>
+
+        <script src="../js/avalon.shim.sn.js"></script>
+        <script src="../js/jquery.min.js"></script>
+        <script src="../js/jquery.form.js"></script>
+        <script src="../js/main.js"></script>
+        <script src="../js/data-interface.js"></script>
+        <script>
+            $(function(){
+                var accountCtrl = avalon.define({
+                    $id: "account",
+                    cnt: 1,
+                    userinfo: {
+                        id: "",
+                    	avator: "img/demo_detail-11.png",
+                    	name: "",
+                    	nickName: "",
+                    	sex: 1,
+                    	phone: "",
+                    	email: "",
+                    	birth: "",
+                    	province: "",
+                    	address: ""
+                    },
+                    safe: {
+                        level: "",
+                        passwordLevel: "低",
+                    	city: "",
+                    	lastdate: "",
+                    	bindEmail: 0,
+                    	bindPhone: 0
+                    },
+                    addrInfo: {
+                        province: "",
+                        city: "",
+                        district: ""
+                    },
+                    tab: function(idx){
+                    	accountCtrl.cnt = idx;
+                    },
+                    reload: function(){
+                        getFullPersonlInfoById();
+                    },
+                    submitUserinfo: function(){
+                        $("#form_userinfo").ajaxSubmit({
+                            type: "post",
+                            url: DI.saveFullPersonlInfoById,
+                            success: function(data){
+                                alert(data.status);
+                            },
+                            error: function(err){
+                                console.log(err);
+                            }
+                        });
+                    },
+                    mPhone: false,
+                    mPhoneStep: 1,
+                    mPhoneCode: "",
+                    mPhoneNew: "",
+                    mPhoneFunc: function(){
+                        accountCtrl.mPhone = true;
+                    },
+                    sendPhoneMessage: function(val){
+                        var phoneNum = val | accountCtrl.userinfo.phone;
+                        $.ajax({
+                            type: "post",
+                            url: DI.sendPhoneMessage,
+                            data: {phone: phoneNum},
+                            dataType: "json",
+                            success: function(data){
+                                alert(data.status);
+                            }
+                        });
+                    },
+                    mPhoneNext: function(){
+                        $.ajax({
+                            type: "post",
+                            url: DI.validateSendPhoneMessage,
+                            data: {
+                                phone: accountCtrl.userinfo.phone,
+                                randomNumStr: accountCtrl.mPhoneCode
+                            },
+                            dataType: "json",
+                            success: function(data){
+                                if(data.status == "success"){
+                                    accountCtrl.mPhoneStep == 2;
+                                }else{
+                                    alert(data.status);
+                                }
+                            }
+                        });
+                    },
+                    mPhoneSubmit: function(){
+                        $.ajax({
+                            type: "post",
+                            url: DI.validateSendPhoneMessage,
+                            data: {
+                                phone: accountCtrl.userinfo.phone,
+                                randomNumStr: accountCtrl.mPhoneCode
+                            },
+                            dataType: "json",
+                            success: function(data){
+                                if(data.status == "success"){
+                                    $.ajax({
+                                        type: "post",
+                                        url: DI.updatePhone,
+                                        data: {
+                                            newPhone: accountCtrl.mPhoneNew
+                                        },
+                                        dataType: "json",
+                                        success: function(data){
+                                            accountCtrl.popupTitle = "修改手机号";
+                                            accountCtrl.popupSuccess = true;
+                                            accountCtrl.popupSuccessStatus = data.status == "success";
+                                        }
+                                    });
+                                }else{
+                                    alert(data.status);
+                                }
+                            }
+                        });
+                    },
+                    mEmail: false,
+                    mEmailStep: 1,
+                    mEmailCode: "",
+                    mEmailNew: "",
+                    mEmailFunc: function(){
+                        accountCtrl.mEmail = true;
+                    },
+                    sendEmailMessage: function(val){
+                        var phoneNum = val | accountCtrl.userinfo.email;
+                        $.ajax({
+                            type: "post",
+                            url: DI.sendEmailMessage,
+                            data: {email: phoneNum},
+                            dataType: "json",
+                            success: function(data){
+                                alert(data.status);
+                            }
+                        });
+                    },
+                    mEmailNext: function(){
+                        $.ajax({
+                            type: "post",
+                            url: DI.validateSendEmailMessage,
+                            data: {
+                                email: accountCtrl.userinfo.email,
+                                randomNumStr: accountCtrl.mEmailCode
+                            },
+                            dataType: "json",
+                            success: function(data){
+                                if(data.status == "success"){
+                                    accountCtrl.mEmailStep == 2;
+                                }else{
+                                    alert(data.status);
+                                }
+                            }
+                        });
+                    },
+                    mEmailSubmit: function(){
+                        $.ajax({
+                            type: "post",
+                            url: DI.validateSendEmailMessage,
+                            data: {
+                                email: accountCtrl.userinfo.email,
+                                randomNumStr: accountCtrl.mEmailCode
+                            },
+                            dataType: "json",
+                            success: function(data){
+                                if(data.status == "success"){
+                                    $.ajax({
+                                        type: "post",
+                                        url: DI.updateEmail,
+                                        data: {
+                                            neweEmail: accountCtrl.mEmailNew
+                                        },
+                                        dataType: "json",
+                                        success: function(data){
+                                            accountCtrl.popupTitle = "修改邮箱";
+                                            accountCtrl.popupSuccess = true;
+                                            accountCtrl.popupSuccessStatus = data.status == "success";
+                                        }
+                                    });
+                                }else{
+                                    alert(data.status);
+                                }
+                            }
+                        });
+                    },
+                    mPwd: false,
+                    mPwdFunc: function(){
+                        accountCtrl.mPwd = true;
+                        accountCtrl.mPhoneStep = 1;
+                    },
+                    mPwdNew: "",
+                    mPwdNew2: "",
+                    mPwdSubmit: function(){
+                        if(accountCtrl.mPwdNew == accountCtrl.mPwdNew2){
+                            $.ajax({
+                                type: "post",
+                                url: DI.updatePassword,
+                                data: {
+                                    newPassword: accountCtrl.mPwdNew
+                                },
+                                dataType: "json",
+                                success: function(data){
+                                    accountCtrl.popupTitle = "修改邮箱";
+                                    accountCtrl.popupSuccess = true;
+                                    accountCtrl.popupSuccessStatus = data.status == "success";
+                                }
+                            });
+                        }else{
+                            alert("两次密码输入不正确");
+                        }
+                    },
+                    popupSuccess: false,
+                    popupTitle: "",
+                    popupSuccessStatus: false,
+                    popupClose: function(){
+                        accountCtrl.mPhone = accountCtrl.mEmail = accountCtrl.bEmail = accountCtrl.mPwd = accountCtrl.popupSuccess = false;
+                    },
+                    bEmail: false,
+                    bEmailFunc: function(type){
+                        accountCtrl.bEmailStatus == type;
+                        accountCtrl.bEmail = true;
+                    },
+                    bEmailStatus: 1,
+                    bEmailSubmit: function(){
+                        if(accountCtrl.bEmailStatus == 1){
+                            $.ajax({
+                                type: "post",
+                                url: DI.updateEmail,
+                                data: {
+                                    neweEmail: accountCtrl.mEmailNew
+                                },
+                                dataType: "json",
+                                success: function(data){
+                                    accountCtrl.popupTitle = "修改邮箱";
+                                    accountCtrl.popupSuccess = true;
+                                    accountCtrl.popupSuccessStatus = data.status == "success";
+                                }
+                            });
+                        }else{
+                            $.ajax({
+                                type: "post",
+                                url: DI.unbindEmail,
+                                data: {
+                                    email: accountCtrl.userinfo.email,
+                                    randomNumStr: accountCtrl.mEmailCode
+                                },
+                                dataType: "json",
+                                success: function(data){
+                                    accountCtrl.popupTitle = "修改邮箱";
+                                    accountCtrl.popupSuccess = true;
+                                    accountCtrl.popupSuccessStatus = data.status == "success";
+                                }
+                            });
+                        }
+                    }
+                });
+
+                avalon.scan();
+                
+                getFullPersonlInfoById();
+                
+                function getFullPersonlInfoById(){
+                    $.ajax({
+                        type: "post",
+                        url: DI.getFullPersonlInfoById,
+                        dataType: "json",
+                        success: function(data){
+                            accountCtrl.userinfo.id = data.id;
+                            accountCtrl.userinfo.name = data.name;
+                            accountCtrl.userinfo.sex = ((data.sex===0)?1:data.sex);//默认为男
+                            accountCtrl.userinfo.phone = data.phone;
+                            accountCtrl.userinfo.email = data.email;
+                            
+                            if(data.safe == "低"){
+                                accountCtrl.safe.level = 1;
+                            }else if(data.safe == "中"){
+                                accountCtrl.safe.level = 2;
+                            }else if(data.safe == "高"){
+                                accountCtrl.safe.level = 3;
+                            }
+                            accountCtrl.safe.passwordLevel = data.passwordLevel;
+                            accountCtrl.safe.bindEmail = data.bindEmail;
+                            accountCtrl.safe.bindPhone = data.bindPhone;
+                        }
+                    });
+                }
+                
+                Buylll.uploadPreview();
+            });
+        </script>
+    </body>
+</html>

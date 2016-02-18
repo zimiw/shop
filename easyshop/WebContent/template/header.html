@@ -1,0 +1,33 @@
+<div class="header">
+    <div class="login-info">
+        <div class="wrap">
+            <p>洋流欢迎你！<a href="login.html" ms-visible="!header.logged">登录|注册</a><span ms-visible="header.logged">{{header.uname}}</span><a href="javascript:;" ms-click="header.quit" ms-visible="header.logged">注销</a></p>
+            <div class="btns" ms-visible="header.logged">
+                <a href="personal_myOrder.html">我的订单</a>
+                <span>/</span>
+                <a href="personal_home.html">个人中心</a>
+                <span>/</span>
+                <a href="help.html">帮助中心</a>
+            </div>
+        </div>
+    </div>
+    <div class="buy-info">
+        <div class="wrap">
+            <a class="logo" href="home.html">
+                <img src="../img/logo.png" />
+            </a>
+            <a class="shop-cart" href="balance_shoppingCart.html">
+                我的购物车<span>{{header.productNum}}</span>
+            </a>
+            <div class="search-box">
+                <div class="container">
+                    <input type="text" ms-duplex="header.keyword" />
+                    <button type="button" ms-click="header.search">搜索</button>
+                </div>
+                <p class="keywords">
+                    <a ms-attr-href="list.html?name={{el.name}}&brand=false" ms-repeat="header.keywords">{{el.name}}</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

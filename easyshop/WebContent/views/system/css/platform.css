@@ -1,0 +1,605 @@
+body {
+	padding: 30px;
+}
+/* 一级标题 */
+.u-title {
+    margin-bottom: 25px;
+    padding-left: 8px;
+    line-height: 18px;        
+    border-left: 3px solid #ff720d;
+    font-size: 18px;
+    color: #999;
+}
+/* 二级标题 */
+.u-title-sub {
+    margin-bottom: 25px;
+    font-size: 16px;
+    color: #999;
+}
+/* tab标签 */
+.u-tabs .tab-box {
+    height: 25px;
+    margin-bottom: 25px;
+    border-bottom: 1px solid #e1e3e6;
+    font-size: 0;
+}
+.u-tabs .tab-box .tab {
+    display: inline-block;
+    vertical-align: top;
+    min-width: 74px;
+    height: 100%;
+    margin-top: 1px;
+    padding: 0 15px;
+    line-height: 12px;
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+    cursor: pointer;
+}
+.u-tabs .tab-box .tab.sel {
+    color: #333;
+    border-bottom: 3px solid #ff720d;
+}
+.u-tabs .cnt-box .cnt {
+    display: none;
+}
+.u-tabs .cnt-box .cnt:first-child {
+    display: block;
+}
+/* 表单 */
+.u-form .column {
+    margin-bottom: 15px;
+    font-size: 0;
+}
+.u-form .column label,
+.u-form .column .u-ipt,
+.u-form .column .btn-box,
+.u-form .column .cnt-box,
+.u-form .column .err-box {
+    display: inline-block;
+    vertical-align: top;
+}
+.u-form .column label {
+    width: 5em;
+    height: 26px;
+    margin-right: 5px;
+    line-height: 26px;
+    font-size: 14px;
+    text-align: right;
+}
+.u-form .column label span {
+    margin-right: 7px;
+    color: #ff6666;
+}
+.u-form .column .err-box {
+    margin-left: 10px;
+    height: 26px;
+}
+.u-form .column .cnt-box.word {
+    height: 26px;
+    font-size: 14px;
+    line-height: 26px;
+}
+.u-form .column .cnt-box .split {
+	margin: 0 9px;
+	font-size: 14px;
+	line-height: 24px;
+}
+.u-form .column .btn-box .u-btn {
+	margin-right: 10px;
+}
+.u-form .column .u-btn.small {
+	margin-left: 10px;
+}
+.u-form .column .cnt-box.radio-x .u-radio {
+	display: inline-block;
+	margin-right: 30px;
+}
+.u-form .column .cnt-box.district-box select {
+	margin-right: 5px;
+	margin-bottom: 5px;
+}
+/* label的字符个数 默认是5个字符 */
+.u-form.six .column label {
+	width: 6em;
+}
+.u-form.seven .column label {
+	width: 7em;
+}
+/* 报错信息 */
+.u-error {
+	padding-left: 20px;
+    line-height: 26px;
+    font-size: 14px;
+    color: #333;
+    background: url(images/platform_icons.png) no-repeat 0 0;
+}
+/*input ipt样式*/
+.u-ipt {
+    width: 250px;
+    height: 26px;
+    line-height: 26px;
+    padding-left: 6px;
+    border: 1px solid #abafb8;
+    background-color: #fff;
+}
+.u-ipt.dis {
+    border-color: #d4d9e4;
+    background-color: #f2f2f2;
+    color: #999;
+}
+/*日期控件样式 YYYY-MM-DD hh:mm:ss*/
+.ipt-timepicker {
+    width: 185px;
+    background: url(images/platform_icons.png) no-repeat 159px -26px;
+}
+/*YYYY-MM-DD*/
+.ipt-datepicker {
+    width: 130px;
+    background: url(images/platform_icons.png) no-repeat 104px -26px;
+}
+/* 地区 */
+.ipt-district {
+	width: 395px;
+}
+/* textarea */
+.u-textarea {
+	width: 290px;
+	height: 70px;
+	padding: 5px;
+	border: 1px solid #abafb8;
+	font-size: 14px;
+}
+/*搜索框*/
+.column .cnt-box{
+    position: relative;
+}
+.column .u-ipt.find {
+    padding-right: 30px;
+}
+.column .cnt-box .find-icon {
+    position: absolute;
+    top: 1px;
+    right: 1px;
+    width: 24px;
+    height: 24px;
+    background: url(images/platform_icons.png) no-repeat 0px -102px;
+}
+/*button u-btn  这是普通大小的button 背景绿色，常见的【确定】【查询】*/
+.u-btn {
+    min-width: 88px;
+    height: 32px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    background-color: #15b374;
+    color: #fff;
+    line-height: 32px;
+    white-space: nowrap;
+}
+.u-btn:hover {
+    background-color: #4cbf91;
+}
+.u-btn.dis {
+    background-color: #d4d7d9;
+    cursor: default;
+}
+/*这个是普通大小的button 但是背景偏灰色，常见的【返回】*/
+.u-btn.gray {
+    background-color: #e1e3e6;
+    color: #333;
+}
+.u-btn.gray:hover {
+    background-color: #daeaf2;
+}
+.u-btn.orange {
+    background-color: #ff661a;
+}
+.u-btn.orange:hover {
+    background-color: #ff7733;
+}
+/*小号的查询按钮*/
+.u-btn.small {
+    min-width: 64px;
+    height: 26px;
+    padding: 0 15px;
+    line-height: 26px;
+}
+/* radio */
+.u-radio {
+	font-size: 0;
+}
+.u-radio input,
+.u-radio span {
+	display: inline-block;
+	vertical-align: middle;
+}
+.u-radio span {
+	margin-left: 5px;
+	font-size: 14px;
+	line-height: 26px;
+}
+/* 下拉框 */
+select {
+    width: 250px;
+    height: 26px;
+    padding-left: 3px;
+    border: 1px solid #abafb8;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background: url(images/platform_icons.png) no-repeat 224px -50px;
+}
+select.district {
+	width: 95px;
+	background-position: 69px -50px;
+}
+
+/* 弹框 */
+.u-popup {
+	display: none;
+    position: fixed;
+    z-index: 9000;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+}
+.u-popup .bg {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    filter: alpha(opacity = 70);
+    -moz-opacity: 0.7;
+    -khtml-opacity: 0.7;
+    opacity: 0.7;
+    background-color: #000;
+}
+.u-popup .asTable-box {
+    width: 100%;
+    height: 100%;
+    padding: 20px 0;
+    overflow-y: auto;
+}
+.u-popup .asTable {
+    display: table;
+    width: 100%;
+    height: 100%;
+}
+.u-popup .asTable .asTableCell {
+    display: table-cell;
+    vertical-align: middle;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+}
+.u-popup .asTableCell .asCell {
+    display: inline-block;
+    position: relative;
+    padding-bottom: 35px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    background-color: #fff;
+}
+.u-popup .asTableCell .asCell .close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 30px;
+    height: 30px;
+    line-height: 25px;
+    font-weight: bold;
+    color: #808080;
+    font-size: 22px;
+    text-align: center;
+}
+.u-popup .asTableCell .asCell .close:hover {
+    color: #ff4c4c;
+}
+.u-popup .asTableCell .asCell .close:active {
+    color: #e62e2e;
+}
+.u-popup .asTableCell .asCell .title {
+    color: #4c997f;
+    text-align: left;
+    font-size: 14px;
+    font-weight: bold;
+    border-bottom: 1px solid #e5e5e5;
+}
+.u-popup .asTableCell .asCell .btn-box {
+    font-size: 0;
+}
+.u-popup .asTableCell .asCell .btn-box .u-btn {
+    margin: 0 5px;
+}
+.u-popup .asTableCell .dialog {
+    min-width: 465px;
+	padding: 0 0 30px 40px;
+}
+.u-popup .asTableCell .dialog .title {
+    height: 48px;
+    line-height: 71px;
+}
+.u-popup .asTableCell .dialog .container {
+    max-height: 550px;
+    padding-top: 15px;
+    padding-right: 55px;
+    text-align: left;
+    overflow-y: auto;
+}
+.u-popup .asTableCell .alert {
+    width: 388px;
+    padding: 0 24px 30px;
+}
+.u-popup .asTableCell .alert .title {
+    height: 38px;
+    line-height: 52px;
+}
+.u-popup .asTableCell .alert .container {
+    min-height: 86px;
+    padding-top: 37px;
+    font-size: 0;
+}
+.u-popup .asTableCell .alert .container .warning,
+.u-popup .asTableCell .alert .container p {
+    display: inline-block;
+    vertical-align: top;
+}
+.u-popup .asTableCell .alert .container .warning {
+	width: 26px;
+	height: 26px;
+	background: url(images/platform_icons.png) no-repeat 0 -75px;
+}
+.u-popup .asTableCell .alert .container p {
+	margin-left: 12px;
+	font-size: 18px;
+	text-align: left;
+}
+
+/* 顶部提示信息 */
+.u-headTip{
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 30px;
+    text-align: center;
+}
+.u-headTip p {
+	display: inline-block;
+	min-width: 310px;
+	padding: 0 20px;
+	line-height: 30px;
+    color: #fff;
+    font-size: 14px;
+    background-color: #b54449;
+}
+/* 双行表单 */
+.u-multiform .column {
+    margin-bottom: 15px;
+    font-size: 0;
+}
+.u-multiform .column .cell {
+	display: inline-block;
+	margin-right: 70px;
+}
+.u-multiform .column label,
+.u-multiform .column .u-ipt,
+.u-multiform .column select,
+.u-multiform .column .cnt-box,
+.u-multiform .column .btn-box,
+.u-multiform .column .err-box {
+    display: inline-block;
+    vertical-align: top;
+}
+.u-multiform .column label {
+    width: 5em;
+    height: 26px;
+    margin-right: 5px;
+    line-height: 26px;
+    font-size: 14px;
+    text-align: right;
+}
+.u-multiform .column label span {
+    margin-right: 7px;
+    color: #ff6666;
+}
+.u-multiform .column .cnt-box.radio-x .u-radio {
+	display: inline-block;
+	margin-right: 30px;
+}
+.u-multiform .column .cnt-box .split {
+    margin: 0 9px;
+    font-size: 14px;
+    line-height: 24px;
+}
+.u-multiform .column .err-box {
+    margin-left: 10px;
+    height: 26px;
+}
+/* label的字符个数 默认是5个字符 */
+.u-multiform.six .column label {
+	width: 6em;
+}
+.u-multiform.seven .column label {
+	width: 7em;
+}
+/* 数据展示 */
+.u-datainfo .column {
+    margin-bottom: 20px;
+    font-size: 0;
+}
+.u-datainfo .column .cell {
+	display: inline-block;
+}
+.u-datainfo .column .cell:first-child {
+	margin-right: 90px;
+}
+.u-datainfo .column label,
+.u-datainfo .column .cnt-box {
+    display: inline-block;
+    vertical-align: top;
+    font-size: 14px;
+    line-height: 1;
+}
+.u-datainfo .column label {
+    width: 5em;
+    margin-right: 10px;
+    text-align: right;
+    color: #666;
+}
+.u-datainfo .column .cnt-box {
+	width: 300px;
+	text-align: left;
+	color: #333;
+}
+.u-datainfo .info-title {
+	padding: 10px 0 15px;
+	font-weight: bold;
+	line-height: 1;
+}
+/* label的字符个数 默认是5个字符 */
+.u-datainfo.six .column label {
+	width: 6em;
+}
+.u-datainfo.seven .column label {
+	width: 7em;
+}
+.u-datainfo.eight .column label {
+	width: 8em;
+}
+
+
+/* 根据文字长度不一样 需要手动添加lable的长度！！！ */
+/*.u-multiform .column .cell:first-child label {
+	width: 5em;
+}*/
+/* 根据文字长度不一样 需要手动添加lable的长度！！！ */
+/*.u-datainfo .column .cell:first-child label {
+	width: 6em;
+}*/
+
+.u-top-btns {
+    margin-bottom: 10px;
+    font-size: 0;
+    text-align: right;
+}
+.u-top-btns button {
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 10px;
+}
+.u-bottom-btns {
+    margin-top: 20px;
+    font-size: 0;
+}
+.u-bottom-btns button {
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 10px;
+}
+
+.u-upload-img {
+    position: relative;
+    display: inline-block;
+    vertical-align: bottom;
+    width: 190px;
+    height: 110px;
+    border: 1px solid #abafb8;
+}
+.u-upload-img img {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.u-upload-img .as-btn {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    color: #fff;
+    font-size: 14px;
+    background-color: rgba(0,0,0,.6);
+    text-align: center;
+}
+.u-upload-img input {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 30px;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.u-step {
+    font-size: 18px;
+    padding: 10px 0;
+}
+
+.u-singleinfo {
+    padding: 10px 5px;
+    margin-bottom: 10px;
+    background-color: #E6E6E6;
+}
+
+.u-uploadImg .img-box img {
+    display: block;
+    width: auto;
+    height: 100px;
+    margin-bottom: 10px;
+}
+.u-uploadImg .info-box {
+    display: none;
+}
+.u-uploadImg .info-box p {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 10px;
+    padding: 5px 0;
+    font-size: 14px;
+}
+.u-uploadImg .btn-box button {
+    vertical-align: top;
+}
+
+.datagrid-cell, .datagrid-cell-group, .datagrid-header-rownumber, .datagrid-cell-rownumber {
+    height: auto;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    line-height: 1;
+}
+
+.btn-operate {
+    display: block;
+    padding: 5px 0;
+    color: #0069D6;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

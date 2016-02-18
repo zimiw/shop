@@ -1,0 +1,110 @@
+.panel-body {
+    font-size: 14px;
+}
+.layout-panel-center .panel-body {
+    background-color: #fff;
+    overflow:hidden;
+}
+.textbox .textbox-text {
+    font-size: 14px;
+}
+.datagrid-header-row {
+    height: 30px;
+}
+.datagrid-row {
+    height: 50px;
+}
+.datebox-button{
+    height:auto;
+}
+.layout-panel-west .panel-header{
+    background-color:#222426;
+    padding:12px 15px 12px 30px;
+}
+.layout-panel-west .panel-header .panel-title{
+    font-size:14px;
+    color:#737980;
+}
+.layout-expand.layout-expand-west .panel-tool{
+    right:5px;
+}
+.layout-panel-west .panel-header.panel-header-noborder .panel-tool{
+    right:auto;
+    left:8px;
+}
+.pagination-info {
+    float: left;
+    margin-left: 20px;
+}
+
+
+
+
+.g-north {
+    height: 60px;
+    background-color: #f4f4f4;
+}
+.logo{
+    float:left;
+    font-size:21px;
+    padding:10px 15px;
+    line-height:40px;
+}
+.login-info{
+    float:right;
+    padding:15px 20px;
+    font-size:14px;
+    line-height:30px;
+}
+.login-info em{
+    font-style:normal;
+    font-weight:normal;
+    margin:0 20px;
+    color:#999;
+}
+.login-info a{
+    color:#333;
+}
+.login-info a:hover {
+    color: #ff4c4c;
+}
+.login-info a:active {
+    color: #d91616;
+}
+.g-west {
+    width: 200px;
+    background-color: #2b2e33;
+}
+.iframeBox {
+    width: 100%;
+    height: 100%;
+}
+.iframeBox iframe {
+    width: 100%;
+    height: 100%;
+}
+/* menus */
+.m-menu2{
+    background:#212326 url(images/icons.png) no-repeat 15px -270px;
+    padding:12px 15px;
+}
+.m-menu2 .u-nav{
+    display:block;
+    width:100%;
+    height: 39px;
+    padding-left: 30px;
+    line-height: 39px;
+    background:url(images/navIcons.png) no-repeat 0 0;
+    font-size:14px;
+    color:#b8c2cc;
+}
+.m-menu2 .u-nav:last-child{
+    background:url(images/navIcons.png) no-repeat 0 -80px;
+}
+.m-menu2 .u-nav.sel{
+    color:#36aa71;
+    background:url(images/navIcons.png) no-repeat 0 -40px;
+}
+.m-menu2 .u-nav.sel:last-child{
+    background:url(images/navIcons.png) no-repeat 0 -120px;
+}

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>用户管理</title>
+		<link rel="stylesheet" href="../../css/reset.css" />
+		<link rel="stylesheet" href="../../css/platform.css" />
+		<link rel="stylesheet" href="../../css/table.css" />
+		<style>
+		    .u-btn.search{
+		        margin-right:10px;
+		    }
+		    .username,.userpwd{
+		    	width:120px !important;
+		    }
+		    .u-form .column .cell{
+		    	margin:5px 0px;
+		    }
+		    .u-form .column .cell label{
+		    	width:120px;
+		    }
+		</style>
+	</head>
+	<body>
+	    <div class="u-multiform">
+    	    <div class="column">
+                <div class="cell">
+                    <label>用户名：</label>
+                    <!--<input class="u-ipt" maxlength="6">-->
+                   	<span style="height:20px;display:inline-block">1</span>
+                </div>
+                <div class="cell">
+                    <label>类型：</label>
+                    <div class="cnt-box radio-x">
+                        <div class="u-radio">
+                            <input name="type" type="radio" value="active">
+                            <span>启用</span>
+                        </div>
+                        <div class="u-radio">
+                            <input name="type" type="radio" value="forbidden">
+                            <span>禁用</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <label></label>
+                <div class="btn-box">
+                    <button class="u-btn search" type="button">查询</button>
+                    <button class="u-btn add" type="button">添加</button>
+                </div>
+            </div>
+        </div>
+        <div id="userTable" ms-controller="userTable"></div>
+	    <script type="avalon" id="tablerowtemplate">                         
+            <div class="tableWrapper">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>用户ID</th>
+                            <th>用户名</th>
+                            <th>当前状态</th>
+                            <th>用户类型</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ms-repeat-row="sources">
+                            <td>{{row.userId}}-{{row.roleId}}</td>
+                            <td>{{row.name}}</td>
+                            <td>{{row.status | statusFilter}}</td>
+                            <td>{{row.type}}</td>
+                            <td class="operate">                                            
+                                <a href="javascript:;" ms-click="customFuncs.deleteUser(row.userId)" ms-if="row.type!='superAdmin'">删除</a>
+                                <a href="javascript:;" ms-click="customFuncs.editUser($index)">编辑</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="13">
+                                <div class="pager">
+                                    <div class="first-page" ms-click="firstpage" ms-class={{firstpagestyle}}>首页</div>
+                                    <div class="pre-page" ms-click="prepage" ms-class={{prepagestyle}}>上一页</div>
+                                    <div class="current-page">第<input class="current-page-num" type="text" ms-duplex="currentpage" ms-input="jumppage()"/>页
+                                        <span class="totalpage">共 {{totalpage}} 页</span>
+                                    </div>
+                                    <div class="next-page" ms-click="nextpage" ms-class={{nextpagestyle}}>下一页</div>
+                                    <div class="last-page" ms-click="lastpage" ms-class={{lastpagestyle}}>尾页</div>
+                                    <div class="pageRowsConfig" ms-if="isshowRowsList"><span class="configTxt">每页</span><select class="rowsConfig" ms-duplex="peerpagerows" ms-change="refresh"><option ms-repeat-options="rowsConfigList">{{options}}</option></select> <span class="configTxt">行</span></div>
+                                    <div class="messageinfo">{{startrow}}-{{endrow}} 共{{total}}条</div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </script>
+        <!-- 弹框-内容 -->
+        <div class="u-popup" id="popup-cnt"  ms-controller="addUserCtrl">
+            <div class="bg"></div>
+            <div class="asTable">
+                <div class="asTableCell">
+                    <div class="asCell dialog">
+                        <a href="javascript:;" class="close btn-close">×</a>
+                        <p class="title">添加用户</p>
+                        <div class="container">
+                        	<div class="u-form">
+                        		<div class="column">
+			                        <div class="cell">
+			                            <label>用户名：</label>
+			                            <input class="u-ipt username" type="text" placeholder="请输入用户名" ms-duplex="name"/>
+			                        </div>
+			                        <div class="cell">
+			                            <label>密码：</label>
+			                            <input class="u-ipt userpwd" type="password" placeholder="请输入密码" ms-duplex="pwd"/>
+			                        </div>
+			                        <div class="cell">
+			                            <label>再次输入密码：</label>
+			                            <input class="u-ipt userpwd" type="password" placeholder="请输入密码" ms-duplex="checkPwd" ms-blur="checkPWD"/>
+			                        </div>
+			                        <div class="cell">
+					                    <label>状态：</label>
+					                    <div class="cnt-box radio-x">
+					                        <div class="u-radio">
+					                            <input name="type" type="radio" value="active" ms-duplex-string="status">
+					                            <span>启用</span>
+					                        </div>
+					                        <div class="u-radio">
+					                            <input name="type" type="radio" value="forbidden" ms-duplex-string="status">
+					                            <span>禁用</span>
+					                        </div>
+					                    </div>
+					                </div>
+					                <div class="cell">
+					                    <label>类型：</label>
+					                    <select ms-duplex="type">
+					                    	<option>普通用户</option>
+					                    	<option>公司员工</option>
+					                    </select>
+					                </div>
+					                <div class="cell" ms-if="type!='普通用户'">
+					                    <label>角色：</label>
+					                    <div class="cnt-box">
+					                        <select ms-duplex="roleId">
+					                        	<option ms-repeat-roles="rolelist" ms-attr-value="roles.roleId">{{roles.name}}</option>
+					                        </select>
+					                    </div>
+					                </div>
+					                <div class="cell">
+					                    <label>备注：</label>
+					                    <div class="cnt-box radio-x">
+					                        <textarea class="u-textarea" type="text" placeholder="请输入" ms-duplex="backup"></textarea>
+					                    </div>
+					                </div>
+		                        </div>
+		                    </div>
+                        </div>
+                        <div class="btn-box">
+                        	<button class="u-btn submit" type="button" ms-click="submit">提交</button>
+                        	<button class="u-btn orange btn-close" type="button">取消</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript" src="../../js/jquery.min.js" ></script>
+        <script type="text/javascript" src="../../js/avalon.shim.sn.js" ></script>
+        <script type="text/javascript" src="../../js/swift-ui-table-1.1.js" ></script>
+        <script type="text/javascript" src="../../js/platform.js"></script>
+        <script>
+            $(document).ready(function(){
+                var opts={
+                    targetId: "userTable",
+                    templateId: "tablerowtemplate",
+                    settings:{
+                        url:"../../user/getAllUsers",
+                        ajaxType:"json",
+                        peerpagerow:10,
+                        sourceInterface:{
+                        	INum:'total',
+                        	IData:"rows"
+                        }
+                    },
+                    customFuncs:{
+                    	deleteUser:function(ID){
+                    		$.ajax({
+                    			type:"post",
+                    			dataType:"json",
+                    			data:{
+                    				userId:ID
+                    			},
+                    			url:"../../user/deleteOne",
+                    			success:function(data){
+                    				if(data.status=="success"){
+                    					userTable.refresh();
+                    				}else{
+                    					alert(data.msg);
+                    				}
+                    			}
+                    			
+                    		});
+                    	},
+                    	editUser:function(index){
+                    		formCtrl.$type="edit";
+                    		formCtrl.name=userTable.table.sources[index].name;
+                    		formCtrl.pwd= userTable.table.sources[index].pwd;
+                    		formCtrl.checkPwd= userTable.table.sources[index].pwd;
+                    		formCtrl.status=userTable.table.sources[index].status;
+                    		formCtrl.roleId=userTable.table.sources[index].roleId;
+                    		console.log(formCtrl.roleId);
+                    		formCtrl.type=userTable.table.sources[index].type;
+                    		formCtrl.backup=userTable.table.sources[index].backup;
+                    		PLATFORM.popupShow("#popup-cnt");
+                    	}
+                    }
+                }
+                var userTable=SwiftUI.swiftTable.getInstance(opts);
+                avalon.filters.statusFilter=function(str){
+                	if(str == "active"){
+                		return "启用";
+                	}else{
+                		return "禁止";
+                	}
+                };
+                avalon.filters.statusFilter2=function(str){
+                	if(str == "active"){
+                		return "禁止";
+                	}else{
+                		return "启用";
+                	}
+                };
+                
+                $(".u-btn.add").click(function(){
+                	formCtrl.name="";
+            		formCtrl.pwd= "";
+            		formCtrl.checkPwd= "";
+            		formCtrl.status="active";
+            		formCtrl.roleId="";
+            		formCtrl.type="";
+            		formCtrl.backup="";
+                	PLATFORM.popupShow("#popup-cnt");
+                });
+                
+                var formCtrl = avalon.define({
+                	$id:"addUserCtrl",
+                	name:"",
+                	pwd:"",
+                	checkPwd:"",
+                	status:"active",
+                	backup:"",
+                	roleId:'',
+                	rolelist:[],
+                	$type:"add",
+                	type:"",
+                	checkPWD:function(){
+                		if(formCtrl.pwd !== formCtrl.checkPwd){
+                			alert("您两次输入的密码有误，请检查！");
+                			formCtrl.pwd="";
+                			formCtrl.checkPwd="";
+                		}
+                	},
+                	submit:function(){
+                		if(formCtrl.$type==="add"){
+                			var url="../../user/addUser";
+                		}else{
+                			url="../../user/updateUser";
+                		}
+                		$.ajax({
+                			type:"post",
+                			dataType:"json",
+                			url:url,
+                			data:{
+                				username:formCtrl.name,
+                				password:formCtrl.pwd,
+                				backup:formCtrl.backup,
+                				status:formCtrl.status,
+                				type:formCtrl.type,
+                				roleId:formCtrl.roleId
+                			},
+                			success:function(data){
+                				if(data.status=="success"){
+                					$("#popup-cnt").hide();
+                					userTable.refresh();
+                				}else{
+                					alert(data.msg);
+                				}
+                			}
+                		});
+                	}
+                });
+                avalon.scan();
+                $.ajax({
+                	type:"post",
+                	dataType:"json",
+                	url:"../../role/getRoleLists",
+                	success:function(data){
+                		formCtrl.rolelist=data.roles;
+                	}
+                });
+            });
+        </script>
+	</body>
+</html>

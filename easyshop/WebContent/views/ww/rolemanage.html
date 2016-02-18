@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<title>洋流管理系统</title>
+        <link rel="stylesheet" href="css/easyui/metro-gray/easyui.css"/>
+        <link rel="stylesheet" href="css/easyui/icon.css"/>
+		<link rel="stylesheet" href="css/reset.css" />
+        <link rel="stylesheet" href="css/platform.css"/>
+        <style type="text/css">
+        	td{
+        		height: 50px;
+        	}
+        	input {
+				margin-left: 20px;
+			}
+        </style>
+        <script src="js/jquery.min.js"></script>
+        <script src="js/avalon.shim.sn.js"></script>
+        <script src="js/jquery.form.js"></script>
+        <script src="js/easyui/jquery.easyui.min.js"></script>
+        <script src="js/easyui/easyui-lang-zh_CN.js"></script>
+        <script src="js/platform.js"></script>
+        <script src="js/data-interface.js"></script>
+        <script>
+        	var allFunctions = null;
+        	var rolegrid = null;
+        	$(function(){
+        		queryAllFuncs();
+        		initDatagrid();
+        	});
+        	
+        	//先查找出所有的操作权限
+        	function queryAllFuncs(){
+        		$.ajax({
+           			type:"post",
+           			dataType:"json",
+           			url:"../../functions/queryAllFunctions",
+           			success:function(data){
+           				if(data.status != "fail"){
+           					allFunctions = data.rows;
+           				}else{
+           					alert(data.msg);
+           				}
+           			}
+           		});
+        	}
+        	
+        	function initDatagrid(){
+        		rolegrid = $("#roletable").datagrid({
+			        url:"../../role/getRoleLists",
+			        columns:[[
+			            {field:"name",title:"角色",width:150},
+			            {field:"roleDetail",title:"权限",width:650,
+			            	formatter: function(value,row,index){
+		            			if(row != undefined && row != null){
+		            				var functions = row.functions;
+	            					var result = "";
+	            					if(allFunctions != null && allFunctions.length > 0){
+	            						for(var i=0;i<allFunctions.length;i++){
+	            							var isChecked = false;
+	            							for(var j=0;j<functions.length;j++){
+	            								//如果当前角色拥有某个操作权限，则将这个操作权限选中
+	            								if(allFunctions[i].id == functions[j].id){
+	            									result += "<input type='checkbox' checked='checked' name='"+row.roleId+"' value='"+allFunctions[i].id+"'>"+allFunctions[i].name;
+	            									isChecked = true;
+	            									break;
+	            								}
+	            							}
+	            							if(!isChecked){
+	            								result += "<input type='checkbox' name='"+row.roleId+"' value="+allFunctions[i].id+">"+allFunctions[i].name;
+	            							}
+	            						}
+	            					}
+	            					return result;
+		            			}
+							}
+			            }
+			        ]],
+			        pagination : true,
+					pageSize : 5,
+					pageList : [5, 10, 15],
+					pageNumber : 1,
+					pagePosition : 'bottom',
+					singleSelect : true,
+					onLoadSuccess : function(data) {
+						if(data.status != "fail"){
+							rolegrid.datagrid("loaded");
+						}
+					}
+			    });
+        	}
+        	
+        	var result = "";
+        	function saveRoles(){
+        		var rows = rolegrid.datagrid("getRows");
+        		var roleName = "";
+        		if(rows != null && rows.length > 0){
+        			for(var i=0;i<rows.length;i++){
+        				var roleId = rows[i].roleId;
+        				roleName = rows[i].name;
+        				var funChecks = $("input[name='"+roleId+"']");
+        				if(funChecks != undefined && funChecks.length > 0){
+        					var privilegeIds = "";
+        					for(var j=0;j<funChecks.length;j++){
+        						if($(funChecks[j]).is(":checked")){
+        							if(privilegeIds == ""){
+        								privilegeIds += $(funChecks[j]).val();
+        							}else{
+        								privilegeIds += "@" + $(funChecks[j]).val();
+        							}
+        						}
+        					}
+        				}
+        				
+        				$.ajax({
+		           			type:"post",
+		           			dataType:"json",
+		           			data:{roleId:roleId,privilegeIds:privilegeIds},
+		           			url:"../../role/addRolePrivilege",
+		           			success:function(data){
+		           				if(data.status != "success"){
+		           					result += (roleName+" ");
+		           				}
+		           			}
+		           		});
+        			}
+        		}
+        		if(result == ""){
+        			alert("保存成功");
+        		}
+        	}
+        </script>
+	</head>
+	<body>
+		<div class="main-content">
+		    <div ms-visible="!edit">
+	            <p style="font-size: 12px;color: #4698FF;">权限管理 > 角色管理</p>
+	            <div class="p-datagrid">
+	            	<table id = "roletable"></table>
+	            </div>
+	        </div>
+	        <div class="cnt-box" style="margin-top: 30px;">
+	        	<button class="u-btn small" style="float: right;" onclick="saveRoles();"">保存</button>
+	        </div>
+		</div>
+		
+        
+	</body>
+</html>

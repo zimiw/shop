@@ -1,0 +1,127 @@
+.order-tip {
+	position: relative;
+	height: 110px;
+	margin-top: 30px;
+	padding-top: 33px;
+	padding-left: 90px;
+	border: 1px solid #fffad3;
+	color: #404040;
+	line-height: 1;
+	background: #fffdec url(images/pay_tip.png) no-repeat 30px center;
+}
+.order-tip p:first-child {
+	margin-bottom: 15px;
+	font-size: 18px;
+}
+.order-tip a {
+	position: absolute;
+	right: 30px;
+	bottom: 22px;
+	color: #005ea7;
+	line-height: 1;
+}
+.time-countdown {
+	color: #ee087e;
+}
+
+.pay-box {
+	padding: 0 30px;
+	background-color: #fff;
+}
+.pay-box .money {
+	height: 80px;
+	font-size: 14px;
+	color: #404040;
+    line-height: 102px;
+}
+.pay-box .money span {
+	font-size: 24px;
+	color: #ee087e;
+}
+.tab-box .tabs {
+	height: 42px;
+    border-bottom: 1px solid #dddada;
+    font-size: 0;
+}
+.tab-box .tabs .tab {
+	display: inline-block;
+	vertical-align: top;
+	width: 150px;
+    height: 42px;
+    margin-right: 5px;
+    font-size: 16px;
+    color: #666;
+    line-height: 42px;
+    text-align: center;
+    border: 1px solid #dddada;
+    background-color: #f4f4f4;
+    cursor: pointer;
+}
+.tab-box .tabs .tab.sel {
+    background-color: #ffffff;
+    border-bottom-color: #fff;
+}
+.tab-box .cnts {
+	padding: 35px 0 30px;
+	font-size: 0;
+}
+.tab-box .way {
+	display: inline-block;
+	vertical-align: top;
+	height: 35px;
+	margin-right: 65px;
+}
+.tab-box .way .yl-radio,
+.tab-box .way img,
+.tab-box .way input,
+.tab-box .way .yl-bank {
+	display: inline-block;
+	vertical-align: middle;
+}
+.tab-box .way img {
+	margin-left: 10px;
+}
+.tab-box .yl-btn {
+	margin-top: 45px;
+}
+
+.payway {
+    font-size: 24px;
+    text-align: center;
+    line-height: 1;
+}
+
+.popup .btn-box {
+    font-size: 0;
+    text-align: center;
+}
+.popup .btn-box {
+    margin-top: 40px;
+    font-size: 0;
+}
+.popup .btn-box a {
+    vertical-align: middle;
+    margin: 0 5px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

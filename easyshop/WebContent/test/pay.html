@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <title>洋流网</title>
+    <script src="../js/avalon.shim.sn.js"></script>
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="../js/data-interface.js"></script>
+</head>
+<body ms-controller="common">
+<script src="pingpp-pc.js"></script>
+<script>
+
+
+    function GetUrlParamString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null)return unescape(r[2]);
+        return null;
+    }
+
+    $.ajax({
+        type: "post",
+        //url: DI.baseURL + "/charge/getCharge?orderId="
+        url: "/easyshop/charge/getCharge?orderId="
+        + GetUrlParamString("orderId") + "&channel=" + GetUrlParamString("channel"),
+        dataType: "json",
+        success: function (data) {
+            debugger;
+            pingppPc.createPayment(data.msg, function (result, err) {
+                // 处理错误信息 result = "fail", err = Object {msg: "invalid_charge", extra: "no_such_channel:wx_pub_qr"}
+                debugger;
+            });
+        },
+        error: function (err) {
+            debugger;
+            console.log(err);
+            alert("网络繁忙,请稍后重试");
+        }
+    });
+
+    // 调用方法
+    //alert(GetQueryString("id"));
+    /*
+     var charge =
+     {
+     "id": "ch_qPGSKSzjL0iT8qfnX5C4S4yP",
+     "object": "charge",
+     "created": 1452801226,
+     "livemode": false,
+     "paid": false,
+     "refunded": false,
+     "app": "app_qLO880GuzXv1K8qT",
+     "channel": "upacp_pc",
+     "order_no": "100000004",
+     "client_ip": "127.0.0.1",
+     "amount": 102,
+     "amount_settle": 102,
+     "currency": "cny",
+     "subject": "洋流网商品",
+     "body": "洋流网订单商品..",
+     "time_paid": null,
+     "time_expire": 1452887626,
+     "time_settle": null,
+     "transaction_no": null,
+     "refunds": {
+     "object": "list",
+     "url": "/v1/charges/ch_qPGSKSzjL0iT8qfnX5C4S4yP/refunds",
+     "has_more": false,
+     "data": []
+     },
+     "amount_refunded": 0,
+     "failure_code": null,
+     "failure_msg": null,
+     "metadata": {},
+     "credential": {
+     "object": "credential",
+     "upacp_pc": {
+     "accessType": "0",
+     "backUrl": "https://api.pingxx.com/notify/charges/ch_qPGSKSzjL0iT8qfnX5C4S4yP",
+     "bizType": "000000",
+     "certId": "urL8y5q5ubrTGWXXfPWTSOK8",
+     "channelType": "07",
+     "currencyCode": "156",
+     "customerIp": "127.0.0.1",
+     "encoding": "UTF-8",
+     "frontUrl": "http://192.168.1.101:8181/easyshop/charge/handleChargeSucessFromChannelCallBack?orderId\u003d100000004",
+     "merId": "890640711161262",
+     "orderDesc": "洋流网商品",
+     "orderId": "100000004",
+     "payTimeout": "20160116035346",
+     "reqReserved": "ch_qPGSKSzjL0iT8qfnX5C4S4yP",
+     "signMethod": "01",
+     "txnAmt": "102",
+     "txnSubType": "01",
+     "txnTime": "20160115035346",
+     "txnType": "01",
+     "version": "5.0.0",
+     "signature": "TFdESzRPcnZ2am45RFdMcWZIU3FiWExD"
+     }
+     },
+     "extra": {
+     "result_url": "http://192.168.1.101:8181/easyshop/charge/handleChargeSucessFromChannelCallBack?orderId\u003d100000004"
+     },
+     "description": null
+     }
+     ;*/
+
+
+
+
+</script>
+</body>
+</html>

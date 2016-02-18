@@ -1,0 +1,158 @@
+.topbar-box {
+    height: 125px;
+    padding-top: 39px;
+    text-align: center;
+}
+.topbar-box .topbar {
+    display: inline-block;
+    width: 999px;
+    height: 55px;
+    background: url(images/forget_toolbar.png) no-repeat;
+}
+.topbar-box .topbar.step1 {
+    background-position: 0 0;
+}
+.topbar-box .topbar.step2 {
+    background-position: 0 -55px;
+}
+.topbar-box .topbar.step3 {
+    background-position: 0 -110px;
+}
+.topbar-box .topbar.step4 {
+    background-position: 0 -165px;
+}
+
+.forget-box {
+    height: 500px;
+    background-color: #fff;
+}
+.forget-box .item {
+    margin-bottom: 30px;
+    font-size: 0;
+    line-height: 1;
+}
+.forget-box .item label,
+.forget-box .item input,
+.forget-box .item select,
+.forget-box .item button,
+.forget-box .item .ctt,
+.forget-box .item .validate-code,
+.forget-box .item .change,
+.forget-box .item .err-tip {
+    display: inline-block;
+    vertical-align: middle;
+}
+.forget-box .item label {
+    font-size: 14px;
+    text-align: right;
+}
+.forget-box .item .validate-code,
+.forget-box .item .change {
+    margin-left: 10px;
+}
+.forget-box .item .change {
+    color: #e871b3;
+    font-size: 14px;
+}
+.forget-box .item .err-tip {
+    height: 16px;
+    margin-left: 20px;
+    padding-left: 23px;
+    font-size: 12px;
+    color: #ff3333;
+    line-height: 16px;
+    background: url(images/err-tip.png) no-repeat center left;
+}
+.forget-box .item .ctt {
+    font-size: 14px;
+}
+
+.forget-box .step1 {
+    height: 100%;
+    padding: 115px 0 0 390px;
+}
+.forget-box .step1 label {
+    width: 4em;
+}
+.forget-box .step2 {
+    height: 100%;
+    padding: 95px 0 0 307px;
+}
+.forget-box .step2 label {
+    width: 10em;
+}
+.forget-box .step3 {
+    height: 100%;
+    padding: 150px 0 0 362px;
+}
+.forget-box .step3 label {
+    width: 6em;
+}
+.forget-box .step4 {
+    height: 100%;
+    padding-top: 170px;
+    text-align: center;
+}
+
+.btn-next {
+    width: 160px;
+    height: 45px;
+    font-size: 18px;
+    color: #fff;
+    text-align: center;
+    line-height: 45px;
+    background-color: #ee087e;
+}
+.btn-phone {
+    width: 125px;
+    height: 45px;
+    margin-left: 10px;
+    text-align: center;
+    line-height: 45px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+}
+
+.modify-tip {
+    display: inline-block;
+    padding-left: 102px;
+    font-size: 30px;
+    line-height: 80px;
+    background: url(images/forget_tip.png) no-repeat;
+}
+.modify-tip.success {
+    background-position: 0 0;
+}
+.modify-tip.fail {
+    background-position: 0 -80px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

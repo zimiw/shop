@@ -1,0 +1,216 @@
+{
+	"classify": "运动户外",
+	"brands": [
+	   {
+	       "name": "Max Factor/蜜丝佛陀"
+	   },
+	   {
+	       "name": "CK/卡尔文·克莱因 "
+	   },
+	   {
+	       "name": "Candy Moyo/膜玉"
+	   },
+	   {
+	       "name": "Burberry/博柏利"
+	   },
+	   {
+	       "name": "Anna sui/安娜苏"
+	   },
+	   {
+	       "name": "Gucci/古驰"
+	   }
+	],
+	"items": [
+		{
+		    "url": "http://www.baidu.com",
+		    "img": "img/demo_detail-1.png",
+		    "name": "TAKEO KIKUCHI/菊池武夫 2015AW 男士牛皮鳄鱼纹公",
+        	"flag": "img/demo_9.png",
+            "area": "香港",
+            "price": "606.20",
+            "reference": "1099"
+		},
+		{
+		    "url": "http://www.baidu.com",
+		    "img": "img/demo_detail-1.png",
+		    "name": "TAKEO KIKUCHI/菊池武夫 2015AW 男士牛皮鳄鱼纹公",
+        	"flag": "img/demo_9.png",
+            "area": "香港",
+            "price": "606.20",
+            "reference": "1099"
+		},
+		{
+		    "url": "http://www.baidu.com",
+		    "img": "img/demo_detail-1.png",
+		    "name": "TAKEO KIKUCHI/菊池武夫 2015AW 男士牛皮鳄鱼纹公",
+        	"flag": "img/demo_9.png",
+            "area": "香港",
+            "price": "606.20",
+            "reference": "1099"
+		},
+		{
+		    "url": "http://www.baidu.com",
+		    "img": "img/demo_detail-1.png",
+		    "name": "TAKEO KIKUCHI/菊池武夫 2015AW 男士牛皮鳄鱼纹公",
+        	"flag": "img/demo_9.png",
+            "area": "香港",
+            "price": "606.20",
+            "reference": "1099"
+		},
+		{
+		    "url": "http://www.baidu.com",
+		    "img": "img/demo_detail-1.png",
+		    "name": "TAKEO KIKUCHI/菊池武夫 2015AW 男士牛皮鳄鱼纹公",
+        	"flag": "img/demo_9.png",
+            "area": "香港",
+            "price": "606.20",
+            "reference": "1099"
+		},
+		{
+		    "url": "http://www.baidu.com",
+		    "img": "img/demo_detail-1.png",
+		    "name": "TAKEO KIKUCHI/菊池武夫 2015AW 男士牛皮鳄鱼纹公",
+        	"flag": "img/demo_9.png",
+            "area": "香港",
+            "price": "606.20",
+            "reference": "1099"
+		},
+		{
+		    "url": "http://www.baidu.com",
+		    "img": "img/demo_detail-1.png",
+		    "name": "TAKEO KIKUCHI/菊池武夫 2015AW 男士牛皮鳄鱼纹公",
+        	"flag": "img/demo_9.png",
+            "area": "香港",
+            "price": "606.20",
+            "reference": "1099"
+		},
+		{
+		    "url": "http://www.baidu.com",
+		    "img": "img/demo_detail-1.png",
+		    "name": "TAKEO KIKUCHI/菊池武夫 2015AW 男士牛皮鳄鱼纹公",
+        	"flag": "img/demo_9.png",
+            "area": "香港",
+            "price": "606.20",
+            "reference": "1099"
+		},
+		{
+		    "url": "http://www.baidu.com",
+		    "img": "img/demo_detail-1.png",
+		    "name": "TAKEO KIKUCHI/菊池武夫 2015AW 男士牛皮鳄鱼纹公",
+        	"flag": "img/demo_9.png",
+            "area": "香港",
+            "price": "606.20",
+            "reference": "1099"
+		},
+		{
+		    "url": "http://www.baidu.com",
+		    "img": "img/demo_detail-1.png",
+		    "name": "TAKEO KIKUCHI/菊池武夫 2015AW 男士牛皮鳄鱼纹公",
+        	"flag": "img/demo_9.png",
+            "area": "香港",
+            "price": "606.20",
+            "reference": "1099"
+		},
+		{
+		    "url": "http://www.baidu.com",
+		    "img": "img/demo_detail-1.png",
+		    "name": "TAKEO KIKUCHI/菊池武夫 2015AW 男士牛皮鳄鱼纹公",
+        	"flag": "img/demo_9.png",
+            "area": "香港",
+            "price": "606.20",
+            "reference": "1099"
+		},
+		{
+		    "url": "http://www.baidu.com",
+		    "img": "img/demo_detail-1.png",
+		    "name": "TAKEO KIKUCHI/菊池武夫 2015AW 男士牛皮鳄鱼纹公",
+        	"flag": "img/demo_9.png",
+            "area": "香港",
+            "price": "606.20",
+            "reference": "1099"
+		},
+		{
+		    "url": "http://www.baidu.com",
+		    "img": "img/demo_detail-1.png",
+		    "name": "TAKEO KIKUCHI/菊池武夫 2015AW 男士牛皮鳄鱼纹公",
+        	"flag": "img/demo_9.png",
+            "area": "香港",
+            "price": "606.20",
+            "reference": "1099"
+		},
+		{
+		    "url": "http://www.baidu.com",
+		    "img": "img/demo_detail-1.png",
+		    "name": "TAKEO KIKUCHI/菊池武夫 2015AW 男士牛皮鳄鱼纹公",
+        	"flag": "img/demo_9.png",
+            "area": "香港",
+            "price": "606.20",
+            "reference": "1099"
+		},
+		{
+		    "url": "http://www.baidu.com",
+		    "img": "img/demo_detail-1.png",
+		    "name": "TAKEO KIKUCHI/菊池武夫 2015AW 男士牛皮鳄鱼纹公",
+        	"flag": "img/demo_9.png",
+            "area": "香港",
+            "price": "606.20",
+            "reference": "1099"
+		},
+		{
+		    "url": "http://www.baidu.com",
+		    "img": "img/demo_detail-1.png",
+		    "name": "TAKEO KIKUCHI/菊池武夫 2015AW 男士牛皮鳄鱼纹公",
+        	"flag": "img/demo_9.png",
+            "area": "香港",
+            "price": "606.20",
+            "reference": "1099"
+		}
+	],
+    "recent": [
+        {
+            "url": "http://www.baidu.com",
+            "img": "img/demo_detail-1.png",
+            "name": "TAKEO KIKUCHI/菊池武夫 2015AW 男士牛皮鳄鱼纹公",
+            "flag": "img/demo_9.png",
+            "area": "香港",
+            "price": "606.20",
+            "reference": "1099"
+        },
+        {
+            "url": "http://www.baidu.com",
+            "img": "img/demo_detail-1.png",
+            "name": "TAKEO KIKUCHI/菊池武夫 2015AW 男士牛皮鳄鱼纹公",
+            "flag": "img/demo_9.png",
+            "area": "香港",
+            "price": "606.20",
+            "reference": "1099"
+        },
+        {
+            "url": "http://www.baidu.com",
+            "img": "img/demo_detail-1.png",
+            "name": "TAKEO KIKUCHI/菊池武夫 2015AW 男士牛皮鳄鱼纹公",
+            "flag": "img/demo_9.png",
+            "area": "香港",
+            "price": "606.20",
+            "reference": "1099"
+        },
+        {
+            "url": "http://www.baidu.com",
+            "img": "img/demo_detail-1.png",
+            "name": "TAKEO KIKUCHI/菊池武夫 2015AW 男士牛皮鳄鱼纹公",
+            "flag": "img/demo_9.png",
+            "area": "香港",
+            "price": "606.20",
+            "reference": "1099"
+        },
+        {
+            "url": "http://www.baidu.com",
+            "img": "img/demo_detail-1.png",
+            "name": "TAKEO KIKUCHI/菊池武夫 2015AW 男士牛皮鳄鱼纹公",
+            "flag": "img/demo_9.png",
+            "area": "香港",
+            "price": "606.20",
+            "reference": "1099"
+        }
+    ]
+}

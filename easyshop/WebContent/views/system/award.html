@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<title>洋流管理系统</title>
+        <link rel="stylesheet" href="css/easyui/metro-gray/easyui.css"/>
+        <link rel="stylesheet" href="css/easyui/icon.css"/>
+        <link rel="stylesheet" href="js/ui/jquery-ui.min.css"/>
+		<link rel="stylesheet" href="css/reset.css" />
+        <link rel="stylesheet" href="css/platform.css"/>
+	</head>
+	<body ms-controller="award">
+        <p class="u-title">抽奖</p>
+        <p class="u-singleinfo">共1,259笔订单，其中1,000笔参与活动，抽取10%，剩余开奖时间 23:25:59</p>
+        <div class="u-top-btns">
+            <button type="button" class="u-btn small" ms-click="operate.setting">设置规则</button>
+        </div>
+        <table id="dg" class="easyui-datagrid" data-options="
+                    autoRowHeight: false,
+                    method: 'post',
+                    singleSelect: true,
+                    striped: true,
+                    fitColumns: true,
+                    rownumbers: true,
+                    nowrap: false,
+                    pagination: true">
+            <thead>
+                <tr>
+                    <th data-options="field:'orderId', width:150, align:'center'">订单号</th>
+                    <th data-options="field:'amount', width:150, align:'center'">实收款（元）</th>
+                    <th data-options="field:'nickname', width:150, align:'center'">买家昵称</th>
+                    <th data-options="field:'chargePaidTime', width:80, align:'center'">成交时间</th>
+                    <th data-options="field:'isJoin', width:100, align:'center'">状态</th>
+                    <th data-options="field:'operate', width:100, align:'center', formatter: function(value,rowData,index){
+                        var check = '&lt;a href=&quot;javascript:;&quot; class=&quot;btn-operate check&quot;&gt;查看&lt;a&gt;'
+                        if(rowData.isJoin == '1'){
+                            check += '&lt;a href=&quot;javascript:;&quot; class=&quot;btn-operate join&quot;&gt;不参加&lt;a&gt;';
+                        }else{
+                            check += '&lt;a href=&quot;javascript:;&quot; class=&quot;btn-operate join&quot;&gt;参加&lt;a&gt;';
+                        }
+                        return check;
+                    }">操作</th>
+                </tr>
+            </thead>
+        </table>
+        
+        <div class="u-popup" ms-visible="popup.setting">
+            <div class="bg"></div>
+            <div class="asTable-box">
+                <div class="asTable">
+                    <div class="asTableCell">
+                        <div class="asCell dialog">
+                            <a href="javascript:;" class="close" ms-click="popup.close">×</a>
+                            <p class="title">抽奖设置</p>
+                            <div class="container">
+                                <div class="u-form">
+                                    <div class="column">
+                                        <label>抽奖时间：</label>
+                                        <input class="u-ipt" id="starttime" type="text" placeholder="抽奖时间" ms-duplex="param.lotteryTime" />
+                                    </div>
+                                    <div class="column">
+                                        <label>中奖概率：</label>
+                                        <input class="u-ipt" type="number" placeholder="字符串最大长度12" ms-duplex="param.rate" />
+                                        <div class="cnt-box">
+                                            <p class="split">%</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="btn-box">
+                                <button class="u-btn" type="button" ms-click="operate.save">提交</button>
+                                <button class="u-btn orange btn-close" type="button" ms-click="popup.close">取消</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="u-headTip"><p></p></div>
+        
+        
+        <script src="js/jquery.min.js"></script>
+        <script src="js/avalon.shim.sn.js"></script>
+        <script src="js/easyui/jquery.easyui.min.js"></script>
+        <script src="js/easyui/easyui-lang-zh_CN.js"></script>
+        <script src="js/ui/jquery-ui.min.js"></script>
+        <script src="js/ui/jquery-ui-timepicker-addon.js"></script>
+        <script src="js/platform.js"></script>
+        <script src="js/data-interface.js"></script>
+        <script>
+            var awardCtrl = avalon.define({
+                $id: "award",
+                popup: {
+                    setting: false,
+                    close: function(){
+                        awardCtrl.popup.setting = false;
+                    }
+                },
+                param: {
+                    lotteryTime: "",
+                    rate: ""
+                },
+                operate: {
+                    setting: function(){
+                        awardCtrl.popup.setting = true;
+                    },
+                    join: function(el){
+                        $.ajax({
+                            type: "post",
+                            url: DI.addLottery,
+                            data: {
+                                orderId: el.orderId
+                            },
+                            dataType: "json",
+                            success: function(data){
+                                PLATFORM.headTip(data.message);
+                                $("#dg").datagrid("load");
+                            }
+                        });
+                    },
+                    save: function(){
+                        $.ajax({
+                            type: "post",
+                            url: DI.addLotteryConf,
+                            data: {
+                                lotteryTime: awardCtrl.param.lotteryTime,
+                                rate: awardCtrl.param.rate
+                            },
+                            dataType: "json",
+                            success: function(data){
+                                awardCtrl.popup.setting = false;
+                                PLATFORM.headTip(data.msg);
+                            }
+                        });
+                    }
+                }
+            });
+            avalon.scan();
+            
+            $(function(){
+               $("#starttime").datetimepicker({
+                    timeOnly: true,
+                    showSecond: true,
+                    timeFormat: 'hh:mm:ss'
+                });
+                
+                $("#dg").datagrid({url: DI.queryLotteryList});
+            });
+            
+            $("body").on("click", ".btn-operate.check", function(){
+                var selected = $("#dg").datagrid("getSelected");
+                location.href = "orderManage.html?orderId=" + selected.orderId;
+            });
+            $("body").on("click", ".btn-operate.join", function(){
+                var selected = $("#dg").datagrid("getSelected");
+                    
+                awardCtrl.operate.join(selected);
+            });
+        </script>
+	</body>
+</html>

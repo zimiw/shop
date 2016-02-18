@@ -1,0 +1,145 @@
+.order-status {
+	position: relative;
+	height: 73px;
+	padding: 0 40px 0 30px;
+	border: 1px solid #fffad3;
+	font-size: 0;
+	background-color: #fffdec;
+}
+.order-status p {
+	display: inline-block;
+	margin-right: 40px;
+	font-size: 14px;
+	line-height: 73px;
+}
+.order-status p span {
+	color: #ee087e;
+}
+.order-status p .ready {
+	color: #333;
+}
+.order-status .btn-box {
+	position: absolute;
+    right: 40px;
+    top: 20px;
+	height: 32px;
+	line-height: 32px;
+}
+.order-status .btn-box .cancel,
+.order-status .btn-box .yl-btn.middle,
+.order-status .btn-box .contact,
+.order-status .btn-box .apply {
+	display: inline-block;
+	vertical-align: middle;
+}
+.order-status .btn-box .cancel {
+	font-size: 14px;
+	color: #333;
+}
+.order-status .btn-box .yl-btn.middle {
+	margin-left: 30px;
+}
+.order-status .btn-box .apply {
+	width: 100px;
+	height: 26px;
+	margin-left: 10px;
+	border: 1px solid #ccc;
+	color: #333;
+	font-size: 14px;
+	background-color: #fff;
+}
+
+.order-detail {
+	padding: 40px;
+	background-color: #fff;
+}
+.order-detail .status {
+	width: 1090px;
+	height: 30px;
+	margin: 0 auto;
+	background: url(images/order_status.png) no-repeat;
+}
+.order-detail .status.status1 {
+	background-position: 0 0;
+}
+.order-detail .status.status2 {
+	background-position: 0 -30px;
+}
+.order-detail .status.status3 {
+	background-position: 0 -60px;
+}
+.order-detail .status.status4 {
+	background-position: 0 -90px;
+}
+.order-detail .status.status5 {
+	background-position: 0 -120px;
+}
+.order-detail .time-box {
+	width: 1090px;
+	height: 60px;
+	margin: 0 auto;
+	font-size: 0;
+}
+.order-detail .time-box .date {
+	display: inline-block;
+	vertical-align: middle;
+	width: 218px;
+	padding-top: 10px;
+	line-height: 10px;
+	font-size: 12px;
+	text-align: center;
+}
+.order-detail .time-box .date p:first-child {
+	padding-bottom: 5px;
+}
+.order-detail .yl-dialog {
+	padding-left: 0;
+	padding-right: 0;
+	border-bottom: 1px solid #eee;
+}
+.order-detail .total-box {
+	margin-top: 25px;
+	padding-bottom: 15px;
+	font-size: 0;
+	text-align: right;
+}
+.order-detail .total-box p {
+	height: 45px;
+	line-height: 45px;
+	padding-right: 25px;
+}
+.order-detail .total-box span {
+	display: inline-block;
+	vertical-align: baseline;
+	font-size: 14px;
+	line-height: 1;
+}
+.order-detail .total-box .freight {
+	font-size: 20px;
+	color: #ee087e;
+}
+.order-detail .total-box .symbol {
+	font-size: 16px;
+	color: #ee087e;
+}
+.order-detail .total-box .total {
+	font-size: 30px;
+	color: #ee087e;
+}
+.order-detail .total-box .price {
+	width: 100px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

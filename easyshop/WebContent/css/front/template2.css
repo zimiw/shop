@@ -1,0 +1,292 @@
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var,b, u, i, center,dl, dt, dd, ol, ul, li, fieldset,
+form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer,
+header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video, button, input, textarea{margin:0;padding:0;box-sizing:border-box;line-height: 1;}
+header,footer,section,article,aside,nav,hgroup,address,figure,figcaption,menu,details{display:block;}
+caption,th{font-weight:normal;}
+html,body,fieldset,img,iframe,abbr{border:0;}
+i,cite,em,var,address,dfn{font-style:normal;}
+[hidefocus],summary{outline:0;}
+li{list-style:none;}
+h1,h2,h3,h4,h5,h6,small{font-size:100%;}
+sup,sub{font-size:83%;}
+pre,code,kbd,samp{font-family:inherit;}
+q:before,q:after{content:none;}
+textarea{overflow:auto;resize:none;}
+input,textarea{border:none;outline:none;background:none;-webkit-tap-highlight-color:rgba(255,0,0,0);}
+label,summary{cursor:default;}
+a,button{cursor:pointer;background:none;border:none;}
+h1,h2,h3,h4,h5,h6,em,strong,b{font-weight:bold;}
+body,textarea,input,button,select,keygen,legend{color:#333;outline:0;font-family:arial,"microsoft yahei", STHeiTi, sans-serif;}
+a{text-decoration:none;-webkit-tap-highlight-color:rgba(255,0,0,0);outline:none;}
+table{border-collapse: collapse;border-spacing: 0;}
+body,input{font-size: 14px;}
+
+body {
+	background-color: #6e5fb4;
+}
+.wrap {
+    width: 1000px;
+    margin: 0 auto;
+}
+.header .buy-info {
+    height: 95px;
+    background-color: #fff;
+}
+.header .buy-info .logo {
+    float: left;
+    display: block;
+    width: 180px;
+    height: 100%;
+}
+.header .buy-info .logo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.footer {
+    margin-top: 70px;
+}
+.footer .company-info {
+    background-color: #fff;
+}
+.footer .company-info .promise {
+    height: 80px;
+    border-bottom: 1px solid #f1f1f1;
+    background: url(images/promise.png) no-repeat center;
+}
+.footer .about-info {
+    font-size: 0;
+}
+.footer .about-info .open-box,
+.footer .about-info .item,
+.footer .about-info .qrcode {
+    display: inline-block;
+    vertical-align: middle;
+}
+.footer .about-info .open-box {
+    width: 230px;
+    height: 164px;
+    margin-right: 80px;
+    padding-top: 64px;
+    text-align: center;
+    font-size: 12px;
+    line-height: 1;
+    background: url(images/tel_bg.png) no-repeat center;
+}
+.footer .about-info .open-box .tel {
+    margin-bottom: 5px;
+    font-size: 20px;
+    color: #404040;
+    line-height: 1;
+}
+.footer .about-info .item {
+    height: 164px;
+    margin-right: 173px;
+    padding-top: 32px;
+}
+.footer .about-info .item li {
+    font-size: 14px;
+    color: #404040;
+    line-height: 1;
+    margin-bottom: 9px;
+}
+.footer .about-info .item li:first-child {
+    margin-bottom: 14px;
+}
+.footer .about-info .item li a {
+    display: block;
+    font-size: 12px;
+    color: #999;
+    line-height: 1;
+}
+.footer .copyright-info {
+    height: 76px;
+    padding-top: 23px;
+    text-align: center;
+    font-size: 12px;
+    color: #999;
+    background-color: #323232;
+}
+.footer .copyright-info p {
+    padding: 4px 0;
+    line-height: 1;
+}
+.footer-box .footer {
+    margin-top: 0;
+}
+.banner {
+    height: 1136px;
+    background: url(../../img/demo_template2.png) no-repeat center center;
+}
+.cnt-box {
+    margin-top: 65px;
+}
+.cnt-box .country-box:first-child {
+    margin-top: 0;
+}
+.part1 {
+    width: 390px;
+    height: 675px;
+    background: url(images/template2_bg.png) no-repeat center bottom;
+}
+.part1 .goto {
+    display: block;
+    margin-top: 80px;
+    color: #fff;
+    text-align: right;
+    font-size: 18px;
+}
+.part1 .img-box {
+    position: relative;
+    width: 390px;
+    height: 515px;
+    border: 15px solid #fff;
+}
+.part1 .img-box img {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.part1 .name-box {
+    position: absolute;
+    left: 35px;
+    bottom: -32px;
+    width: 320px;
+    height: 97px;
+    font-size: 16px;
+    text-align: center;
+    filter: alpha(opacity = 70);
+    -moz-opacity: 0.7;
+    -khtml-opacity: 0.7;
+    opacity: 0.7;
+    background-color: #fff;
+}
+.part1 .name-box .name {
+    padding: 27px 0 10px;
+    font-size: 26px;
+}
+.part2 {
+    width: 480px;
+    height: 675px;
+}
+.part2 .from-box {
+    position: relative;
+    height: 75px;
+    padding: 10px 0 0 55px;
+    color: #f4f6fa;
+    font-size: 14px;
+    background: url(images/template2_country.png) no-repeat left top;
+}
+.part2 .from-box .cn {
+    margin-bottom: 5px;
+    font-size: 30px;
+}
+.part2 .from-box .more {
+    position: absolute;
+    right: 0;
+    bottom: 8px;
+    font-size: 18px;
+    color: #f6ff00;
+}
+
+.product-box {
+    width: 480px;
+    height: 600px;
+    font-size: 0;
+}
+.product-box .product {
+    display: inline-block;
+    width: 240px;
+    height: 300px;
+    padding: 25px 20px;
+    background-color: #fff;
+}
+.product-box .product img {
+    display: block;
+    width: 170px;
+    height: 170px;
+    margin: 0 auto;
+}
+.product-box .product .name {
+    margin: 45px 0 10px;
+    font-size: 12px;
+    color: #000;
+}
+.product-box .product .price-box .price {
+    float: left;
+    font-weight: bold;
+    font-size: 16px;
+    color: #c32424;
+}
+.product-box .product .price-box del {
+    float: right;
+    font-size: 14px;
+    color: #bbb;
+}
+
+.country-box {
+    position: relative;
+    margin-top: 85px;
+    overflow: hidden;
+    background: url(images/template2_line.png) no-repeat center 35px;
+}
+.country-box .symbol {
+    position: absolute;
+    top: 340px;
+}
+.country-box.left .part1,
+.country-box.left .part2 {
+    float: left;
+}
+.country-box.left .part2 {
+    margin-left: 16px;
+}
+.country-box.left .symbol {
+    right: 0;
+}
+.country-box.right .part1,
+.country-box.right .part2 {
+    float: right;
+}
+.country-box.right .part2 {
+    margin-right: 16px;
+}
+.country-box.right .part2 .from-box {
+    text-align: right;
+    padding: 10px 55px 0 0;
+    background: url(images/template2_country.png) no-repeat right top;
+}
+.country-box.right .part2 .from-box .more {
+    left: 0;
+    right: auto;
+}
+.country-box.right .symbol {
+    left: 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

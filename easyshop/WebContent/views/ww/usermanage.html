@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<title>洋流管理系统</title>
+        <link rel="stylesheet" href="css/easyui/metro-gray/easyui.css"/>
+        <link rel="stylesheet" href="css/easyui/icon.css"/>
+		<link rel="stylesheet" href="css/reset.css" />
+        <link rel="stylesheet" href="css/platform.css"/>
+        
+        <style type="text/css">
+        	#dd td{
+        		height: 50px;
+        		text-align: right;
+        	}
+        </style>
+        
+        <script src="js/jquery.min.js"></script>
+        <script src="js/avalon.shim.sn.js"></script>
+        <script src="js/jquery.form.js"></script>
+        <script src="js/easyui/jquery.easyui.min.js"></script>
+        <script src="js/easyui/easyui-lang-zh_CN.js"></script>
+        <script src="js/platform.js"></script>
+        <script src="js/data-interface.js"></script>
+        <script>
+        	var accountgrid = null;
+        	$(function(){
+        		initRoleOptions();
+        	
+        		accountgrid = $("#accounttable").datagrid({
+			        //url:"../../user/getAllUsers?currentPage=1&peerpageRows=15",
+			        url:"../../user/getUserByName?currentPage=1&peerpageRows=15",
+			        columns:[[
+			        	{field:"userId",title:"用户id",hidden:true,width:1},
+			            {field:"name",title:"账号",width:250},
+			            {field:"passwd",title:"密码",width:250,
+			            	formatter: function(value,row,index){
+			            		return "<a href='javascript:void(0);' onclick='resetPasswd(\""+row.userId+"\");'>初始化密码</a>";
+							}
+						},
+			            {field:"role",title:"角色",width:250,
+			            	formatter: function(value,row,index){
+								var role = row.role;
+								if(role != undefined && role != null){
+									return row.role.name;
+								}
+							}
+			            },
+			            {field:"operation",title:"操作",width:250,
+			            	formatter: function(value,row,index){
+			            		var userId = row.userId;
+			            		if(userId != undefined && userId != null){
+			            			return "<a href='javascript:void(0);' onclick='delAccount("+row.userId+");'>删除</a>";
+			            		}
+							}
+			            }
+			        ]],
+			        pagination : true,
+					pageSize : 5,
+					pageList : [5, 10, 15],
+					pageNumber : 1,
+					pagePosition : 'bottom',
+					singleSelect : true,
+					onLoadSuccess : function(data) {
+						if(data != undefined || data.length > 0){
+							accountgrid.datagrid("loaded");
+						}
+					}
+			    });
+        	});
+        	
+        	//初始化角色下拉框
+        	function initRoleOptions(){
+        		$("#role").combobox({
+					url:"../../role/getRoleIdNames",
+					valueField:"roleId",
+					textField:"name",
+					editable:false 
+				});
+        	}
+        	
+        	function searchAccount(){
+        		accountgrid.datagrid("load", {
+			        currentPage: 1,
+			        peerpageRows: 15,
+			        userName:$("#accountTxt").val()
+			    });
+        	}
+        	
+        	function resetPasswd(id){
+        		$.ajax({
+           			type:"post",
+           			dataType:"json",
+           			data:{userId:id},
+           			url:"../../user/resetPassword",
+           			success:function(data){
+           				if(data.status != "fail"){
+           					alert("初始化密码成功");
+           				}else{
+           					alert(data.msg);
+           				}
+           			}
+           		});
+        	}
+        	
+        	function delAccount(id){
+        		$.messager.confirm("Confirm","确定删除选中的用户吗?",function(r){
+				    if (r){
+				        $.ajax({
+		           			type:"post",
+		           			dataType:"json",
+		           			data:{userId:id},
+		           			url:"../../user/deleteOne",
+		           			success:function(data){
+		           				if(data.status != "fail"){
+		           					alert("删除成功");
+		           					accountgrid.datagrid("reload");
+		           				}else{
+		           					alert(data.msg);
+		           				}
+		           			}
+		           		});
+				    }
+				});
+        	}
+        	
+        	function saveAccount(){
+        		var account = $("#account").val();
+        		var passwd = $("#passwd").val();
+        		var role = $("#role").combobox("getValue");
+        		if(account == ""){
+        			alert("请输入账号信息");
+        			return;
+        		}
+        		if(passwd == ""){
+        			alert("请输入初始密码");
+        			return;
+        		}
+        		if(role == ""){
+        			alert("请选择角色");
+        			return;
+        		}
+        		$.ajax({
+           			type:"post",
+           			dataType:"json",
+           			data:{username:account,password:passwd,roleId:role},
+           			url:"../../user/addUser",
+           			success:function(data){
+           				if(data.status != "fail"){
+           					accountgrid.datagrid("reload");
+           					$("#account").textbox("setValue","");
+        					$("#passwd").textbox("setValue","");
+           					alert("保存成功");
+           				}else{
+           					alert(data.msg);
+           				}
+           			}
+           		});
+        	}
+        
+        	function openAddDialog(){
+        		$("#account").textbox("setValue","");
+        		$("#passwd").textbox("setValue","");
+        		$("#dd").dialog("open");
+        	}
+        </script>
+	</head>
+	<body>
+	    <div ms-visible="!edit">
+            <p style="font-size: 12px;color: #4698FF;">权限管理 > 账号管理</p>
+            <div class="u-multiform six">
+                <div class="column">
+                    <div class="cell">
+                        <label>账号：</label>
+                        <input class="u-ipt" ms-duplex="search.code" id="accountTxt">
+                        <button class="u-btn small" style="margin-left: 10px;" onclick="searchAccount();">查询</button>
+                    </div>
+                    <button class="u-btn small" style="float: right;margin-right: 20px;" ms-click="search.search" onclick="openAddDialog();">添加账号</button>
+                </div>
+               
+            </div>
+            <div class="p-datagrid">
+            	<table id = "accounttable"></table>
+            </div>
+        </div>
+        
+        <div class="u-headTip"><p></p></div>
+        
+        
+        <div id="dd" class="easyui-dialog" title="添加账户" style="width:450px;height:250px;"
+            data-options="iconCls:'icon-add',resizable:true,modal:true,closed: true">
+           	<table>
+           		<tr>
+           			<td style="width: 120px;">账号：</td>
+           			<td><input class="easyui-textbox" ms-duplex="search.code" id="account"></td>
+           		</tr>
+           		<tr>
+           			<td>密码：</td>
+           			<td><input class="easyui-textbox" type="password" ms-duplex="search.code" id="passwd"></td>
+           		</tr>
+           		<tr>
+           			<td>角色：</td>
+           			<td>
+           				<input id="role" name="role">
+           				<!-- 
+           				<select id="role">
+           					<option value="">选择角色</option>
+           					<option value="0">运营人员</option>
+           					<option value="1">录入人员</option>
+           					<option value="2">财务人员</option>
+           				</select>
+           				 -->
+           			</td>
+           		</tr>
+           		<tr>
+           			<th colspan="2">
+           				<button class="u-btn small" style="margin-left: 150px;" onclick="saveAccount();">确定</button>
+           				<button class="u-btn small" style="margin-left: 10px;" onclick="$('#dd').dialog('close');" ms-click="search.search">取消</button>
+           			</th>
+           		</tr>
+            </table>
+    	</div>
+        
+	</body>
+</html>

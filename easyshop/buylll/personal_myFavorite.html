@@ -1,0 +1,207 @@
+ <!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <title>洋流网</title>
+
+        <link rel="stylesheet" href="css/reset.css" />
+        <link rel="stylesheet" href="css/personal-favorite.css" />
+    </head>
+    <body ms-controller="common">
+        <div ms-include-src="'template/header.html'" data-include-replace="true" data-include-loaded="initHeader"></div>
+        <div ms-include-src="'template/nav.html'" data-include-replace="true" data-include-loaded="initNav"></div>
+        <div class="wrap" ms-controller="favorite">
+        	<p class="yl-breadcrum">首页 &gt; 个人中心</p>
+        	<div class="yl-personal">
+        		<div class="left-part">
+        			<ul class="menu-box">
+        				<li>
+        					<a class="title" href="javascript:;">个人中心</a>
+        				</li>
+        				<li>
+        					<a class="menu order" href="javascript:;">我的订单</a>
+        				</li>
+        				<li>
+        					<a class="menu favorite sel" href="javascript:;">我的收藏</a>
+        				</li>
+        				<li>
+        					<a class="menu addr" href="javascript:;">地址管理</a>
+        				</li>
+        				<li>
+        					<a class="menu account" href="javascript:;">账户管理</a>
+        				</li>
+        			</ul>
+        		</div>
+        		<div class="right-part">
+        			<div class="yl-dialog">
+        				<p class="title">我的收藏</p>
+        				<div class="dialog-cnt">
+        					<div class="favorite-box">
+        						<div class="item">
+        							<div class="info-box">
+        								<img class="img" src="img/demo_1.png" />
+        								<p class="name">TAKEO KIKUCHI/菊池武2015A 男士牛皮鳄鱼纹公</p>
+        								<div class="price-box">
+        									<div class="yl-area">
+					                            <img src="img/demo_9.png" />
+					                            <span>香港</span>
+					                        </div>
+					                        <p class="price">¥15</p>
+        								</div>
+        							</div>
+        							<div class="operate-mask">
+        								<button class="del"></button>
+        								<button class="add"></button>
+        							</div>
+        						</div>
+        						<div class="item">
+        							<div class="info-box">
+        								<img class="img" src="img/demo_1.png" />
+        								<p class="name">TAKEO KIKUCHI/菊池武2015A 男士牛皮鳄鱼纹公</p>
+        								<div class="price-box">
+        									<div class="yl-area">
+					                            <img src="img/demo_9.png" />
+					                            <span>香港</span>
+					                        </div>
+					                        <p class="price">¥15</p>
+        								</div>
+        							</div>
+        							<div class="operate-mask">
+        								<button class="del"></button>
+        								<button class="add"></button>
+        							</div>
+        						</div>
+        						<div class="item">
+        							<div class="info-box">
+        								<img class="img" src="img/demo_1.png" />
+        								<p class="name">TAKEO KIKUCHI/菊池武2015A 男士牛皮鳄鱼纹公</p>
+        								<div class="price-box">
+        									<div class="yl-area">
+					                            <img src="img/demo_9.png" />
+					                            <span>香港</span>
+					                        </div>
+					                        <p class="price">¥15</p>
+        								</div>
+        							</div>
+        							<div class="operate-mask">
+        								<button class="del"></button>
+        								<button class="add"></button>
+        							</div>
+        						</div>
+        						<div class="item noMgr">
+        							<div class="info-box">
+        								<img class="img" src="img/demo_1.png" />
+        								<p class="name">TAKEO KIKUCHI/菊池武2015A 男士牛皮鳄鱼纹公</p>
+        								<div class="price-box">
+        									<div class="yl-area">
+					                            <img src="img/demo_9.png" />
+					                            <span>香港</span>
+					                        </div>
+					                        <p class="price">¥15</p>
+        								</div>
+        							</div>
+        							<div class="operate-mask">
+        								<button class="del"></button>
+        								<button class="add"></button>
+        							</div>
+        						</div>
+        						<div class="item">
+        							<div class="info-box">
+        								<img class="img" src="img/demo_1.png" />
+        								<p class="name">TAKEO KIKUCHI/菊池武2015A 男士牛皮鳄鱼纹公</p>
+        								<div class="price-box">
+        									<div class="yl-area">
+					                            <img src="img/demo_9.png" />
+					                            <span>香港</span>
+					                        </div>
+					                        <p class="price">¥15</p>
+        								</div>
+        							</div>
+        							<div class="operate-mask">
+        								<button class="del"></button>
+        								<button class="add"></button>
+        							</div>
+        						</div>
+        						<div class="item">
+        							<div class="info-box">
+        								<img class="img" src="img/demo_1.png" />
+        								<p class="name">TAKEO KIKUCHI/菊池武2015A 男士牛皮鳄鱼纹公</p>
+        								<div class="price-box">
+        									<div class="yl-area">
+					                            <img src="img/demo_9.png" />
+					                            <span>香港</span>
+					                        </div>
+					                        <p class="price">¥15</p>
+        								</div>
+        							</div>
+        							<div class="operate-mask">
+        								<button class="del"></button>
+        								<button class="add"></button>
+        							</div>
+        						</div>
+        					</div>
+        				</div>
+        			</div>
+        		</div>
+        	</div>
+        </div>
+        <div ms-include-src="'template/footer.html'" data-include-replace="true"></div>
+
+        <script src="js/avalon.js"></script>
+        <script src="js/jquery.min.js"></script>
+        <script src="js/main.js"></script>
+        <script>
+            $(function(){
+                var headerCtrl = avalon.define({
+                    $id: "header",
+                    productNum: "",
+                    keywords: []
+                });
+
+                var favoriteCtrl = avalon.define({
+                    $id: "favorite",
+                    favorite: [
+                    	{
+                    		img: "img/demo_1.png",
+                    		name: "TAKEO KIKUCHI/菊池武2015A 男士牛皮鳄鱼纹公",
+                    		flag: "img/demo_9.png",
+                    		area: "中国",
+                    		price: "606"
+                    	},
+                    	{
+                    		img: "img/demo_1.png",
+                    		name: "TAKEO KIKUCHI/菊池武2015A 男士牛皮鳄鱼纹公",
+                    		flag: "img/demo_9.png",
+                    		area: "中国",
+                    		price: "606"
+                    	},
+                    	{
+                    		img: "img/demo_1.png",
+                    		name: "TAKEO KIKUCHI/菊池武2015A 男士牛皮鳄鱼纹公",
+                    		flag: "img/demo_9.png",
+                    		area: "中国",
+                    		price: "606"
+                    	},
+                    	{
+                    		img: "img/demo_1.png",
+                    		name: "TAKEO KIKUCHI/菊池武2015A 男士牛皮鳄鱼纹公",
+                    		flag: "img/demo_9.png",
+                    		area: "中国",
+                    		price: "606"
+                    	},
+                    	{
+                    		img: "img/demo_1.png",
+                    		name: "TAKEO KIKUCHI/菊池武2015A 男士牛皮鳄鱼纹公",
+                    		flag: "img/demo_9.png",
+                    		area: "中国",
+                    		price: "606"
+                    	}
+                    ]
+                });
+
+                avalon.scan();
+            });
+        </script>
+    </body>
+</html>

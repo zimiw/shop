@@ -1,0 +1,68 @@
+body {
+    background: #222 url(../img/bg.png) no-repeat center top;
+}
+
+.wrap {
+    width: 1000px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.banner {
+    text-align: center;
+    background-color: #e5005b;
+}
+.banner img {
+    display: inline-block;
+}
+
+.cnt-box {
+    padding-bottom: 150px;
+}
+
+.product-box {
+    margin-bottom: 10px;
+}
+.product-box .title {
+    display: block;
+    width: 100%;
+}
+.product-box .cnt {
+    display: block;
+    font-size: 0;
+}
+.product-box .cnt a {
+    display: inline-block;
+    vertical-align: top;
+}
+.product-box .cnt a img {
+    display: block;
+}
+.product-box .cnt a:first-child {
+    margin-left: 0 !important;
+}
+.product-box.type3 .cnt a {
+    width: 316px;
+    height: 420px;
+    margin-left: 26px;
+}
+.product-box.type2 .cnt a {
+    width: 493px;
+    height: 325px;
+    margin-left: 14px;
+}
+.product-box.type8 .cnt {
+    height: 598px;
+    overflow: hidden;
+}
+.product-box.type8 .cnt a {
+    width: 240px;
+    height: 292px;
+    margin-left: 13.3333px;
+    margin-bottom: 14px;
+}
+.product-box.type8 .cnt a.no-mgl {
+    margin-left: 0;
+}
+
+

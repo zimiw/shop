@@ -1,0 +1,181 @@
+.tab-box {
+	padding: 40px 30px;
+	background-color: #fff;
+}
+.tab-box .tabs {
+	height: 30px;
+	font-size: 0;
+	border-bottom: 2px solid #e5e5e5;
+}
+.tab-box .tab {
+	display: inline-block;
+	vertical-align: top;
+	height: 30px;
+	width: 114px;
+}
+.tab-box .tab:first-child {
+	width: 130px;
+}
+.tab-box .tab a {
+	display: block;
+	height: 14px;
+	color: #404040;
+	font-size: 16px;
+	text-align: center;
+	line-height: 1;
+	border-right: 1px solid #e7e7e7;
+}
+.tab-box .tab a span {
+	color: #ee087e;
+}
+.tab-box .tab.sel {
+	border-bottom: 2px solid #ee087e;
+}
+.tab-box .tab.sel a {
+	color: #ee087e;
+}
+.tab-box .cnts {
+	padding-top: 20px;
+}
+.tab-box .userinfo {
+	padding-left: 60px;
+}
+.tab-box .sex-box {
+	padding-top: 7px;
+}
+.tab-box .btn-modify {
+	display: inline-block;
+	vertical-align: top;
+	height: 32px;
+	margin-left: 20px;
+	line-height: 32px;
+	font-size: 14px;
+	color: #ee087e;
+}
+
+.safe-info {
+	width: 100%;
+	height: 150px;
+	padding-top: 25px;
+	padding-left: 40px;
+	font-size: 0;
+	background: url(images/safe_bg.png) no-repeat center center;
+}
+.safe-info .level,
+.safe-info .tips,
+.safe-info .yl-btn {
+	display: inline-block;
+	vertical-align: middle;
+}
+.safe-info .level {
+	width: 100px;
+	height: 100px;
+	background: url(images/safe_tip.png) no-repeat;
+}
+.safe-info .level1 {
+	background-position: 0 0;
+}
+.safe-info .level2 {
+	background-position: 0 -100px;
+}
+.safe-info .level3 {
+	background-position: 0 -200px;
+}
+.safe-info .tips {
+	margin: 0 120px 0 30px;
+	font-size: 18px;
+	line-height: 1;
+}
+.safe-info .tips .last-login {
+	padding: 12px 0 6px;
+	font-size: 12px;
+	color: #666;
+}
+.safe-info .tips .last-login span {
+	color: #999;
+}
+.safe-info .tips .modify {
+	color: #666;
+	font-size: 12px;
+}
+.safe-info .tips .modify a {
+	color: #2e9900;
+}
+.safe-info .yl-btn {
+	width: 130px;
+	height: 40px;
+	font-weight: bold;
+}
+
+.safe-way {
+	margin-top: 23px;
+	padding-left: 10px;
+}
+.safe-way .item {
+	height: 76px;
+	padding-left: 30px;
+	padding-top: 20px;
+	border-bottom: 1px dashed #eaeaea;
+	font-size: 0;
+}
+.safe-way .item .icon,
+.safe-way .item .name,
+.safe-way .item .intro,
+.safe-way .item .operate-box {
+	display: inline-block;
+	vertical-align: middle;
+}
+.safe-way .item .icon {
+	width: 40px;
+	padding-top: 30px;
+	text-align: center;
+	font-size: 12px;
+	color: #bbb;
+	background: url(images/safe_icon.png) no-repeat 0 0;
+}
+.safe-way .item .icon.warning {
+	background-position: -40px 0;
+}
+.safe-way .item .icon.pwd {
+	color: #ff8800;
+}
+.safe-way .item .name {
+	width: 137px;
+	text-align: center;
+	font-size: 18px;
+}
+.safe-way .item .intro {
+	width: 515px;
+	padding-left: 10px;
+	font-size: 14px;
+	color: #999;
+}
+.safe-way .item .operate-box {
+	width: 170px;
+	text-align: center;
+}
+.safe-way .item .operate-box .link-normal {
+	display: inline-block;
+	margin: 0 8px;
+	font-size: 14px;
+	color: #ee087e;
+}
+.safe-way .item .operate-box .yl-btn-normal {
+	width: 82px;
+	height: 25px;
+	line-height: 25px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

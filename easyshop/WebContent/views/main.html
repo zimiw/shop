@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="description" content="Xenon Boostrap Admin Panel" />
+	<meta name="author" content="" />
+	
+	<title>Xenon - Dashboard</title>
+
+	<link rel="stylesheet" href="http://fonts.useso.com/css?family=Arimo:400,700,400italic">
+	<link rel="stylesheet" href="../assets/css/fonts/linecons/css/linecons.css">
+	<link rel="stylesheet" href="../assets/css/fonts/fontawesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="../assets/css/bootstrap.css">
+	<link rel="stylesheet" href="../assets/css/xenon-core.css">
+	<link rel="stylesheet" href="../assets/css/xenon-forms.css">
+	<link rel="stylesheet" href="../assets/css/xenon-components.css">
+	<link rel="stylesheet" href="../assets/css/xenon-skins.css">
+	<link rel="stylesheet" href="../assets/css/custom.css">
+	
+	<script src="../assets/js/jquery-1.11.1.min.js"></script>
+
+	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+</head>
+<body class="page-body">
+	<div class="settings-pane">
+		<a href="#" data-toggle="settings-pane" data-animate="true">
+			&times;
+		</a>
+	</div>
+	<div class="page-container">
+		
+		<!-- add class "sidebar-collapsed" to close sidebar by default, "chat-visible" to make chat appear always -->
+		<!-- Add "fixed" class to make the sidebar fixed always to the browser viewport. -->
+		<!-- Adding class "toggle-others" will keep only one menu item open at a time. -->
+		<!-- Adding class "collapsed" collapse sidebar root elements and show only icons. -->
+		<div class="sidebar-menu toggle-others fixed">
+			
+			<div class="sidebar-menu-inner">	
+				
+				<header class="logo-env">
+					
+					<!-- logo -->
+					<div class="logo">
+						<a href="dashboard-1.html" class="logo-expanded">
+							<img src="../assets/images/logo@2x.png" width="80" alt="" />
+						</a>
+						
+						<a href="dashboard-1.html" class="logo-collapsed">
+							<img src="../assets/images/logo-collapsed@2x.png" width="40" alt="" />
+						</a>
+					</div>
+					
+					<!-- This will toggle the mobile menu and will be visible only on mobile devices -->
+					<div class="mobile-menu-toggle visible-xs">
+						<a href="#" data-toggle="user-info-menu">
+							<i class="fa-bell-o"></i>
+							<span class="badge badge-success">7</span>
+						</a>
+						<a href="#" data-toggle="mobile-menu">
+							<i class="fa-bars"></i>
+						</a>
+					</div>
+				</header>
+				<ul id="main-menu" class="main-menu">
+					<!-- <li>
+						<a href='javascript:;' title='信息概述'>
+							<i class='linecons-cog'></i><span class='title'>信息概述</span>
+						</a>
+					</li>
+					<li>
+						<a target='rightFrame' href='system/product.html' title='商品管理'>
+							<i class='linecons-cog'></i><span class='title'>商品管理</span>
+						</a>
+					</li>
+					<li>
+						<a target='rightFrame' href='system/catalog.html' title='分类管理'>
+							<i class='linecons-cog'></i><span class='title'>分类管理</span>
+						</a>
+					</li>
+					<li>
+						<a href='javascript:;' title='订单管理'>
+							<i class='linecons-cog'></i><span class='title'>订单管理</span>
+						</a>
+					</li>
+					<li>
+						<a target='rightFrame' href='system/comment.html' title='内容管理'>
+							<i class='linecons-cog'></i><span class='title'>内容管理</span>
+						</a>
+					</li>
+					<li>
+						<a target='rightFrame' href='system/report.html' title='报表管理'>
+							<i class='linecons-cog'></i><span class='title'>报表管理</span>
+						</a>
+					</li>
+					<li>
+						<a href='javascript:;' title='活动管理'>
+							<i class='linecons-cog'></i><span class='title'>活动管理</span>
+						</a>
+					</li>
+					
+					<li>
+						<a href='javascript:;' title='系统管理'>
+							<i class='linecons-cog'></i><span class='title'>系统管理</span>
+						</a>
+						<ul>
+							<li>
+								<a target='rightFrame' href='system/user.html' title='用户管理'>
+									<i class='linecons-cog'></i><span class='title'>用户管理</span>
+								</a>
+							</li>
+							<li>
+								<a target='rightFrame' href='system/role.html' title='角色管理'>
+									<i class='linecons-cog'></i><span class='title'>角色管理</span>
+								</a>
+							</li>
+						</ul>
+					</li>
+					 -->
+				</ul>	
+			</div>
+			
+		</div>
+		
+		<div class="main-content">
+					
+			<!-- User Info, Notifications and Menu Bar -->
+			<nav class="navbar user-info-navbar" role="navigation">
+				<!-- Left links for user info navbar -->
+				
+				<!-- Right links for user info navbar -->
+				<ul class="user-info-menu right-links list-inline list-unstyled">
+					<li>
+						<a href="#" style="display:inline-block">
+							<img src="../assets/images/user-4.png" alt="user-image" class="img-circle img-inline userpic-32" width="28" />
+							<span id="currentUser">
+								
+							</span>
+						</a>
+						<a href="../views/login.html" style="display:inline-block">
+							<i class="fa-lock"></i>
+							退出登录
+						</a>
+					</li>
+				</ul>
+			</nav>
+			<div class="row">
+				<div class="col-sm-12" style="min-height:750px">
+					<iframe src="" name="rightFrame" style="width:100%;min-height:750px;border:0"></iframe>
+				</div>
+			</div>
+			<!-- Main Footer -->
+			<!-- Choose between footer styles: "footer-type-1" or "footer-type-2" -->
+			<!-- Add class "sticky" to  always stick the footer to the end of page (if page contents is small) -->
+			<!-- Or class "fixed" to  always fix the footer to the end of page -->
+			<footer class="main-footer sticky footer-type-1">
+				<div class="footer-inner">
+					<!-- Add your copyright text here -->
+					<div class="footer-text">
+						&copy; 2015
+						<strong>EasyShop</strong> 
+					</div>
+				</div>
+			</footer>
+		</div>
+	</div>
+	
+	
+	<div class="page-loading-overlay">
+		<div class="loader-2"></div>
+	</div>
+	
+
+
+
+	<!-- Bottom Scripts -->
+	<script src="../assets/js/jquery-1.11.1.min.js"></script>
+	<script src="../assets/js/bootstrap.min.js"></script>
+	<script src="../assets/js/TweenMax.min.js"></script>
+	<script src="../assets/js/resizeable.js"></script>
+	<script src="../assets/js/joinable.js"></script>
+	<script src="../assets/js/xenon-api.js"></script>
+	<script src="../assets/js/xenon-toggles.js"></script>
+
+
+	<!-- Imported scripts on this page -->
+	<script src="../assets/js/xenon-widgets.js"></script>
+	<script src="../assets/js/devexpress-web-14.1/js/globalize.min.js"></script>
+	<script src="../assets/js/devexpress-web-14.1/js/dx.chartjs.js"></script>
+	<script src="../assets/js/toastr/toastr.min.js"></script>
+
+
+	<!-- JavaScripts initializations and stuff -->
+	<script src="../assets/js/xenon-custom.js"></script>
+	<script>
+		function buildItem(arraies){
+			if(arraies.length>0){
+				var result="";
+				for(var i=0;i<arraies.length;i++){
+					if(arraies[i].subFunctions.length>0){
+						result+="<li><a href='javascript:;' title='"+arraies[i].name+"'>"+
+								"<i class='linecons-cog'></i><span class='title'>"+arraies[i].name+"</span></a>";
+						result=buildSubItem(result,arraies[i].subFunctions);
+						result+="</li>";
+					}else{
+						result+="<li><a target='rightFrame' href='"+arraies[i].url+"' title='"+arraies[i].name+"'><i class='linecons-cog'></i><span class='title'>"+arraies[i].name+"</span></a></li>";
+					}
+				}
+			}
+			return result;
+		}
+		function buildSubItem(content,arraies){
+			if(arraies.length>0){
+				content+="<ul>";
+				for(var ii=0;ii<arraies.length;ii++){
+					if(arraies[ii].subFunctions.length>0){
+						content=buildSubItem(content,arraies[ii].subFunctions);
+					}else{
+						content+="<li><a target='rightFrame' href='"+arraies[ii].url+"'><span class='title'>"+arraies[ii].name+"</span></a></li>";
+					}
+				}
+				content+="</ul>";
+			}
+			return content;
+		}
+		$(document).ready(function(){
+			$.ajax({
+				url:"../user/currentUser",
+				type:"post",
+				dataType:"json",
+				success:function(data){
+					if(data.status=="success"){
+						$("#currentUser").html(data.currentUser);
+						if(data.isAdmin=="true"){
+							$.ajax({
+								url:"../functions/getAllFunctions",
+								type:"post",
+								dataType:"json",
+								data:{
+									id:1
+								},
+								success:function(data){
+									var result=buildItem(data.rows[0].subFunctions);
+									$("#main-menu").html(result);
+									setup_sidebar_menu();
+								},
+								error:function(){
+									alert("加载菜单失败！");
+								}
+							});
+						}else{
+							$.ajax({
+								url:"../role/getRolePrivileges",
+								type:"post",
+								dataType:"json",
+								data:{
+									userName:data.currentUser
+								},
+								success:function(data){
+									var result=buildItem(data.rows);
+									$("#main-menu").html(result);
+									setup_sidebar_menu();
+								},
+								error:function(){
+									alert("加载菜单失败！");
+								}
+							});
+						}
+						
+					}else{
+						window.location.href="login.html";
+					}
+					
+				},
+				error:function(){
+					alert("加载菜单失败！");
+				}
+			});
+			
+			$(window).resize(function(){
+				if($(".sidebar-menu.toggle-others.fixed").hasClass("collapsed")){
+					$(".sidebar-menu.toggle-others.fixed").removeClass("collapsed");
+				}
+			});
+		});
+		
+	</script>
+
+</body>
+</html>

@@ -1,0 +1,167 @@
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var,b, u, i, center,dl, dt, dd, ol, ul, li, fieldset,
+form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer,
+header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video, button, input, textarea{margin:0;padding:0;box-sizing:border-box;line-height: 1;}
+header,footer,section,article,aside,nav,hgroup,address,figure,figcaption,menu,details{display:block;}
+caption,th{font-weight:normal;}
+html,body,fieldset,img,iframe,abbr{border:0;}
+i,cite,em,var,address,dfn{font-style:normal;}
+[hidefocus],summary{outline:0;}
+li{list-style:none;}
+h1,h2,h3,h4,h5,h6,small{font-size:100%;}
+sup,sub{font-size:83%;}
+pre,code,kbd,samp{font-family:inherit;}
+q:before,q:after{content:none;}
+textarea{overflow:auto;resize:none;}
+input,textarea{border:none;outline:none;background:none;-webkit-tap-highlight-color:rgba(255,0,0,0);}
+label,summary{cursor:default;}
+a,button{cursor:pointer;background:none;border:none;}
+h1,h2,h3,h4,h5,h6,em,strong,b{font-weight:bold;}
+body,textarea,input,button,select,keygen,legend{color:#333;outline:0;font-family:arial,"microsoft yahei", STHeiTi, sans-serif;}
+a{text-decoration:none;-webkit-tap-highlight-color:rgba(255,0,0,0);outline:none;}
+table{border-collapse: collapse;border-spacing: 0;}
+body,input{font-size: 14px;}
+
+body {
+	background-color: #212121;
+}
+.wrap {
+    width: 1000px;
+    margin: 0 auto;
+}
+.header .buy-info {
+    height: 95px;
+    background-color: #fff;
+}
+.header .buy-info .logo {
+    float: left;
+    display: block;
+    width: 180px;
+    height: 100%;
+}
+.header .buy-info .logo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.footer {
+    margin-top: 70px;
+}
+.footer .company-info {
+    background-color: #fff;
+}
+.footer .company-info .promise {
+    height: 80px;
+    border-bottom: 1px solid #f1f1f1;
+    background: url(images/promise.png) no-repeat center;
+}
+.footer .about-info {
+    font-size: 0;
+}
+.footer .about-info .open-box,
+.footer .about-info .item,
+.footer .about-info .qrcode {
+    display: inline-block;
+    vertical-align: middle;
+}
+.footer .about-info .open-box {
+    width: 230px;
+    height: 164px;
+    margin-right: 80px;
+    padding-top: 64px;
+    text-align: center;
+    font-size: 12px;
+    line-height: 1;
+    background: url(images/tel_bg.png) no-repeat center;
+}
+.footer .about-info .open-box .tel {
+    margin-bottom: 5px;
+    font-size: 20px;
+    color: #404040;
+    line-height: 1;
+}
+.footer .about-info .item {
+    height: 164px;
+    margin-right: 173px;
+    padding-top: 32px;
+}
+.footer .about-info .item li {
+    font-size: 14px;
+    color: #404040;
+    line-height: 1;
+    margin-bottom: 9px;
+}
+.footer .about-info .item li:first-child {
+    margin-bottom: 14px;
+}
+.footer .about-info .item li a {
+    display: block;
+    font-size: 12px;
+    color: #999;
+    line-height: 1;
+}
+.footer .copyright-info {
+    height: 76px;
+    padding-top: 23px;
+    text-align: center;
+    font-size: 12px;
+    color: #999;
+    background-color: #323232;
+}
+.footer .copyright-info p {
+    padding: 4px 0;
+    line-height: 1;
+}
+.footer-box .footer {
+    margin-top: 0;
+}
+
+.banner {
+    text-align: center;
+    background-color: #e5005b;
+}
+.banner img {
+    display: inline-block;
+}
+
+.product-box .title {
+    display: block;
+    width: 100%;
+}
+.product-box .cnt {
+    display: block;
+    font-size: 0;
+}
+.product-box .cnt a {
+    display: inline-block;
+    vertical-align: top;
+}
+.product-box .cnt a img {
+    display: block;
+}
+.product-box .cnt a:first-child {
+    margin-left: 0 !important;
+}
+.product-box.type3 .cnt a {
+    width: 316px;
+    height: 420px;
+    margin-left: 26px;
+}
+.product-box.type2 .cnt a {
+    width: 493px;
+    height: 325px;
+    margin-left: 14px;
+}
+.product-box.type8 .cnt {
+    height: 598px;
+    overflow: hidden;
+}
+.product-box.type8 .cnt a {
+    width: 240px;
+    height: 292px;
+    margin-left: 13.3333px;
+    margin-bottom: 14px;
+}
+.product-box.type8 .cnt a.no-mgl {
+    margin-left: 0;
+}

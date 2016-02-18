@@ -1,0 +1,25 @@
+{
+	"classify": "运动户外",
+	"title": "FENDI/芬迪 女士2Jours系列渐变斜格小牛皮手拎包 8BH250 红色渐变",
+	"imgs": [
+		["img/demo_detail-1.png", "img/demo_detail-2.png", "img/demo_detail-3.png", "img/demo_detail-4.png", "img/demo_detail-5.png"],
+		["img/demo_detail-1.png", "img/demo_detail-2.png", "img/demo_detail-3.png", "img/demo_detail-4.png", "img/demo_detail-5.png"],
+		["img/demo_detail-1.png", "img/demo_detail-2.png", "img/demo_detail-3.png", "img/demo_detail-4.png", "img/demo_detail-5.png"]
+	],
+	"flag": "img/demo_9.png",
+    "area": "香港",
+    "price": "606.20",
+    "reference": "1099",
+    "colors": [
+    	"img/demo_detail-6.png",
+    	"img/demo_detail-7.png",
+    	"img/demo_detail-8.png"
+    ],
+    "sizes": [
+    	"S",
+    	"M"
+    ],
+    "num": 1,
+    "collection": false,
+    "details": ["img/demo_detail-9.png", "img/demo_detail-10.png"]
+}

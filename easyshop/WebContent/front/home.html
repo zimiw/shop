@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <title>洋流网</title>
+
+        <link rel="stylesheet" href="../css/front/reset.css" />
+        <link rel="stylesheet" href="../css/front/home.css" />
+    </head>
+    <body ms-controller="common">
+        <div ms-include-src="'../template/header.html'" data-include-replace="true" data-include-loaded="initHeader"></div>
+        <div ms-include-src="'../template/nav.html'" data-include-replace="true" data-include-loaded="initNav"></div>
+        <div ms-controller="home">
+            <div class="banner">
+                <ul>
+                    <li ms-repeat="banner">
+                        <a ms-attr-href="el.url">
+                            <img ms-attr-src="el.imgSource" />
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="free wrap">
+                <div class="countdown-box">
+                    <div class="free-countdown"></div>
+                </div>
+                <div class="prize-box">
+                    <a href="javascript:;" ms-click="freeRule">活动说明</a>
+                    <div class="name-box" ms-visible="!rule">
+                        <p ms-repeat="win">{{el.id}}&nbsp;&nbsp;&nbsp;&nbsp;{{el.name}}&nbsp;&nbsp;&nbsp;&nbsp;{{el.bindPhone}}</p>
+                    </div>
+                    <p class="rule" ms-visible="rule">
+                        1.抽奖规则1<br />
+                        2.抽奖规则2
+                    </p>
+                </div>
+            </div>
+            <div class="cnt-box wrap">
+                <div class="flash-sale">
+                    <p class="home-title flash"></p>
+                    <div class="container">
+                        <div class="cell" ms-class="no-mgl: $index == 2 || $index == 4" ms-repeat="limit">
+                            <img class="product" ms-attr-src="el.imgs[0].imgsource" />
+                            <div class="info-box">
+                                <div class="yl-area">
+                                    <em ms-class="{{el.country}}"></em>
+                                    <span>{{el.country | area}}</span>
+                                </div>
+                                <p class="title">{{el.name}}</p>
+                                <p class="price">¥<span>{{el.specialPrice}}</span></p>
+                                <p class="contrast">洋流原价：¥{{el.currentPrice}}&nbsp;&nbsp;&nbsp;&nbsp;国内参考价：{{el.originPrice}}</p>
+                            </div>
+                            <div class="is-countdown normal-countdown" ms-class="countdown-sale{{$index}}"></div>
+                            <a class="addDetail" ms-attr-href="'detail.html?productId=' + el.productId">立即购买</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="activity">
+                    <p class="home-title activity"></p>
+                    <div class="container">
+                        <a class="cell" ms-href="el.url" ms-repeat="activity">
+                            <img ms-attr-src="el.imgSource" />
+                            <div class="is-countdown normal-countdown" ms-class="countdown-activity{{$index}}"></div>
+                        </a>
+                    </div>
+                </div>
+                <div class="hot">
+                    <p class="home-title hot"></p>
+                    <div class="container">
+                        <div class="cell">
+                            <a class="hot-small" ms-attr-href="adviser.url">
+                                <img ms-attr-src="adviser.imgSource" />
+                            </a>
+                            <div class="item-box">
+                                <a class="item" ms-attr-href="'detail.html?productId=' + hot1.productId">
+                                    <img class="product" ms-attr-src="hot1.imgs[0].imgsource" />
+                                    <div class="info-box">
+                                        <div class="yl-area">
+		                                    <em ms-class="{{hot1.country}}"></em>
+                                            <span>{{hot1.country | area}}</span>
+		                                </div>
+                                        <p class="title">{{hot1.name}}</p>
+                                        <p class="price">¥{{hot1.currentPrice}}</p>
+                                    </div>
+                                </a>
+                                <a class="item" ms-attr-href="'detail.html?productId=' + hot2.productId">
+                                    <img class="product" ms-attr-src="hot2.imgs[0].imgsource" />
+                                    <div class="info-box">
+                                        <div class="yl-area">
+		                                    <em ms-class="{{hot2.country}}"></em>
+                                            <span>{{hot2.country | area}}</span>
+		                                </div>
+                                        <p class="title">{{hot2.name}}</p>
+                                        <p class="price">¥{{hot2.currentPrice}}</p>
+                                    </div>
+                                </a>
+                            </div>
+                            <a class="hot-big" ms-attr-href="'detail.html?productId=' + hot3.productId">
+                                <img ms-attr-src="hot3.imgs[0].imgsource" />
+                                <div class="yl-area">
+                                    <em ms-class="{{hot3.country}}"></em>
+                                    <span>{{hot3.country | area}}</span>
+                                </div>
+                                <div class="info-bar">
+                                    <p class="title">{{hot3.name}}</p>
+                                    <del class="origin">{{hot2.originPrice}}</del>
+                                    <p class="price">¥{{hot2.currentPrice}}</p>
+                                </div>
+                            </a>
+                            <div class="item-box">
+                                <a class="item" ms-attr-href="'detail.html?productId=' + hot4.productId">
+                                    <img class="product" ms-attr-src="hot4.imgs[0].imgsource" />
+                                    <div class="info-box">
+                                        <div class="yl-area">
+		                                    <em ms-class="{{hot4.country}}"></em>
+                                            <span>{{hot4.country | area}}</span>
+		                                </div>
+                                        <p class="title">{{hot4.name}}</p>
+                                        <p class="price">¥{{hot4.currentPrice}}</p>
+                                    </div>
+                                </a>
+                                <a class="item" ms-attr-href="'detail.html?productId=' + hot5.productId">
+                                    <img class="product" ms-attr-src="hot5.imgs[0].imgsource" />
+                                    <div class="info-box">
+                                        <div class="yl-area">
+		                                    <em ms-class="{{hot5.country}}"></em>
+                                            <span>{{hot5.country | area}}</span>
+		                                </div>
+                                        <p class="title">{{hot5.name}}</p>
+                                        <p class="price">¥{{hot5.currentPrice}}</p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="toolbar-box">
+                    <div class="right-bar" id="right-bar">
+                        <div class="shop-cart">
+                            <p class="num">{{productNum}}</p>
+                        </div>
+                        <div class="tel">
+                            <script src="http://chat16.live800.com/live800/chatClient/staticButton.js?jid=9247684444&companyID=547265&configID=145350&codeType=custom"></script>
+                        </div>
+                        <div class="to-top"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div ms-include-src="'../template/footer.html'" data-include-replace="true"></div>
+
+        <script src="../js/avalon.shim.sn.js"></script>
+        <script src="../js/jquery.min.js"></script>
+        <script src="../js/unslider.min.js"></script>
+        <script src="../js/jquery.countdown.min.js"></script>
+        <script src="../js/jquery.pin.min.js"></script>
+        <script src="../js/main.js"></script>
+        <script src="../js/data-interface.js"></script>
+        <script>
+            $(function(){
+                var homeCtrl = avalon.define({
+                    $id: "home",
+                    banner: [],
+                    win: [],
+                    limit: [],
+                    activity: [],
+                    hot1: [],
+                    hot2: [],
+                    hot3: [],
+                    hot4: [],
+                    hot5: [],
+                    hot6: [],
+                    adviser: [],
+                    productNum: "0",
+                    rule: false,
+                    freeRule: function(){
+                        homeCtrl.rule = !homeCtrl.rule;
+                    }
+                });
+
+                avalon.scan();
+                
+                //获取banner
+                $.ajax({
+                	type: "post",
+                    url: DI.getBanner,
+                    dataType: "json",
+                    success:function(data){
+                    	homeCtrl.banner = data.banner;
+                    	var timer = setTimeout(function(){
+                            $('.banner').unslider({
+                                dots: true
+                            });
+                            clearTimeout(timer);
+                            timer = null;
+                        }, 0);
+                    }
+                });
+				//Limit
+				$.ajax({
+                	type: "post",
+                    url: DI.getLimit,
+                    dataType: "json",
+                    success:function(data){
+                		homeCtrl.limit = data.limit;
+                    	var timer = setTimeout(function(){
+                    		for(var i=0; i<data.limit.length; i++){
+                                $(".countdown-sale" + i).countdown({
+                                    date: new Date(data.limit[i].external),
+                                    render: function(data) {
+                                        $(this.el).html(this.leadingZeros(data.hours, 2) + "小时 " + this.leadingZeros(data.min, 2) + "分 " + this.leadingZeros(data.sec, 2) + "秒");
+                                        if(data.sec % 5 == 0){
+                                            // 查询是否还有库存
+                                            
+                                        }
+                                    },
+                                    onEnd: function(){
+                                        var cell = $(this.el).parents(".cell");
+                                        cell.find(".addDetail").remove();
+                                        $(this.el).remove();
+                                        cell.append("<img class='tag_status' src='../img/goods_over.png' />")
+                                    }
+                                });
+                            };
+                    		 clearTimeout(timer);
+                             timer = null;
+                         }, 0);
+                    }
+                });
+				//hotsell
+				$.ajax({
+                	type: "post",
+                    url: DI.getHotSell,
+                    dataType: "json",
+                    success:function(data){
+                    	homeCtrl.hot1 = data.hot[0];
+                        homeCtrl.hot2 = data.hot[1];
+                        homeCtrl.hot3 = data.hot[2];
+                        homeCtrl.hot4 = data.hot[3];
+                        homeCtrl.hot5 = data.hot[4];
+                        homeCtrl.hot6 = data.hot[5];
+                    }
+                });
+				//special
+				$.ajax({
+                	type: "post",
+                    url: DI.getSpecial,
+                    dataType: "json",
+                    success:function(data){
+                		homeCtrl.activity = data.activity;
+                    	var timer = setTimeout(function(){
+                    		for(var i=0; i<data.activity.length; i++){
+                                $(".countdown-activity" + i).countdown({
+                                    date: new Date(data.activity[i].endTime),
+                                    render: function(data) {
+                                        $(this.el).html(this.leadingZeros(data.hours, 2) + "小时 " + this.leadingZeros(data.min, 2) + "分 " + this.leadingZeros(data.sec, 2) + "秒");
+                                    },
+                                    onEnd: function(){
+                                        $(this.el).parents(".cell").remove();
+                                    }
+                                });
+                            };
+                            
+                            clearTimeout(timer);
+                            timer = null;
+                        }, 0);
+                    }
+                });
+				//win
+				$.ajax({
+					type:"post",
+					dataType:"json",
+					url:DI.getWin,
+					success:function(data){
+						homeCtrl.win = data.win;
+						if(data.win.length == 0){
+						    homeCtrl.rule = true;
+						}
+					}
+				});
+				//adviser
+				$.ajax({
+					type:"post",
+					dataType:"json",
+					url:DI.getAdviser,
+					success:function(data){
+						homeCtrl.adviser = data.adviser[0];
+					}
+				});
+				
+				function getFree(){
+                    var now = new Date(),
+                        year = now.getFullYear(),
+                        month = now.getMonth(),
+                        day = now.getDate(),
+                        hour = now.getHours(),
+                        limit = null;
+                    
+                    if(hour > 8){
+                        limit = new Date(year + "-" + (month + 1) + "-" + (day + 1) + " 09:00");
+                    }else{
+                        limit = new Date(year + "-" + (month + 1) + "-" + day + " 09:00");
+                    }
+				    return limit;
+				}
+                
+                $(".free-countdown").countdown({
+                    date: getFree(),
+                    render: function(data) {
+                        $(this.el).html("<span>" + this.leadingZeros(data.hours, 2) + "</span><span>" + this.leadingZeros(data.min, 2) + "</span><span>" + this.leadingZeros(data.sec, 2) + "</span>");
+                    },
+                    onEnd: function(){
+                        $(this).update(getFree());
+                    }
+                });
+                
+                $(".toolbar-box").pin();
+            });
+        </script>
+    </body>
+</html>

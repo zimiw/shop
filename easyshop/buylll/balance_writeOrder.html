@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <title>洋流网</title>
+
+        <link rel="stylesheet" href="css/reset.css" />
+        <link rel="stylesheet" href="css/balance-order.css" />
+    </head>
+    <body ms-controller="common">
+        <div ms-include-src="'template/header.html'" data-include-replace="true" data-include-loaded="initHeader"></div>
+        <div class="wrap" ms-controller="order">
+        	<div ms-visible="!addAddr">
+	        	<div class="order-box addr">
+	        		<p class="title"><span>选择收货地址</span></p>
+	        		<div class="cnt">
+	        			<div class="yl-addrbox">
+	        				<div class="addr default">
+	        					<p class="recipients">测试<span>收</span></p>
+	        					<div class="info">
+	        						<p>江苏省南京市鼓楼区</p>
+	        						<p>淮海路1859号 中山大厦</p>
+	        						<p>159****5582</p>
+	        					</div>
+	        					<div class="operate-box">
+	        						<a class="modify"></a>
+	        						<a class="del"></a>
+	        					</div>
+		        				<a class="make-def" href="javascript:;">默认收货地址</a>
+	        				</div>
+	        				<div class="addr">
+	        					<p class="recipients">测试<span>收</span></p>
+	        					<div class="info">
+	        						<p>江苏省南京市鼓楼区</p>
+	        						<p>淮海路1859号 中山大厦</p>
+	        						<p>159****5582</p>
+	        					</div>
+	        					<div class="operate-box">
+	        						<a class="modify"></a>
+	        						<a class="del"></a>
+	        					</div>
+		        				<a class="make-def" href="javascript:;">默认收货地址</a>
+	        				</div>
+	        				<div class="addrAdd" ms-click="addrAdd"></div>
+	        			</div>
+	        		</div>
+	        	</div>
+	        	<div class="order-box">
+	        		<p class="title">
+	        			<span>确认商品信息</span>
+	        			<a href="javascript:;">返回购物车修改&nbsp;&gt;</a>
+	        		</p>
+	        		<div class="cnt">
+	        			<table class="tb-goods">
+	        				<thead>
+	        					<tr>
+		        					<th class="col1"></th>
+		        					<th class="col2">商品信息</th>
+		        					<th class="col3">单价（元）</th>
+		        					<th class="col4">数量</th>
+		        					<th class="col5">金额</th>
+	        					</tr>
+	        				</thead>
+	        				<tbody>
+	        					<tr>
+	        						<td class="col1">
+	        							<img src="img/demo_1.png" />
+	        						</td>
+	        						<td class="col2">测试商品</td>
+	        						<td class="col3">10.00</td>
+	        						<td class="col4">1</td>
+	        						<td class="col5">10.00</td>
+	        					</tr>
+	        					<tr>
+	        						<td class="col1">
+	        							<img src="img/demo_1.png" />
+	        						</td>
+	        						<td class="col2">测试商品</td>
+	        						<td class="col3">10.00</td>
+	        						<td class="col4">1</td>
+	        						<td class="col5">10.00</td>
+	        					</tr>
+	        				</tbody>
+	        			</table>
+	        		</div>
+	        	</div>
+	        	<div class="balance-box">
+	        		<div class="rule">
+	        			<div class="yl-chkbox">
+	                        <em></em>
+	                    </div>
+	                    <span>本人同意并接受《洋流网服务协议》</span>
+	        		</div>
+	        		<div class="total-box">
+	        			<p>运费:<span>{{freight | currency}}</span></p>
+	        			<p class="total">应付金额:<span>{{total | currency}}</span></p>
+	        			<button>立刻结算</button>
+	        		</div>
+	        	</div>
+        	</div>
+        	<div ms-visible="addAddr">
+        		<div class="order-box add">
+	        		<p class="title">
+	        			<span>新增收货地址</span>
+	        		</p>
+	        		<div class="cnt">
+	        			<div class="yl-form six">
+    						<div class="item">
+        						<label><span>*</span>所在地区</label>
+        						<div class="form-cnt">
+	        						<select class="yl-select area">
+	        							<option>省/直辖市</option>
+	        						</select>
+	        						<select class="yl-select area">
+	        							<option>城市/地区</option>
+	        						</select>
+	        						<select class="yl-select area">
+	        							<option>区/县</option>
+	        						</select>
+        						</div>
+        					</div>
+        					<div class="item">
+        						<label><span>*</span>详细地址</label>
+        						<input class="ipt-form long" />
+        					</div>
+        					<div class="item">
+        						<label><span>*</span>收货人姓名</label>
+        						<input class="ipt-form long" />
+        					</div>
+        					<div class="item">
+        						<label><span>*</span>手机号码</label>
+        						<input class="ipt-form long" />
+        					</div>
+        					<div class="item">
+        						<label>电话号码</label>
+        						<div class="form-cnt">
+	        						<input class="ipt-form telpre" />
+	        						<span class="split">-</span>
+	        						<input class="ipt-form tel" />
+        						</div>
+        					</div>
+        					<div class="item forBtn">
+        						<label></label>
+        						<button class="yl-btn middle">+&nbsp;保存新地址</button>
+        					</div>
+    					</div>
+	        		</div>
+	        	</div>
+        	</div>
+        </div>
+        <div ms-include-src="'template/footer.html'" data-include-replace="true"></div>
+
+        <script src="js/avalon.js"></script>
+        <script src="js/jquery.min.js"></script>
+        <script src="js/main.js"></script>
+        <script>
+            $(function(){
+                var orderCtrl = avalon.define({
+                    $id: "order",
+                    addAddr: false,
+                    addr:[
+                        {
+                            "name": "祝小鱼",
+                            "city": "江苏省南京市鼓楼区",
+                            "street": "淮海路1859号 中山大厦",
+                            "phone": "159****5582",
+                            "def": true
+                        },
+                        {
+                            "name": "祝小鱼",
+                            "city": "江苏省南京市鼓楼区",
+                            "street": "淮海路1859号 中山大厦",
+                            "phone": "159****5582",
+                            "def": false
+                        }
+                    ],
+                    goods:[
+                        {
+                            "img": "img/demo_1.png",
+                            "name": "AKEO KIKUCHI/菊池武夫 2015AW 男士牛皮鳄鱼",
+                            "price": "60.6",
+                            "num": "2"
+                        }
+                    ],
+                    freight: 0,
+                    total: 1299,
+                    addrAdd: function(){
+                    	orderCtrl.addAddr = true;
+                    }
+                });
+
+                avalon.scan();
+            });
+        </script>
+    </body>
+</html>

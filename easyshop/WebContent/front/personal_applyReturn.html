@@ -1,0 +1,196 @@
+ <!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <title>洋流网</title>
+
+        <link rel="stylesheet" href="../css/front/reset.css" />
+    </head>
+    <body ms-controller="common">
+        <div ms-include-src="'../template/header.html'" data-include-replace="true" data-include-loaded="initHeader"></div>
+        <div ms-include-src="'../template/nav.html'" data-include-replace="true" data-include-loaded="initNav"></div>
+        
+        <div class="wrap" ms-controller="return">
+        	<p class="yl-breadcrum">首页 &gt; 个人中心 &gt; 退款申请</p>
+        	<div class="yl-personal">
+        		<div class="left-part">
+        			<div class="yl-leftinfo">
+        				<p class="title">退款商品</p>
+        				<div class="leftinfo-cnt">
+        					<div class="good-info">
+        						<img ms-attr-src="img" />
+        						<span>{{name}}</span>
+        					</div>
+        					<div class="yl-datagrid word three">
+	        					<div class="item">
+	        						<label>单价：</label>
+	        						<p class="form-ctt">{{price}}</p>
+	        					</div>
+	        					<div class="item">
+	        						<label>数量：</label>
+	        						<p class="form-ctt">{{num}}</p>
+	        					</div>
+	        					<div class="item">
+	        						<label>小计：</label>
+	        						<p class="form-ctt color-price">{{price*num | currency}}</p>
+	        					</div>
+	        				</div>
+        				</div>
+        			</div>
+        			<div class="division-line"></div>
+        			<div class="yl-leftinfo">
+        				<p class="title">订单详情</p>
+        				<div class="leftinfo-cnt">
+        					<div class="yl-datagrid word five">
+	        					<div class="item">
+	        						<label>订单编号：</label>
+	        						<p class="form-ctt">{{oid}}</p>
+	        					</div>
+	        					<div class="item">
+	        						<label>运费：</label>
+	        						<p class="form-ctt">¥0.00</p>
+	        					</div>
+	        					<div class="item">
+	        						<label>订单金额：</label>
+	        						<p class="form-ctt color-price">{{total | currency}}</p>
+	        					</div>
+	        					<div class="item">
+	        						<label>成交时间：</label>
+	        						<p class="form-ctt">{{odate | date("yyyy-MM-dd")}}</p>
+	        					</div>
+	        					<div class="item">
+	        						<label></label>
+	        						<p class="form-ctt">{{odate | date("HH:mm:ss")}}</p>
+	        					</div>
+	        				</div>
+        				</div>
+        			</div>
+        		</div>
+        		<div class="right-part">
+        			<div class="yl-dialog">
+        				<p class="title">退款申请</p>
+        				<div class="dialog-cnt">
+        					<form class="yl-form six" id="form_return" enctype="multipart/form-data">
+            				    <input type="hidden" name="orderId" ms-duplex="param.orderId" />
+            				    <input type="hidden" name="productId" ms-duplex="param.productId" />
+            				    <input type="hidden" name="num" ms-duplex="param.num" />
+            				    <input type="hidden" name="amount" ms-duplex="param.amount" />
+        						<div class="item">
+	        						<label><span>*</span>退款原因：</label>
+	        						<select class="yl-select" name="changeReason" ms-duplex="param.changeReason" data-duplex-changed="selectchange">
+	        							<option value="0">质量问题</option>
+	        							<option value="1">颜色/款式/图案与描述不符</option>
+	        							<option value="2">假冒品牌</option>
+	        							<option value="3">收到商品破损</option>
+	        							<option value="4">材质、面料与商品描述不符</option>
+	        							<option value="5">大小尺寸与商品描述不符</option>
+	        							<option value="6">卖家发错货</option>
+	        							<option value="7">其他</option>
+	        						</select>
+	        					</div>
+	        					<div class="item">
+	        						<label>退款说明：</label>
+	        						<textarea class="yl-textarea" name="remark" ms-duplex="param.remark"></textarea>
+	        					</div>
+	        					<div class="item">
+	        						<label>退款凭证：</label>
+	        						<div class="form-cnt">
+                                        <div class="yl-uploadimg">
+                                            <img src="../img/defaultHead.jpg">
+                                            <p class="as-btn">点击上传</p>
+                                            <input type="file" name="image1">
+                                        </div>
+                                    </div>
+	        						<a href="javascript:;" class="help-tip">上传帮助</a>
+	        					</div>
+        					</form>
+        					<div class="yl-form six">
+	        					<div class="item forBtn">
+	        						<label></label>
+	        						<button class="yl-btn middle" ms-click="apply">申请</button>
+	        					</div>
+	        				</div>
+        				</div>
+        			</div>
+        		</div>
+        	</div>
+        </div>
+        <div ms-include-src="'../template/footer.html'" data-include-replace="true"></div>
+
+        <script src="../js/avalon.shim.sn.js"></script>
+        <script src="../js/jquery.min.js"></script>
+        <script src="../js/jquery.form.js"></script>
+        <script src="../js/main.js"></script>
+        <script src="../js/data-interface.js"></script>
+        <script>
+            $(function(){
+                var param = Buylll.getUrlArgs();
+                
+                var returnCtrl = avalon.define({
+                    $id: "return",
+                    param: {
+                        orderId: param.orderId,
+                        productId: param.productId,
+                        num: 0,
+                        amount: 0,
+                        changeReason: 0,
+                        remark: ""
+                    },
+                    selectchange: function(val){
+                        returnCtrl.param.changeReason = val;
+                    },
+                    name: "",
+                    img: "",
+                    num: "",
+                    price: "",
+                    oid: "",
+                    total: "",
+                    odate: "",
+                    apply: function(){
+                        $("#form_return").ajaxSubmit({
+                            type: "post",
+                            url: DI.orderReturn,
+                            dataType: "json",
+                            success: function(data){
+                                location.href = "personal_myOrder.html";
+                            },
+                            error: function(err){
+                                console.log(err);
+                            }
+                        });
+                    }
+                });
+
+                avalon.scan();
+                
+                $.ajax({
+                    type: "post",
+                    url: DI.getOrderAndProduct,
+                    data: {
+                        orderId: Number(param.orderId),
+                        productId: Number(param.productId)
+                    },
+                    dataType: "json",
+                    success: function(data){
+                        returnCtrl.name = data.name;
+                        returnCtrl.img = data.img;
+                        returnCtrl.num = data.num;
+                        returnCtrl.price = data.price;
+                        returnCtrl.oid = data.oid;
+                        returnCtrl.total = data.total;
+                        returnCtrl.odate = data.odate;
+                        
+                        returnCtrl.param.amount = data.price * data.num;
+                        returnCtrl.param.num = data.num;
+                    },
+                    error: function(err){
+                        console.log(err);
+                    }
+                });
+                
+                Buylll.uploadPreview();
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <title>洋流网</title>
+
+        <link rel="stylesheet" href="../css/front/reset.css" />
+        <link rel="stylesheet" href="../css/front/balance-order.css" />
+    </head>
+    <body ms-controller="common">
+        <div ms-include-src="'../template/header.html'" data-include-replace="true" data-include-loaded="initHeader"></div>
+        
+        <div class="wrap" ms-controller="order">
+        	<div ms-visible="!addAddr">
+	        	<div class="order-box addr">
+	        		<p class="title"><span>选择收货地址</span></p>
+	        		<div class="cnt">
+	        			<div class="yl-addrbox">
+	        				<div class="addr" ms-class="default: el.isDefault" ms-class-1="noMgr: ($index+1)%4 == 0" ms-repeat="addr">
+                                <p class="recipients">{{el.name}}<span>收</span></p>
+                                <div class="info">
+                                    <p>{{el.province}}{{el.city}}{{el.district}}</p>
+                                    <p>{{el.street}}</p>
+                                    <p>{{el.phone}}</p>
+                                </div>
+                                <div class="operate-box">
+                                    <a class="modify" ms-click="modify(el)"></a>
+                                    <a class="del" ms-click="del(el.addressId)"></a>
+                                </div>
+                                <a class="make-def" href="javascript:;" ms-click="setDefault(el.addressId)">默认收货地址</a>
+                            </div>
+                            <div class="addrAdd" ms-click="modify(null)"></div>
+	        			</div>
+	        		</div>
+	        	</div>
+	        	<div class="order-box">
+	        		<p class="title">
+	        			<span>确认商品信息</span>
+	        			<a href="javascript:;" ms-click="backToCart">返回购物车修改&nbsp;&gt;</a>
+	        		</p>
+	        		<div class="cnt">
+	        			<table class="tb-goods">
+	        				<thead>
+	        					<tr>
+		        					<th class="col1"></th>
+		        					<th class="col2">商品信息</th>
+		        					<th class="col3">单价（元）</th>
+		        					<th class="col4">数量</th>
+		        					<th class="col5">金额</th>
+	        					</tr>
+	        				</thead>
+	        				<tbody>
+	        					<tr ms-repeat="goods">
+	        						<td class="col1">
+	        							<img ms-attr-src="el.imgs[0].imgsource" />
+	        						</td>
+	        						<td class="col2">{{el.name}}</td>
+	        						<td class="col3">{{el.currentPrice | currency(" ")}}&nbsp;</td>
+	        						<td class="col4">{{el.num}}</td>
+	        						<td class="col5">{{el.currentPrice * el.num | currency(" ")}}&nbsp;</td>
+	        					</tr>
+	        				</tbody>
+	        			</table>
+	        		</div>
+	        	</div>
+	        	<div class="balance-box">
+	        		<div class="rule">
+	        			<div class="yl-chkbox chked">
+	                        <em></em>
+	                    </div>
+	                    <span>本人同意并接受《洋流网服务协议》</span>
+	        		</div>
+	        		<div class="total-box">
+	        			<p>运费:<span>¥0</span></p>
+	        			<p class="total">应付金额:<span>{{total | currency}}</span></p>
+	        			<button ms-click="balanceNow">立刻结算</button>
+	        		</div>
+	        	</div>
+        	</div>
+        	<div ms-visible="addAddr">
+        		<div class="order-box addr">
+	        		<p class="title">
+	        			<span>新增收货地址</span>
+	        		</p>
+	        		<div class="cnt">
+    	        		<div class="dialog-cnt">
+                            <div class="yl-form six">
+                                <div class="item">
+                                    <label><span>*</span>所在地区</label>
+                                    <div class="form-cnt">
+                                        <input class="ipt-form area" placeholder="省/直辖市" ms-duplex="addrInfo.province" />
+                                        <input class="ipt-form area" placeholder="城市/地区" ms-duplex="addrInfo.city" />
+                                        <input class="ipt-form area" placeholder="区/县" ms-duplex="addrInfo.district" />
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <label><span>*</span>详细地址</label>
+                                    <input class="ipt-form long" ms-duplex="addrInfo.street" />
+                                </div>
+                                <div class="item">
+                                    <label><span>*</span>收货人姓名</label>
+                                    <input class="ipt-form long" ms-duplex="addrInfo.name" />
+                                </div>
+                                <div class="item">
+                                    <label><span>*</span>手机号码</label>
+                                    <input class="ipt-form long" ms-duplex="addrInfo.phone" />
+                                </div>
+                                <div class="item forBtn">
+                                    <label></label>
+                                    <button class="yl-btn middle" ms-click="save">+&nbsp;保存新地址</button>
+                                    <button class="yl-btn middle" ms-click="back">返回</button>
+                                </div>
+                            </div>
+                        </div>
+	        		</div>
+	        	</div>
+        	</div>
+        </div>
+        <div ms-include-src="'../template/footer.html'" data-include-replace="true"></div>
+
+        <script src="../js/avalon.shim.sn.js"></script>
+        <script src="../js/jquery.min.js"></script>
+        <script src="../js/main.js"></script>
+        <script src="../js/data-interface.js"></script>
+        <script>
+            $(function(){
+                var orderCtrl = avalon.define({
+                    $id: "order",
+                    addAddr: false,
+                    addr:[],
+                    addressId: "",
+                    addrInfo: {
+                        "addressId": "",
+                        "name": "",
+                        "phone": "",
+                        "province": "",
+                        "city": "",
+                        "district": "",
+                        "street": ""
+                    },
+                    modify: function(el){
+                        if(el){
+                            orderCtrl.addrInfo.addressId = el.addressId;
+                            orderCtrl.addrInfo.name = el.name;
+                            orderCtrl.addrInfo.phone = el.phone;
+                            orderCtrl.addrInfo.province = el.province;
+                            orderCtrl.addrInfo.city = el.city;
+                            orderCtrl.addrInfo.district = el.district;
+                            orderCtrl.addrInfo.street = el.street;
+                        }else{
+                            orderCtrl.addrInfo.addressId = "";
+                            orderCtrl.addrInfo.name = "";
+                            orderCtrl.addrInfo.phone = "";
+                            orderCtrl.addrInfo.province = "";
+                            orderCtrl.addrInfo.city = "";
+                            orderCtrl.addrInfo.district = "";
+                            orderCtrl.addrInfo.street = "";
+                        }
+                        orderCtrl.addAddr = true;
+                    },
+                    del: function(id){
+                        $.ajax({
+                            type: "post",
+                            dataType: "json",
+                            data: {
+                                addressId: id
+                            },
+                            url: DI.delAddress,
+                            success: function(data){
+                                if(data.status == "success"){
+                                    getAddress();
+                                }
+                            },
+                            error: function(err){
+                                console.log(err);
+                            }
+                        });
+                    },
+                    setDefault: function(id){
+                        $.ajax({
+                            type: "post",
+                            dataType: "json",
+                            data: {
+                                addressId: id
+                            },
+                            url: DI.setDefaultAddress,
+                            success: function(data){
+                                if(data.status == "success"){
+                                    getAddress();
+                                }
+                            },
+                            error: function(err){
+                                console.log(err);
+                            }
+                        });
+                    },
+                    save: function(){
+                        var url = ""
+                        if(orderCtrl.addrInfo.addressId == ""){
+                            url = DI.addAddress;
+                        }else{
+                            url = DI.modifyAddress;
+                        }
+                        $.ajax({
+                            type: "post",
+                            dataType: "json",
+                            data: orderCtrl.addrInfo,
+                            url: url,
+                            success: function(data){
+                                if(data.status == "success"){
+                                    getAddress();
+                                }
+                            },
+                            error: function(err){
+                                console.log(err);
+                            }
+                        });
+                        orderCtrl.addAddr = false;
+                    },
+                    back: function(){
+                        orderCtrl.addAddr = false;
+                    },
+                    goods:[],
+                    shoppingcartIds: "",
+                    total: 0,
+                    backToCart:function(){
+                        Buylll.modifySelected(0, orderCtrl.shoppingcartIds);
+                        location.href = "balance_shoppingCart.html";
+                    },
+                    orderInfo: "",
+                    balanceNow: function(){
+                        $.ajax({
+                            type: "post",
+                            dataType: "json",
+                            url: DI.addToOrder,
+                            data: {
+                                shoppingCartStr: orderCtrl.orderInfo,
+                                addressId: orderCtrl.addressId
+                            },
+                            success: function(data){
+                                location.href = "balance_pay.html?orderId=" + data.orderId;
+                            },
+                            error: function(err){
+                                console.log(err);
+                            }
+                        });
+                    }
+                });
+
+                avalon.scan();
+                getAddress();
+                checkSelected();
+                
+                var param = Buylll.getUrlArgs();
+                
+                function getAddress(){
+                    $.ajax({
+                        type: "post",
+                        dataType: "json",
+                        url: DI.getAddress,
+                        success: function(data){
+                            orderCtrl.addr = data.data;
+                            for(var i=0; i<data.data.length; i++){
+                                if(data.data[i].isDefault){
+                                    orderCtrl.addressId = data.data[i].addressId;
+                                    return;
+                                }
+                            }
+                        },
+                        error: function(err){
+                            console.log(err);
+                        }
+                    });
+                }
+                function checkSelected(){
+                    var selectedType = 1;
+                    if(param){
+                        var selectedType = param.selectedType;
+                        selectedType = selectedType ? selectedType : 1;
+                    }
+                    $.ajax({
+                        type: "post",
+                        dataType: "json",
+                        url: DI.checkSelected,
+                        data: {
+                            selectedType: selectedType
+                        },
+                        success: function(data){
+                            var data = data.data,
+                                idArr = [],
+                                item = {},
+                                orderInfo = [];
+                            for(var i = 0; i < data.length; i++){
+                                idArr.push(data[i].shoppingcartId);
+                                orderCtrl.total += Number(data[i].product.currentPrice) * Number(data[i].number);
+                                item = data[i].product;
+                                item.num = data[i].number;
+                                orderCtrl.goods.push(item);
+                                orderInfo.push(data[i].shoppingcartId + "##" + data[i].color + "##" + data[i].size);
+                            }
+                            orderCtrl.shoppingcartIds = idArr.join("@@");
+                            orderCtrl.orderInfo = orderInfo.join("@@");
+                        },
+                        error: function(err){
+                            console.log(err);
+                        }
+                    });
+                }
+            });
+        </script>
+    </body>
+</html>

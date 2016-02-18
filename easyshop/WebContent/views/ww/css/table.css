@@ -1,0 +1,122 @@
+.tableWrapper{
+    border:1px solid #D3D3D3
+}
+.table {
+    font-weight: normal;
+    border-spacing: 0;
+    width: 100%;
+    font-size: 12px;
+    color: #333;
+}
+.table thead {
+    background-color: #ebeced;
+}
+.table thead th {
+    height: 30px;
+    color: #666;
+    text-align: center;
+}
+.table tbody tr {
+    border-bottom: 1px dashed #e6e6e6;
+}
+.table tbody td {
+    height: 30px;
+    padding: 10px;
+    text-align: center;
+}
+/*.table tfoot tr{
+    border-top:1px dashed #e6e6e6;
+}*/
+.operate a{
+    margin: 8px;
+    color: #1f43e1;
+    font-size: 14px;
+}
+.operate a:hover{
+    text-decoration: underline;
+}
+.tableWrapper tbody tr:last-child{
+    border-bottom: none;
+}
+.pager{
+    position: relative;
+    height: 25px;
+    font-size: 12px;
+    margin-top: 5px;
+    margin-bottom: 2px;
+    /* margin-left: 5px; */
+    border-top: 1px solid lightgrey;
+    padding-top: 3px;
+    padding-left: 5px;
+}
+.first-page,.pre-page,.next-page,.last-page,.current-page{
+    text-align: center;
+    /*display:inline-block;*/
+    float: left;
+    width:60px;
+    height:22px;
+    line-height: 22px;
+    border:1px solid #ccc;
+    cursor: pointer;
+}
+.first-page{
+    margin-right: 1px;
+}
+.next-page{
+    margin-right: 3px;
+}
+.first-page.disabled,.pre-page.disabled,.next-page.disabled,.last-page.disabled{
+    color: #999;
+}
+.current-page{
+    width:175px;
+    border:0;
+}
+.current-page-num{
+    display: inline-block;
+    width:32px;
+    height:22px;
+    line-height: 22px;
+    border:1px solid #ccc;
+    margin:auto 8px;
+    text-align: center;
+    color:#666
+}
+.totalpage{
+    display:inline-block;
+    margin-left:13px
+}
+.messageinfo{
+    float: right;
+    margin-right: 18px;
+    height:25px;
+    line-height:25px;
+}
+.pageRowsConfig{
+    display: none;
+    /*display: inline-block;*/
+    width:120px;
+    height:22px;
+    line-height: 22px;
+    margin:auto 8px;
+    text-align: left;
+    font-size:12px;
+}
+.rowsConfig{
+    display: inline-block;
+    width:30px;
+    height:22px;
+    line-height: 18px;
+    border:1px solid #ccc;
+    text-align: left;
+    margin-left:5px;
+    font-size: 14px;
+}
+.rowsConfig option{
+    text-align: center;
+}
+.configTxt{
+    display:inline-block;
+    vertical-align: middle;
+    margin-top:-1px;
+}

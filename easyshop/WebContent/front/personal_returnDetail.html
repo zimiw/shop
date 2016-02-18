@@ -1,0 +1,141 @@
+ <!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <title>洋流网</title>
+
+        <link rel="stylesheet" href="../css/front/reset.css" />
+        <link rel="stylesheet" href="../css/front/personal-returnDetail.css" />
+    </head>
+    <body ms-controller="common">
+        <div ms-include-src="'../template/header.html'" data-include-replace="true" data-include-loaded="initHeader"></div>
+        <div ms-include-src="'../template/nav.html'" data-include-replace="true" data-include-loaded="initNav"></div>
+        
+        <div class="wrap" ms-controller="return">
+        	<p class="yl-breadcrum">首页 &gt; 个人中心 &gt; 退换货详情</p>
+        	<div class="return-detail">
+        		<div class="yl-dialog">
+        			<p class="title">退款申请<button class="yl-btn middle">取消申请</button></p>
+        			<div class="dialog-cnt">
+		        		<div class="status" ms-class="status{{process.length}}"></div>
+		        		<div class="time-box">
+		        			<div class="date" ms-repeat="process">
+		        				<p>{{el.nodeTime}}</p>
+		        			</div>
+		        		</div>
+        			</div>
+        		</div>
+        		<div class="yl-dialog">
+        			<p class="title">退款信息</p>
+        			<div class="dialog-cnt">
+        				<div class="yl-datagrid five">
+        					<div class="item">
+        						<label>服务类型：</label>
+        						<p class="form-ctt">{{returnInfo.type}}</p>
+        					</div>
+        					<div class="item">
+        						<label>退款金额：</label>
+        						<p class="form-ctt">{{returnInfo.price}}</p>
+        					</div>
+        					<div class="item">
+        						<label>退货数量：</label>
+        						<p class="form-ctt">{{returnInfo.num}}</p>
+        					</div>
+        					<div class="item">
+        						<label>退货方式：</label>
+        						<p class="form-ctt">{{returnInfo.way}}</p>
+        					</div>
+        					<div class="item">
+        						<label>退货原因：</label>
+        						<p class="form-ctt">{{returnInfo.reason}}</p>
+        					</div>
+        					<div class="item">
+        						<label>详情描述：</label>
+        						<p class="form-ctt">{{returnInfo.remark}}</p>
+        					</div>
+        				</div>
+        			</div>
+        		</div>
+        		<div class="yl-dialog">
+        			<p class="title">进度追踪</p>
+        			<div class="dialog-cnt">
+        				<div class="yl-datagrid process">
+        					<div class="item" ms-repeat="process">
+        						<label>{{el.nodeTime}}</label>
+        						<p class="form-ctt">{{el.nodeDesc}}</p>
+        					</div>
+        				</div>
+        			</div>
+        		</div>
+    			<div class="dialog-cnt">
+    				<table class="yl-tb return">
+    					<thead>
+    						<tr>
+        						<th class="col1">订单</th>
+        						<th class="col2"></th>
+        						<th class="col3">商品名称</th>
+        						<th class="col4">提交时间</th>
+        						<th class="col5">服务类型</th>
+    						</tr>
+    					</thead>
+    					<tbody>
+    						<tr ms-repeat="goods">
+    							<td class="col1">{{orderId}}</td>
+    							<td class="col2"><img class="img" ms-attr-src="el.img" /></td>
+    							<td class="col3">{{el.name}}</td>
+    							<td class="col4">
+    								<p>{{process[0].nodeTime}}</p>
+    							</td>
+    							<td class="col5">退货</td>
+    						</tr>
+    					</tbody>
+    				</table>
+    			</div>
+        	</div>
+        </div>
+        <div ms-include-src="'../template/footer.html'" data-include-replace="true"></div>
+
+        <script src="../js/avalon.shim.sn.js"></script>
+        <script src="../js/jquery.min.js"></script>
+        <script src="../js/main.js"></script>
+        <script src="../js/data-interface.js"></script>
+        <script>
+            $(function(){
+                var param = Buylll.getUrlArgs();
+                var returnCtrl = avalon.define({
+                    $id: "return",
+                    orderId: param.orderId,
+                    dateList: [],
+                    returnInfo: {
+                		type: "",
+                		price: "",
+                		num: "0",
+                		way: "",
+                		reason: "",
+                		intro: ""
+                	},
+                    process: [],
+                    goods: []
+                });
+
+                avalon.scan();
+                
+                $.ajax({
+                    type: "post",
+                    url: DI.getReturnDetail,
+                    dataType: "json",
+                    data: {
+                        orderId: Number(param.orderId),
+                        productId: Number(param.productId),
+                    },
+                    success:function(data){
+                        returnCtrl.returnInfo = data.returnInfo;
+                        returnCtrl.process = data.process;
+                        returnCtrl.goods = data.goods;
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>

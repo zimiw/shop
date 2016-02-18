@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <title>洋流网</title>
+
+        <link rel="stylesheet" href="../css/front/reset.css" />
+        <link rel="stylesheet" href="../css/front/balance-pay.css" />
+    </head>
+    <body ms-controller="common">
+        <div ms-include-src="'../template/header.html'" data-include-replace="true" data-include-loaded="initHeader"></div>
+        
+        <div class="wrap" ms-controller="pay">
+        	<div class="order-tip">
+        		<p>订单提交成功，现在只差最后一步啦！</p>
+        		<p>请您在提交订单后<span class="time-countdown"></span>内完成支付，否则订单会自动取消！</p>
+        		<a href="javascript:;" ms-click="goDetail">查看订单详情▶▶</a>
+        	</div>
+        	<div class="pay-box">
+        		<p class="money">
+        			支付金额：<span>{{amount | currency}}</span>
+        		</p>
+        		<div class="tab-box">
+        			<!--<div class="tabs">
+        				<p class="tab" ms-click="tab(1)" ms-class="sel: cnt==1">储蓄卡</p>
+        				<p class="tab" ms-click="tab(2)" ms-class="sel: cnt==2">信用卡</p>
+        				<p class="tab" ms-click="tab(3)" ms-class="sel: cnt==3">支付平台</p>
+        			</div>-->
+        			<div class="cnts">
+        				<!--<div class="cnt" ms-visible="cnt == 1">
+        				    <div class="way" ms-repeat="banks">
+                                <input type="radio" ms-duplex-string="channel" name="channel" ms-attr-value="el" />
+                                <div class="yl-bank" ms-class="{{el}}"></div>
+                            </div>
+        				</div>
+        				<div class="cnt" ms-visible="cnt == 2">
+        				    <div class="way" ms-repeat="banks">
+                                <input type="radio" ms-duplex-string="channel" name="channel" ms-attr-value="'credit' + el" />
+                                <div class="yl-bank" ms-class="{{el}}"></div>
+                            </div>
+        				</div>-->
+        				<div class="cnt">
+        					<div class="way-box">
+	        					<div class="way">
+	        						<input type="radio" ms-duplex-string="channel" name="channel" value="alipay_pc_direct" />
+	        						<img src="../img/pay_zhifubao.png" />
+	        					</div>
+	        					<div class="way">
+	        						<input type="radio" ms-duplex-string="channel" name="channel" value="wx_pub_qr" />
+	        						<img src="../img/pay_weixin.png" />
+	        					</div>
+	        					<div class="way">
+	        						<input type="radio" ms-duplex-string="channel" name="channel" value="upacp_pc" />
+	        						<img src="../img/pay_unionpay.png" />
+	        					</div>
+        					</div>
+        				</div>
+        					<button class="yl-btn" ms-click="goPay">去支付</button>
+        				</div>
+        			</div>
+        		</div>
+        		
+        		<div class="popup" ms-visible="popup.pay">
+                    <div class="popup-bg"></div>
+                    <div class="popup-cnt">
+                        <p class="title">支付</p>
+                        <a class="close" href="javascript:;" ms-click="popup.close"></a>
+                        <div class="cnt">
+                            <p class="payway">立即前往{{channel | payway}}进行支付</p>
+                            <div class="btn-box">
+                                <a class="yl-popup-btn" href="personal_myOrder.html">支付成功</a>
+                                <a class="yl-popup-btn2" href="help-contact.html">支付遇到问题</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        	</div>
+        <div ms-include-src="'../template/footer.html'" data-include-replace="true"></div>
+
+        <script src="../js/avalon.shim.sn.js"></script>
+        <script src="../js/jquery.min.js"></script>
+        <script src="../js/jquery.plugin.min.js"></script>
+        <script src="../js/jquery.countdown.min.js"></script>
+        <script src="../js/main.js"></script>
+        <script src="../js/data-interface.js"></script>
+        <script>
+            $(function(){
+                var param = Buylll.getUrlArgs();
+                
+                var payCtrl = avalon.define({
+                    $id: "pay",
+                    amount: 0,
+                    cnt: 1,
+                    banks: ["cmb","psb","cib","shb","spd","pab","abc","njcb","cmbc","bcm","jsb","ccb","bob","cbb","icbc","ceb","cgb","hfb","hxb","czb","boc","ecitic"],
+                    channel: "upacp_pc",
+                    tab: function(idx){
+                    	payCtrl.cnt = idx;
+                    },
+                    goDetail: function(){
+                        location.href = "personal_orderDetail.html?orderId=" + param.orderId;
+                    },
+                    goPay: function(){
+                        if(payCtrl.channel == "upacp_pc") {
+                            window.open("pay_upacp.html?orderId=" + param.orderId + "&channel=" + payCtrl.channel, "_blank");
+                        }else if ($("#chargeChannel").val() == "wx_pub_qr") {
+                            window.open("pay_qr.html?orderId=" + param.orderId + "&channel=" + payCtrl.channel, "_blank");
+                        }
+                        listeningIsHasPaid();
+                        payCtrl.popup.pay = true;
+                    },
+                    popup: {
+                        pay: false,
+                        close: function(){
+                            payCtrl.popup.pay = false;
+                        }
+                    }
+                });
+
+                avalon.scan();
+                
+//              $(".time-countdown").countdown({
+//                  until: +1800,
+//                  layout: "{hnn}小时 {mn}分 {sn}秒"
+//              });
+
+                function listeningIsHasPaid() {
+                    window.timer = window.setInterval(checkIsHasPaid,1000);
+                }
+            
+                function checkIsHasPaid(){
+                    $.ajax({
+                        type: "post",
+                        url: DI.manualCheckIsHasPaid,
+                        data: {
+                            orderId: param.orderId
+                        },
+                        dataType: "json",
+                        success: function (data) {
+                            if (data) {
+                                window.clearInterval(timer);
+                                alert("支付成功");
+                            }
+                            console.log(data);
+                            //debugger;
+                        },
+                        error: function (err) {
+                            //debugger;
+                            console.log(err);
+                            //alert("网络繁忙,请稍后重试");
+                        }
+                    });
+                }
+                
+                $.ajax({
+                    type: "post",
+                    url: DI.getOrderByOrderId,
+                    data: {
+                        orderId: param.orderId
+                    },
+                    dataType: "json",
+                    success: function(data){
+                        payCtrl.amount = data.data.amount;
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>

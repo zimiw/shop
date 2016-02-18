@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <title>洋流网</title>
+
+        <link rel="stylesheet" href="css/reset.css" />
+        <link rel="stylesheet" href="css/login.css" />
+    </head>
+    <body ms-controller="login">
+        <div class="header">
+            <div class="buy-info">
+                <div class="wrap">
+                    <a class="logo" href="">
+                        <img src="img/logo.png" />
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="sec-login">
+        	<div class="cnt wrap">
+        		<div class="login-box" ms-visible="loginFlag">
+        			<div class="title">
+	        			<p>登录账户</p>
+	        			<a href="javascript:;">免费注册</a>
+        			</div>
+        			<p class="err-tip">请输入验证码</p>
+        			<input class="ipt ipt-user" type="text" placeholder="请输入手机号码或邮箱" />
+        			<div class="pwd-box" ms-visible="!pwdVisible">
+	        			<input class="ipt ipt-pwd" type="password" placeholder="请输入密码" />
+	        			<a class="visible" href="javascript:;"></a>
+        			</div>
+        			<div class="pwd-box" ms-visible="pwdVisible">
+	        			<input class="ipt ipt-pwd" type="password" placeholder="请输入密码" />
+	        			<a class="invisible" href="javascript:;"></a>
+        			</div>
+        			<div class="validate-code">
+        				<input class="ipt ipt-validate" placeholder="请输入验证码" />
+        				<span></span>
+        			</div>
+        			<div class="info-box">
+        				<div class="yl-chkbox">
+        					<em></em>
+        					<span>两周内自动登录</span>
+        				</div>
+	        			<a href="javascript:;">忘记密码？</a>
+        			</div>
+        			<button class="btn btn-login">登录</button>
+        		</div>
+        		<div class="login-box" ms-visible="!loginFlag">
+        			<div class="title">
+	        			<p>登录账户</p>
+	        			<a href="javascript:;">免费注册</a>
+        			</div>
+        			<p class="err-tip">请输入验证码</p>
+        			<input class="ipt ipt-user" type="text" placeholder="请输入手机号码或邮箱" />
+        			<div class="pwd-box" ms-visible="!pwdVisible">
+	        			<input class="ipt ipt-pwd" type="password" placeholder="请输入密码" />
+	        			<a class="visible" href="javascript:;"></a>
+        			</div>
+        			<div class="pwd-box" ms-visible="pwdVisible">
+	        			<input class="ipt ipt-pwd" type="password" placeholder="请输入密码" />
+	        			<a class="invisible" href="javascript:;"></a>
+        			</div>
+        			<div class="validate-code">
+        				<input class="ipt ipt-validate" placeholder="请输入验证码" />
+        				<span></span>
+        			</div>
+        			<div class="info-box">
+        				<div class="yl-chkbox">
+        					<em></em>
+        					<span>两周内自动登录</span>
+        				</div>
+	        			<a href="javascript:;">忘记密码？</a>
+        			</div>
+        			<button class="btn btn-login">登录</button>
+        		</div>
+        	</div>
+        </div>
+        <div ms-include-src="'template/footer.html'" data-include-replace="true"></div>
+
+        <script src="js/avalon.js"></script>
+        <script src="js/jquery.min.js"></script>
+        <script src="js/main.js"></script>
+        <script>
+            $(function(){
+                var loginCtrl = avalon.define({
+                    $id: "login",
+                    pwdVisible: true,
+                    loginFlag: false
+                });
+
+                avalon.scan();
+            });
+        </script>
+    </body>
+</html>

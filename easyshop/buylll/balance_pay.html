@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <title>洋流网</title>
+
+        <link rel="stylesheet" href="css/reset.css" />
+        <link rel="stylesheet" href="css/balance-pay.css" />
+    </head>
+    <body ms-controller="common">
+        <div ms-include-src="'template/header.html'" data-include-replace="true" data-include-loaded="initHeader"></div>
+        <div ms-controller="" class="wrap">
+        	<div class="order-tip">
+        		<p>订单提交成功，现在只差最后一步啦！</p>
+        		<p>请您在提交订单后<span class="time-countdown"></span>内完成支付，否则订单会自动取消！</p>
+        		<a href="javascript:;">查看订单详情▶▶</a>
+        	</div>
+        	<div class="pay-box">
+        		<p class="money">
+        			支付金额：<span>500</span>
+        		</p>
+        		<div class="tab-box">
+        			<div class="tabs">
+        				<p class="tab" ms-click="tab(1)" ms-class="sel: cnt==1">储蓄卡</p>
+        				<p class="tab" ms-click="tab(2)" ms-class="sel: cnt==2">信用卡</p>
+        				<p class="tab" ms-click="tab(3)" ms-class="sel: cnt==3">支付平台</p>
+        			</div>
+        			<div class="cnts">
+        				<div class="cnt" ms-visible="cnt == 1"></div>
+        				<div class="cnt" ms-visible="cnt == 2"></div>
+        				<div class="cnt" ms-visible="cnt == 3">
+        					<div class="way-box">
+	        					<div class="way">
+	        						<a class="yl-radio" href="javascript:;"></a>
+	        						<img src="img/pay_zhifubao.png" />
+	        					</div>
+	        					<div class="way">
+	        						<a class="yl-radio" href="javascript:;"></a>
+	        						<img src="img/pay_weixin.png" />
+	        					</div>
+        					</div>
+        					<button class="yl-btn">去支付</button>
+        				</div>
+        			</div>
+        		</div>
+        	</div>
+        </div>
+        <div ms-include-src="'template/footer.html'" data-include-replace="true"></div>
+
+        <script src="js/avalon.js"></script>
+        <script src="js/jquery.min.js"></script>
+        <script src="js/jquery.plugin.min.js"></script>
+        <script src="js/jquery.countdown.min.js"></script>
+        <script src="js/main.js"></script>
+        <script>
+            $(function(){
+                var payCtrl = avalon.define({
+                    $id: "pay",
+                    price: 990,
+                    cnt: 3,
+                    tab: function(idx){
+                    	payCtrl.cnt = idx;
+                    }
+                });
+
+                avalon.scan();
+                
+                $(".time-countdown").countdown({
+                    until: +1800,
+                    layout: "{hnn}小时 {mn}分 {sn}秒"
+                });
+            });
+        </script>
+    </body>
+</html>

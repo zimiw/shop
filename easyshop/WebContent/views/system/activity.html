@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<title>洋流管理系统</title>
+        <link rel="stylesheet" href="css/easyui/metro-gray/easyui.css"/>
+        <link rel="stylesheet" href="css/easyui/icon.css"/>
+        <link rel="stylesheet" href="js/ui/jquery-ui.min.css"/>
+		<link rel="stylesheet" href="css/reset.css" />
+        <link rel="stylesheet" href="css/platform.css"/>
+        <link rel="stylesheet" href="css/page.css"/>
+	</head>
+	<body ms-controller="activity">
+        <p class="u-title">专场活动管理</p>
+        <div class="u-top-btns">
+            <button type="button" class="u-btn small" ms-click="add">新增</button>
+        </div>
+        
+        <div class="u-form" ms-repeat="activities">
+            <div class="column">
+                <div class="u-uploadImg" ms-attr-id="uplpad{{$index}}">
+                    <div class="img-box">
+                        <img ms-attr-src="el.imgSource" />
+                    </div>
+                    <div class="info-box">
+                        <p class="name"></p>
+                        <p class="process"></p>
+                    </div>
+                    <div class="btn-box">
+                        <button class="u-btn small gray" ms-attr-id="btn{{$index}}" ms-visible="el.new">选择文件</button>
+                        <button class="u-btn small orange" ms-attr-id="btn-upload{{$index}}" ms-visible="el.new">上传</button>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="cnt-box">
+                    <input class="u-ipt ipt-timepicker" type="text" ms-attr-id="timepickerStart{{$index}}" placeholder="开始时间" ms-duplex="el.beginTime">
+                    <span class="split">-</span>
+                    <input class="u-ipt ipt-timepicker" type="text" ms-attr-id="timepickerEnd{{$index}}" placeholder="结束时间" ms-duplex="el.endTime">
+                </div>                        
+            </div>
+            <div class="column">
+                <input class="u-ipt" type="text" placeholder="url" ms-duplex="el.url" />                                
+            </div>
+            <div class="column">
+                <div class="btn-box">
+                    <button class="u-btn" type="button" ms-visible="el.new" ms-click="save(el)">提交</button>
+                    <button class="u-btn orange" type="button" ms-visible="!el.new" ms-click="del(el)">删除</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="u-headTip"><p></p></div>
+        
+        
+        <script src="js/jquery.min.js"></script>
+        <script src="js/avalon.shim.sn.js"></script>
+        <script src="js/easyui/jquery.easyui.min.js"></script>
+        <script src="js/easyui/easyui-lang-zh_CN.js"></script>
+        <script src="js/ui/jquery-ui.min.js"></script>
+        <script src="js/ui/jquery-ui-timepicker-addon.js"></script>
+        <script src="js/platform.js"></script>
+        <script src="js/data-interface.js"></script>
+        <script src="js/vendor/crypto/crypto/crypto.js"></script>
+        <script src="js/vendor/crypto/hmac/hmac.js"></script>
+        <script src="js/vendor/crypto/sha1/sha1.js"></script>
+        <script src="js/vendor/base64.js"></script>
+        <script src="js/vendor/plupload/plupload.full.min.js"></script>
+        <script src="js/vendor/plupload/zh_CN.js"></script>
+        <script>
+            var activityCtrl = avalon.define({
+                $id: "activity",
+                activities: [
+                    {
+                        speId: null,
+                        beginTime: "",
+                        endTime: "",
+                        imgSource: "img/def_upload.png",
+                        url: "",
+                        new: true
+                    }
+                ],
+                add: function(){
+                    activityCtrl.activities.push({
+                        speId: null,
+                        beginTime: "",
+                        endTime: "",
+                        imgSource: "img/def_upload.png",
+                        url: "",
+                        new: true
+                    });
+                    var timer = setTimeout(function(){
+                        var idx = activityCtrl.activities.length - 1;
+                        PLATFORM.imgUpload("uplpad"+idx, "btn"+idx, "btn-upload"+idx, true);
+                        PLATFORM.timepickerRange("#timepickerStart"+idx, "#timepickerEnd"+idx);
+                        clearTimeout(timer);
+                        timer = null;
+                    }, 0);
+                },
+                save: function(el){
+                    $.ajax({
+                        type: "post",
+                        url: DI.saveActivtySpecialty,
+                        data: {
+                            imgSource: $(this).parents(".u-form").find(".img-box img").attr("src"),
+                            url: el.url,
+                            beginTime: el.beginTime,
+                            endTime: el.endTime
+                        },
+                        dataType: "json",
+                        success: function(data){
+                            el.speId = data.speId;
+                            el.new = false;
+                        }
+                    });
+                },
+                del: function(el){
+                    $.ajax({
+                        type: "post",
+                        url: DI.delActivtySpecialty,
+                        data: {
+                            speId: el.speId
+                        },
+                        dataType: "json",
+                        success: function(data){
+                            if(data.status == "success"){
+                                activityCtrl.activities.remove(el);
+                            }
+                        }
+                    });
+                }
+            });
+            avalon.scan();
+            
+            $(function(){
+                $.ajax({
+                    type: "post",
+                    url: DI.queryActivtySpecialtyList,
+                    dataType: "json",
+                    success: function(data){
+                        if(data.length > 0){
+                            activityCtrl.activities = [];
+                            for(var i=0; i<data.length; i++){
+                                data[i].new = false;
+                                activityCtrl.activities.push(data[i]);
+                            }
+                        }
+                    }
+                });
+                
+                PLATFORM.imgUpload("uplpad0", "btn0", "btn-upload0", true);
+                PLATFORM.timepickerRange("#timepickerStart0", "#timepickerEnd0");
+            });
+        </script>
+	</body>
+</html>

@@ -1,0 +1,241 @@
+{
+    "keywords": [
+        {
+            "name": "奶油",
+            "url": "http://www.baidu.com"
+        },
+        {
+            "name": "面膜",
+            "url": "http://www.baidu.com"
+        },
+        {
+            "name": "花王",
+            "url": "http://www.baidu.com"
+        },
+        {
+            "name": "手表",
+            "url": "http://www.baidu.com"
+        },
+        {
+            "name": "奶",
+            "url": "http://www.baidu.com"
+        }
+    ],
+    "banner": [
+        {
+            "url": "http://www.baidu.com",
+            "img": "img/demo_6.png"
+        },
+        {
+            "url": "http://www.baidu.com",
+            "img": "img/demo_6.png"
+        },
+        {
+            "url": "http://www.baidu.com",
+            "img": "img/demo_6.png"
+        },
+        {
+            "url": "http://www.baidu.com",
+            "img": "img/demo_6.png"
+        }
+    ],
+    "flash": [
+        {
+            "img": "img/demo_1.png",
+            "flag": "img/demo_9.png",
+            "area": "香港",
+            "title": "TAKEO KIKUCHI/菊池武夫 2015AW 男士牛皮鳄鱼纹公",
+            "price": "606",
+            "original": "700",
+            "startDate": "2015-10-27 09:00",
+            "reference": "1000"
+        },
+        {
+            "img": "img/demo_1.png",
+            "flag": "img/demo_9.png",
+            "area": "香港",
+            "title": "TAKEO KIKUCHI/菊池武夫 2015AW 男士牛皮鳄鱼纹公",
+            "price": "606",
+            "original": "700",
+            "startDate": "2015-10-27 00:00",
+            "reference": "1000"
+        },
+        {
+            "img": "img/demo_1.png",
+            "flag": "img/demo_9.png",
+            "area": "香港",
+            "title": "TAKEO KIKUCHI/菊池武夫 2015AW 男士牛皮鳄鱼纹公",
+            "price": "606",
+            "original": "700",
+            "startDate": "2015-10-27 21:00",
+            "reference": "1000"
+        },
+        {
+            "img": "img/demo_1.png",
+            "flag": "img/demo_9.png",
+            "area": "香港",
+            "title": "TAKEO KIKUCHI/菊池武夫 2015AW 男士牛皮鳄鱼纹公",
+            "price": "606",
+            "original": "700",
+            "startDate": "2015-10-27 20:00",
+            "reference": "1000"
+        },
+        {
+            "img": "img/demo_1.png",
+            "flag": "img/demo_9.png",
+            "area": "香港",
+            "title": "TAKEO KIKUCHI/菊池武夫 2015AW 男士牛皮鳄鱼纹公",
+            "price": "606",
+            "original": "700",
+            "startDate": "2015-10-27 10:00",
+            "reference": "1000"
+        },
+        {
+            "img": "img/demo_1.png",
+            "flag": "img/demo_9.png",
+            "area": "香港",
+            "title": "TAKEO KIKUCHI/菊池武夫 2015AW 男士牛皮鳄鱼纹公",
+            "price": "606",
+            "original": "700",
+            "startDate": "2015-10-27 16:00",
+            "reference": "1000"
+        }
+    ],
+    "activity": [
+        {
+            "img": "img/demo_2.png",
+            "startDate": "2015-10-27 16:00",
+            "url": "http://www.taobao.com"
+        },
+        {
+            "img": "img/demo_3.png",
+            "startDate": "2015-10-27 22:00",
+            "url": "http://www.taobao.com"
+        }
+    ],
+    "hotSmall": {
+        "url": "http://www.jd.com",
+        "img": "img/demo_8.png"
+    },
+    "hotBig": {
+        "url": "http://www.jd.com",
+        "img": "img/demo_7.png"
+    },
+    "hotProduct1": {
+        "url": "http://www.suning.com",
+        "img": "img/demo_5.png",
+        "flag": "img/demo_9.png",
+        "area": "香港",
+        "title": "TAKEO KIKUCHI/菊池武夫 2015AW 男士牛皮鳄鱼纹公",
+        "price": "606"
+    },
+    "hotProduct2": {
+        "url": "http://www.suning.com",
+        "img": "img/demo_5.png",
+        "flag": "img/demo_9.png",
+        "area": "香港",
+        "title": "TAKEO KIKUCHI/菊池武夫 2015AW 男士牛皮鳄鱼纹公",
+        "price": "606"
+    },
+    "hotProduct3": {
+        "url": "http://www.suning.com",
+        "img": "img/demo_5.png",
+        "flag": "img/demo_9.png",
+        "area": "香港",
+        "title": "TAKEO KIKUCHI/菊池武夫 2015AW 男士牛皮鳄鱼纹公",
+        "price": "606"
+    },
+    "hotProduct4": {
+        "url": "http://www.suning.com",
+        "img": "img/demo_5.png",
+        "flag": "img/demo_9.png",
+        "area": "香港",
+        "title": "TAKEO KIKUCHI/菊池武夫 2015AW 男士牛皮鳄鱼纹公",
+        "price": "606"
+    },
+    "hotProductList": [
+        {
+            "url": "http://www.suning.com",
+            "img": "img/demo_4.png",
+            "flag": "img/demo_9.png",
+            "area": "香港",
+            "title": "TAKEO KIKUCHI/菊池武夫 2015AW 男士牛皮鳄鱼纹公",
+            "price": "606",
+            "original": "700"
+        },
+        {
+            "url": "http://www.suning.com",
+            "img": "img/demo_4.png",
+            "flag": "img/demo_9.png",
+            "area": "香港",
+            "title": "TAKEO KIKUCHI/菊池武夫 2015AW 男士牛皮鳄鱼纹公",
+            "price": "606",
+            "original": "700"
+        },
+        {
+            "url": "http://www.suning.com",
+            "img": "img/demo_4.png",
+            "flag": "img/demo_9.png",
+            "area": "香港",
+            "title": "TAKEO KIKUCHI/菊池武夫 2015AW 男士牛皮鳄鱼纹公",
+            "price": "606",
+            "original": "700"
+        },
+        {
+            "url": "http://www.suning.com",
+            "img": "img/demo_4.png",
+            "flag": "img/demo_9.png",
+            "area": "香港",
+            "title": "TAKEO KIKUCHI/菊池武夫 2015AW 男士牛皮鳄鱼纹公",
+            "price": "606",
+            "original": "700"
+        }
+    ],
+    "free": [
+        {
+            "code": "12345566",
+            "name": "周**",
+            "tel": "158****9999"
+        },
+        {
+            "code": "12345566",
+            "name": "周**",
+            "tel": "158****9999"
+        },
+        {
+            "code": "12345566",
+            "name": "周**",
+            "tel": "158****9999"
+        },
+        {
+            "code": "12345566",
+            "name": "周**",
+            "tel": "158****9999"
+        },
+        {
+            "code": "12345566",
+            "name": "周**",
+            "tel": "158****9999"
+        },
+        {
+            "code": "12345566",
+            "name": "周**",
+            "tel": "158****9999"
+        },
+        {
+            "code": "12345566",
+            "name": "吴**",
+            "tel": "158****2222"
+        },
+        {
+            "code": "12345566",
+            "name": "郑*",
+            "tel": "158****4444"
+        },
+        {
+            "code": "12345566",
+            "name": "李**",
+            "tel": "158****8888"
+        }
+    ]
+}

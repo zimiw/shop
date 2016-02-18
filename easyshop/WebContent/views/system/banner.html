@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<title>洋流管理系统</title>
+        <link rel="stylesheet" href="css/easyui/metro-gray/easyui.css"/>
+        <link rel="stylesheet" href="css/easyui/icon.css"/>
+		<link rel="stylesheet" href="css/reset.css" />
+        <link rel="stylesheet" href="css/platform.css"/>
+	</head>
+	<body ms-controller="banner">
+        <p class="u-title">Banner管理</p>
+        <p class="u-singleinfo">1.</p>
+        <div class="u-form">
+            <div class="column">
+                <div class="u-uploadImg" id="uplpad1">
+                    <div class="img-box">
+                        <img ms-attr-src="imgs.img1" />
+                    </div>
+                    <div class="info-box">
+                        <p class="name"></p>
+                        <p class="process"></p>
+                    </div>
+                    <div class="btn-box">
+                        <button class="u-btn small gray" id="btn1">选择文件</button>
+                        <button class="u-btn small orange" id="btn-upload1">上传</button>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <input class="u-ipt" type="text" placeholder="url" ms-duplex="urls.url1" />                                
+            </div>
+            <div class="column">
+                <div class="btn-box">
+                    <button class="u-btn" type="button" ms-click="save(1)">提交</button>
+                </div>
+            </div>
+        </div>
+        <p class="u-singleinfo">2.</p>
+        <div class="u-form">
+            <div class="column">
+                <div class="u-uploadImg" id="uplpad2">
+                    <div class="img-box">
+                        <img ms-attr-src="imgs.img2" />
+                    </div>
+                    <div class="info-box">
+                        <p class="name"></p>
+                        <p class="process"></p>
+                    </div>
+                    <div class="btn-box">
+                        <button class="u-btn small gray" id="btn2">选择文件</button>
+                        <button class="u-btn small orange" id="btn-upload2">上传</button>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <input class="u-ipt" type="text" placeholder="url" ms-duplex="urls.url2" />                                
+            </div>
+            <div class="column">
+                <div class="btn-box">
+                    <button class="u-btn" type="button" ms-click="save(2)">提交</button>
+                </div>
+            </div>
+        </div>
+        <p class="u-singleinfo">3.</p>
+        <div class="u-form">
+            <div class="column">
+                <div class="u-uploadImg" id="uplpad3">
+                    <div class="img-box">
+                        <img ms-attr-src="imgs.img3" />
+                    </div>
+                    <div class="info-box">
+                        <p class="name"></p>
+                        <p class="process"></p>
+                    </div>
+                    <div class="btn-box">
+                        <button class="u-btn small gray" id="btn3">选择文件</button>
+                        <button class="u-btn small orange" id="btn-upload3">上传</button>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <input class="u-ipt" type="text" placeholder="url" ms-duplex="urls.url3" />                                
+            </div>
+            <div class="column">
+                <div class="btn-box">
+                    <button class="u-btn" type="button" ms-click="save(3)">提交</button>
+                </div>
+            </div>
+        </div>
+        <p class="u-singleinfo">4.</p>
+        <div class="u-form">
+            <div class="column">
+                <div class="u-uploadImg" id="uplpad4">
+                    <div class="img-box">
+                        <img ms-attr-src="imgs.img4" />
+                    </div>
+                    <div class="info-box">
+                        <p class="name"></p>
+                        <p class="process"></p>
+                    </div>
+                    <div class="btn-box">
+                        <button class="u-btn small gray" id="btn4">选择文件</button>
+                        <button class="u-btn small orange" id="btn-upload4">上传</button>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <input class="u-ipt" type="text" placeholder="url" ms-duplex="urls.url4" />                                
+            </div>
+            <div class="column">
+                <div class="btn-box">
+                    <button class="u-btn" type="button" ms-click="save(4)">提交</button>
+                </div>
+            </div>
+        </div>
+        <p class="u-singleinfo">5.</p>
+        <div class="u-form">
+            <div class="column">
+                <div class="u-uploadImg" id="uplpad5">
+                    <div class="img-box">
+                        <img ms-attr-src="imgs.img5" />
+                    </div>
+                    <div class="info-box">
+                        <p class="name"></p>
+                        <p class="process"></p>
+                    </div>
+                    <div class="btn-box">
+                        <button class="u-btn small gray" id="btn5">选择文件</button>
+                        <button class="u-btn small orange" id="btn-upload5">上传</button>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <input class="u-ipt" type="text" placeholder="url" ms-duplex="urls.url5" />                                
+            </div>
+            <div class="column">
+                <div class="btn-box">
+                    <button class="u-btn" type="button" ms-click="save(5)">提交</button>
+                </div>
+            </div>
+        </div>
+            
+        <div class="u-headTip"><p></p></div>
+        
+        
+        <script src="js/jquery.min.js"></script>
+        <script src="js/avalon.shim.sn.js"></script>
+        <script src="js/easyui/jquery.easyui.min.js"></script>
+        <script src="js/easyui/easyui-lang-zh_CN.js"></script>
+        <script src="js/platform.js"></script>
+        <script src="js/data-interface.js"></script>
+        <script src="js/vendor/crypto/crypto/crypto.js"></script>
+        <script src="js/vendor/crypto/hmac/hmac.js"></script>
+        <script src="js/vendor/crypto/sha1/sha1.js"></script>
+        <script src="js/vendor/base64.js"></script>
+        <script src="js/vendor/plupload/plupload.full.min.js"></script>
+        <script src="js/vendor/plupload/zh_CN.js"></script>
+        <script>
+            var bannerCtrl = avalon.define({
+                $id: "banner",
+                ids: {
+                    id1: "0",
+                    id2: "0",
+                    id3: "0",
+                    id4: "0",
+                    id5: "0"
+                },
+                urls: {
+                    url1: "",
+                    url2: "",
+                    url3: "",
+                    url4: "",
+                    url5: ""
+                },
+                imgs: {
+                    img1: "img/def_upload.png",
+                    img2: "img/def_upload.png",
+                    img3: "img/def_upload.png",
+                    img4: "img/def_upload.png",
+                    img5: "img/def_upload.png"
+                },
+                save: function(idx){
+                    $.ajax({
+                        type: "post",
+                        url: DI.addBranner,
+                        data: {
+                            id: bannerCtrl.ids["id" + idx],
+                            imgSource: $(".img-box").eq(Number(idx) - 1).find("img").attr("src"),
+                            url: bannerCtrl.urls["url" + idx]
+                        },
+                        dataType: "json",
+                        success: function(data){
+                            PLATFORM.headTip(data.msg);
+                        }
+                    });
+                }
+            });
+            avalon.scan();
+            
+            $(function(){
+                $.ajax({
+                    type: "post",
+                    url: DI.queryBranner,
+                    dataType: "json",
+                    success: function(data){
+                        for(var i=0; i<data.length; i++){
+                            bannerCtrl.ids["id" + (i+1)] = data[i].id;
+                            bannerCtrl.imgs["img" + (i+1)] = data[i].imgSource;
+                            bannerCtrl.urls["url" + (i+1)] = data[i].url;
+                        }
+                    }
+                });
+                
+                PLATFORM.imgUpload("uplpad1", "btn1", "btn-upload1", true);
+                PLATFORM.imgUpload("uplpad2", "btn2", "btn-upload2", true);
+                PLATFORM.imgUpload("uplpad3", "btn3", "btn-upload3", true);
+                PLATFORM.imgUpload("uplpad4", "btn4", "btn-upload4", true);
+                PLATFORM.imgUpload("uplpad5", "btn5", "btn-upload5", true);
+            });
+        </script>
+	</body>
+</html>

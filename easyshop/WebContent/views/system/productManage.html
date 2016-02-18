@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<title>洋流管理系统</title>
+        <link rel="stylesheet" href="css/easyui/metro-gray/easyui.css"/>
+        <link rel="stylesheet" href="css/easyui/icon.css"/>
+		<link rel="stylesheet" href="css/reset.css" />
+        <link rel="stylesheet" href="css/platform.css"/>
+        <link rel="stylesheet" href="css/page.css"/>
+	</head>
+	<body ms-controller="product">
+	    <div ms-visible="!edit">
+            <p class="u-title">商品管理</p>
+            <div class="u-multiform six">
+                <div class="column">
+                    <div class="cell">
+                        <label>商品编码：</label>
+                        <input class="u-ipt" ms-duplex="param.productId" />
+                    </div>
+                    <div class="cell">
+                        <label>商品名称：</label>
+                        <input class="u-ipt" ms-duplex="param.name" />
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="cell">
+                        <label>商品类目：</label>
+                        <select class="u-select" ms-duplex="param.catalogId3" data-duplex-changed="catalogChange"> 
+                            <option value="">全部</option>
+                            <option ms-repeat="param.allCatalog" ms-attr-value="el.catalogId">{{el.catalogName}}</option>
+                        </select>
+                    </div>
+                    <div class="cell">
+                        <label>状态：</label>
+                        <select class="u-select" ms-duplex="param.status" data-duplex-changed="statusChange"> 
+                            <option value="">全部</option>
+                            <option value="0">上架</option>
+                            <option value="1">下架</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="column btn-box">
+                    <div class="cell">
+                        <label></label>
+                        <div class="cnt-box">
+                            <button class="u-btn small" ms-click="param.search">查询</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="u-top-btns">
+                <button type="button" class="u-btn small" ms-click="operate.add">新增</button>
+            </div>
+            <table id="dg" class="easyui-datagrid" data-options="
+                        autoRowHeight: false,
+                        method: 'post',
+                        singleSelect: true,
+                        striped: true,
+                        fitColumns: true,
+                        rownumbers: true,
+                        nowrap: false,
+                        pagination: true">
+                <thead>
+                    <tr>
+                        <th data-options="field:'productid', width:150, align:'center'">商品编码</th>
+                        <th data-options="field:'name', width:150, align:'center'">商品名称</th>
+                        <th data-options="field:'catalogname3', width:80, align:'center'">商品类目</th>
+                        <th data-options="field:'suppliername', width:100, align:'center'">供应商</th>
+                        <th data-options="field:'status', width:100, align:'center', formatter: function(value,rowData,index){
+                            return rowData.status ? '上架' : '下架';
+                        }">状态</th>
+                        <th data-options="field:'totalleftcount', width:100, align:'center'">库存</th>
+                        <th data-options="field:'specialprice', width:100, align:'center'">售价</th>
+                        <th data-options="field:'operate', width:100, align:'center', formatter: function(value,rowData,index){
+                            if(rowData.status){
+                                return '&lt;a href=&quot;javascript:;&quot; class=&quot;btn-operate view&quot;&gt;查看&lt;a&gt;&lt;a href=&quot;javascript:;&quot; class=&quot;btn-operate updown&quot;&gt;下架&lt;a&gt;';
+                            }else{
+                                return '&lt;a href=&quot;javascript:;&quot; class=&quot;btn-operate edit&quot;&gt;编辑&lt;a&gt;&lt;a href=&quot;javascript:;&quot; class=&quot;btn-operate updown&quot;&gt;上架&lt;a&gt;';
+                            }
+                        }">操作</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div ms-visible="edit">
+            <p class="u-title">新增/编辑</p>
+            <div class="u-form">
+                <div class="column" ms-visible="odata.productId != ''">
+                    <label>商品编码：</label>
+                    <input class="u-ipt dis" type="text" disabled="disabled" ms-duplex="odata.productId" />                                
+                </div>
+                <div class="column">
+                    <label>选择类目：</label>
+                    <div class="cnt-box district-box">
+                        <select class="district" ms-duplex="catalog.catalogId1" data-duplex-changed="firstChange">
+                            <option ms-repeat="catalog.first" ms-attr-value="el.catalogId">{{el.catalogName}}</option>
+                        </select>
+                        <select class="district" ms-duplex="catalog.catalogId2" data-duplex-changed="secondChange">
+                            <option ms-repeat="catalog.second" ms-attr-value="el.catalogId">{{el.catalogName}}</option>
+                        </select>
+                        <select class="district" ms-duplex="catalog.catalogId3" data-duplex-changed="thirdChange">
+                            <option ms-repeat="catalog.third" ms-attr-value="el.catalogId">{{el.catalogName}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="column">
+                    <label>品牌：</label>
+                    <select ms-duplex="brands.brandId" data-duplex-changed="brandChange">
+                        <option ms-repeat="brands.all" ms-attr-value="el.brandId">{{el.brandName}}</option>
+                    </select>
+                </div>
+                <div class="column">
+                    <label>供应商：</label>
+                    <select ms-duplex="suppliers.SupplierId" data-duplex-changed="supplierChange">
+                        <option ms-repeat="suppliers.all" ms-attr-value="el.id">{{el.name}}</option>
+                    </select>
+                </div>
+                <div class="column">
+                    <label>商品名称：</label>
+                    <input class="u-ipt" type="text" placeholder="" ms-duplex="odata.name" />
+                </div>
+                <div class="column">
+                    <label>国家：</label>
+                    <select ms-duplex="countries.country" data-duplex-changed="countryChange">
+                        <option ms-repeat="countries.all" ms-attr-value="el.code">{{el.name}}</option>
+                    </select>
+                </div>
+                <div class="column">
+                    <label>重量：</label>
+                    <input class="u-ipt" type="text" placeholder="" ms-duplex="odata.unit" />
+                    <div class="cnt-box">
+                        <p class="split">KG</p>
+                    </div>
+                </div>
+                <div class="attribute-box" ms-repeat="odata.attributes">
+                    <div class="column">
+                        <label>尺寸：</label>
+                        <input class="u-ipt" type="text" placeholder="" ms-duplex="el.size" />
+                    </div>
+                    <div class="column">
+                        <label>颜色：</label>
+                        <input class="u-ipt" type="text" placeholder="" ms-duplex="el.color" />
+                    </div>
+                    <div class="column">
+                        <label>进货价：</label>
+                        <input class="u-ipt" type="text" placeholder="" ms-duplex="el.supplyPrice" />
+                    </div>
+                    <div class="column">
+                        <label>原价：</label>
+                        <input class="u-ipt" type="text" placeholder="" ms-duplex="el.originPrice" />
+                    </div>
+                    <div class="column">
+                        <label>洋流价格：</label>
+                        <input class="u-ipt" type="text" placeholder="" ms-duplex="el.currentPrice" />
+                    </div>
+                    <div class="column">
+                        <label>库存：</label>
+                        <input class="u-ipt" type="text" placeholder="" ms-duplex="el.storeCount" />
+                    </div>
+                </div>
+                <div class="column">
+                    <label></label>
+                    <div class="btn-box" ms-visible="odata.edit">
+                        <button class="u-btn small" type="button" ms-click="odata.add">添加</button>
+                        <button class="u-btn small gray" type="button" ms-click="odata.remove">删除</button>
+                    </div>
+                </div>
+                <div class="column">
+                    <label>主图：</label>
+                    <div class="cnt-box">
+                        <div class="u-uploadImg" id="uplpad-main">
+                            <div class="img-box"></div>
+                            <div class="info-box">
+                                <p class="name"></p>
+                                <p class="process"></p>
+                            </div>
+                            <div class="btn-box" ms-visible="odata.edit">
+                                <button class="u-btn small" id="btn-main">选择文件</button>
+                                <button class="u-btn small orange" id="btn-uploadMain">上传</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <label>商品详情：</label>
+                    <div class="cnt-box">
+                        <div class="u-uploadImg" id="uplpad-detail">
+                            <div class="img-box"></div>
+                            <div class="info-box">
+                                <p class="name"></p>
+                                <p class="process"></p>
+                            </div>
+                            <div class="btn-box" ms-visible="odata.edit">
+                                <button class="u-btn small" id="btn-detail">选择文件</button>
+                                <button class="u-btn small orange" id="btn-uploadDetail">上传</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column" ms-visible="odata.edit">
+                    <label></label>
+                    <div class="btn-box">
+                        <button class="u-btn" type="button" ms-click="operate.save">保存</button>
+                        <button class="u-btn orange" type="button">上架</button>
+                    </div>
+                </div>
+            </div>
+            <div class="u-bottom-btns">
+                <button class="u-btn gray" ms-click="operate.back">返回</button>
+            </div>
+        </div>
+        
+        <div class="u-headTip"><p></p></div>
+        
+        
+        <script src="js/jquery.min.js"></script>
+        <script src="js/avalon.shim.sn.js"></script>
+        <script src="js/jquery.form.js"></script>
+        <script src="js/easyui/jquery.easyui.min.js"></script>
+        <script src="js/easyui/easyui-lang-zh_CN.js"></script>
+        <script src="js/platform.js"></script>
+        <script src="js/data-interface.js"></script>
+        <script src="js/vendor/crypto/crypto/crypto.js"></script>
+        <script src="js/vendor/crypto/hmac/hmac.js"></script>
+        <script src="js/vendor/crypto/sha1/sha1.js"></script>
+        <script src="js/vendor/base64.js"></script>
+        <script src="js/vendor/plupload/plupload.full.min.js"></script>
+        <script src="js/vendor/plupload/zh_CN.js"></script>
+        <script>
+            var productCtrl = avalon.define({
+                $id: "product",
+                edit: false,
+                param: {
+                    productId: "",
+                    name: "",
+                    catalogId3: "",
+                    status: "",
+                    allCatalog: [],
+                    search: function(){
+                        $.ajax({
+                            type: "post",
+                            url: DI.queryAllProducts,
+                            data: {
+                                productId: productCtrl.param.productId,
+                                name: productCtrl.param.name,
+                                catalogId3: productCtrl.param.catalogId3,
+                                status: productCtrl.param.status,
+                            },
+                            dataType: "json",
+                            success: function(data){
+                                var allCatalog = [];
+                                for(var i = 0; i < data.items.length; i++){
+                                    if(data.items[i].subCatalogs.length > 0){
+                                        for(var j = 0; j < data.items[i].subCatalogs.length; j++){
+                                            $.merge(allCatalog, data.items[i].subCatalogs[j].subCatalogs);
+                                        }
+                                    }
+                                }
+                                productCtrl.param.allCatalog = allCatalog;
+                                productCtrl.catalog.first = data.items;
+                            },
+                            error: function(err){
+                                console.log(err);
+                            }
+                        });
+                    }
+                },
+                catalogChange: function(val){
+                    productCtrl.param.catalogId3 = val;
+                },
+                statusChange: function(val){
+                    productCtrl.param.status = val;
+                },
+                catalog: {
+                    first: [],
+                    catalogId1: "",
+                    second: [],
+                    catalogId2: "",
+                    third: [],
+                    catalogId3: "",
+                },
+                firstChange: function(val){
+                    productCtrl.catalog.catalogId1 = val;
+                    productCtrl.catalog.first.some(function(item){
+                        if(item.catalogId == productCtrl.catalog.catalogId1){
+                            productCtrl.catalog.second = item.subCatalogs;
+                            return true;
+                        }
+                    });
+                },
+                secondChange: function(val){
+                    productCtrl.catalog.catalogId2 = val;
+                    productCtrl.catalog.second.some(function(item){
+                        if(item.catalogId == productCtrl.catalog.catalogId2){
+                            productCtrl.catalog.third = item.subCatalogs;
+                            return true;
+                        }
+                    });
+                },
+                thirdChange: function(val){
+                    productCtrl.catalog.catalogId3 = val;
+                    $.ajax({
+                        type: "post",
+                        url: DI.getBrandByCatalogId,
+                        data: {
+                            catalogId: productCtrl.catalog.catalogId3
+                        },
+                        dataType: "json",
+                        success: function(data){
+                            productCtrl.brands.all = data;
+                        },
+                        error: function(err){
+                            console.log(err);
+                        }
+                    });
+                },
+                brands: {
+                    brandId: "",
+                    all: []
+                },
+                brandChange: function(val){
+                    productCtrl.brands.brandId = val;
+                    $.ajax({
+                        type: "post",
+                        url: DI.getSupplierByBrandId,
+                        data: {
+                            brandId: productCtrl.brands.brandId
+                        },
+                        dataType: "json",
+                        success: function(data){
+                            productCtrl.suppliers.all = data;
+                        },
+                        error: function(err){
+                            console.log(err);
+                        }
+                    });
+                },
+                suppliers: {
+                    SupplierId: "",
+                    all: []
+                },
+                supplierChange: function(val){
+                    productCtrl.suppliers.SupplierId = val;
+                },
+                countries: {
+                    country: "",
+                    all: [
+                        {
+                            code: "hk",
+                            name: "香港"
+                        },
+                        {
+                            code: "us",
+                            name: "美国"
+                        },
+                        {
+                            code: "jp",
+                            name: "日本"
+                        },
+                        {
+                            code: "it",
+                            name: "意大利"
+                        },
+                        {
+                            code: "kp",
+                            name: "韩国"
+                        },
+                        {
+                            code: "ch",
+                            name: "瑞士"
+                        },
+                        {
+                            code: "th",
+                            name: "泰国"
+                        },
+                        {
+                            code: "fr",
+                            name: "法国"
+                        },
+                        {
+                            code: "uk",
+                            name: "英国"
+                        },
+                        {
+                            code: "tw",
+                            name: "台湾"
+                        },
+                        {
+                            code: "de",
+                            name: "德国"
+                        },
+                        {
+                            code: "es",
+                            name: "西班牙"
+                        },
+                        {
+                            code: "nl",
+                            name: "荷兰"
+                        },
+                        {
+                            code: "ca",
+                            name: "加拿大"
+                        },
+                        {
+                            code: "ar",
+                            name: "阿根廷"
+                        },
+                        {
+                            code: "ru",
+                            name: "俄罗斯"
+                        },
+                        {
+                            code: "br",
+                            name: "巴西"
+                        }
+                    ]
+                },
+                countryChange: function(val){
+                    productCtrl.countries.country = val;
+                },
+                odata: {
+                    edit: true,
+                    productId: "",
+                    name: "",
+                    unit: "",
+                    attributes: [
+                        {
+                            size: "",
+                            color: "",
+                            supplyPrice: "",
+                            originPrice: "",
+                            currentPrice: "",
+                            storeCount: ""
+                        }
+                    ],
+                    add: function(){
+                        if(productCtrl.odata.productId == ""){
+                            productCtrl.odata.attributes.push({
+                                size: "",
+                                color: "",
+                                supplyPrice: "",
+                                originPrice: "",
+                                currentPrice: "",
+                                storeCount: ""
+                            });
+                        }else{
+                            productCtrl.odata.attributes.push({
+                                size: "",
+                                color: "",
+                                supplyPrice: "",
+                                originPrice: "",
+                                currentPrice: "",
+                                storeCount: "",
+                                productTypeId: 0,
+                                sellCount: 0,
+                                limitActivityCount: 0,
+                                specialPrice: 0
+                            });
+                        }
+                    },
+                    remove: function(){
+                        if(productCtrl.odata.attributes.length > 1){
+                            productCtrl.odata.attributes.pop();
+                        }
+                    }
+                },
+                operate: {
+                    add: function(){
+                        productCtrl.edit = true;
+                        
+                        productCtrl.odata.productId = "";
+                        productCtrl.catalog.catalogId1 = "";
+                        productCtrl.catalog.catalogId2 = "";
+                        productCtrl.catalog.catalogId3 = "";
+                        productCtrl.brands.brandId = "";
+                        productCtrl.suppliers.SupplierId = "";
+                        productCtrl.countries.country = "";
+                        productCtrl.odata.name = "";
+                        productCtrl.odata.unit = "";
+                        productCtrl.odata.attributes = [{
+                            size: "",
+                            color: "",
+                            supplyPrice: "",
+                            originPrice: "",
+                            currentPrice: "",
+                            storeCount: ""
+                        }];
+                    },
+                    edit: function(el){
+                        productCtrl.edit = true;
+                        
+                        productCtrl.odata.productId = el.productid;
+                        productCtrl.catalog.catalogId1 = el.catalogid1;
+                        productCtrl.catalog.catalogId2 = el.catalogid2;
+                        productCtrl.catalog.catalogId3 = el.catalogid3;
+                        productCtrl.brands.brandId = el.brandid;
+                        productCtrl.suppliers.SupplierId = el.supplierid;
+                        productCtrl.countries.country = el.country;
+                        productCtrl.odata.name = el.name;
+                        productCtrl.odata.unit = el.unit;
+                        productCtrl.odata.attributes = el.producttypes;
+                    },
+                    save: function(){
+                        var size = [],
+                            color = [],
+                            supplyPrice = [],
+                            originPrice = [],
+                            currentPrice = [],
+                            storeCount = [],
+                            topImg = [],
+                            detailImg = [],
+                            productTypeId = [],
+                            sellCount = [],
+                            limitActivityCount = [],
+                            specialPrice= [],
+                            param = null,
+                            attribute = null;
+                        
+                        for(var i = 0; i < productCtrl.odata.attributes.length; i++){
+                            attribute = productCtrl.odata.attributes[i];
+                            size.push(attribute.size);
+                            color.push(attribute.color);
+                            supplyPrice.push(attribute.supplyPrice);
+                            originPrice.push(attribute.originPrice);
+                            currentPrice.push(attribute.currentPrice);
+                            storeCount.push(attribute.storeCount);
+                            productTypeId.push(attribute.productTypeId);
+                            sellCount.push(attribute.sellCount);
+                            limitActivityCount.push(attribute.limitActivityCount);
+                            specialPrice.push(attribute.specialPrice);
+                        }
+                        
+                        $("#uplpad-main .img-box img").each(function(){
+                            topImg.push(this.src);
+                        });
+                        $("#uplpad-detail .img-box img").each(function(){
+                            detailImg.push(this.src);
+                        });
+                        
+                        param = {
+                            catalogId1: productCtrl.catalog.catalogId1,
+                            catalogId2: productCtrl.catalog.catalogId2,
+                            catalogId3: productCtrl.catalog.catalogId3,
+                            brandId: productCtrl.brands.brandId,
+                            SupplierId: productCtrl.suppliers.SupplierId,
+                            name: productCtrl.odata.name,
+                            country: productCtrl.countries.country,
+                            unit: productCtrl.odata.unit,
+                            size: size.join("@"),
+                            color: color.join("@"),
+                            supplyPrice: supplyPrice.join("@"),
+                            originPrice: originPrice.join("@"),
+                            currentPrice: currentPrice.join("@"),
+                            storeCount: storeCount.join("@"),
+                            topImg: topImg.join("@"),
+                            detailImg: detailImg.join("@")
+                        };
+                        if(productCtrl.odata.productId != ""){
+                            param.productTypeId = productTypeId.join("@");
+                            param.sellCount = sellCount.join("@");
+                            param.limitActivityCount = limitActivityCount.join("@");
+                            param.specialPrice = specialPrice.join("@");
+                        }
+                        
+                        $.ajax({
+                            type: "post",
+                            url: DI.addProductByAll,
+                            data: param,
+                            dataType: "json",
+                            success: function(data){
+                                if(data.status = "success"){
+                                    productCtrl.edit = false;
+                                    $("#dg").datagrid("load");
+                                    PLATFORM.headTip("添加商品成功");
+                                }else{
+                                    PLATFORM.headTip("添加商品失败");
+                                }
+                            },
+                            error: function(err){
+                                console.log(err);
+                            }
+                        });
+                    },
+                    updown: function(el){
+                        $.ajax({
+                            type: "post",
+                            url: DI.setProductStatus,
+                            data: {
+                                productIds: el.productid,
+                                status: el.status ? 0 : 1
+                            },
+                            dataType: "json",
+                            success: function(data){
+                                if(data.status = "success"){
+                                    $("#dg").datagrid("load");
+                                    PLATFORM.headTip("变更成功");
+                                }else{
+                                    PLATFORM.headTip("变更失败");
+                                }
+                            },
+                            error: function(err){
+                                console.log(err);
+                            }
+                        });
+                    },
+                    back: function(){
+                        productCtrl.edit = false;
+                    }
+                }
+            });
+            avalon.scan();
+            
+            $(function(){
+                PLATFORM.imgUpload("uplpad-main", "btn-main", "btn-uploadMain");
+                PLATFORM.imgUpload("uplpad-detail", "btn-detail", "btn-uploadDetail");
+                
+                $.ajax({
+                    type: "post",
+                    url: DI.getItems,
+                    dataType: "json",
+                    success: function(data){
+                        var allCatalog = [];
+                        for(var i = 0; i < data.items.length; i++){
+                            if(data.items[i].subCatalogs.length > 0){
+                                for(var j = 0; j < data.items[i].subCatalogs.length; j++){
+                                    $.merge(allCatalog, data.items[i].subCatalogs[j].subCatalogs);
+                                }
+                            }
+                        }
+                        productCtrl.param.allCatalog = allCatalog;
+                        productCtrl.catalog.first = data.items;
+                    },
+                    error: function(err){
+                        console.log(err);
+                    }
+                });
+                
+                $("#dg").datagrid({"url": DI.queryAllProducts});
+            });
+            
+            $("body").on("click", ".btn-operate.view", function(){
+                var selected = $("#dg").datagrid("getSelected");
+                    
+                productCtrl.odata.edit = false;
+                productCtrl.operate.edit(selected);
+            });
+            
+            $("body").on("click", ".btn-operate.edit", function(){
+                var selected = $("#dg").datagrid("getSelected");
+                    
+                productCtrl.odata.edit = true;
+                productCtrl.operate.edit(selected);
+            });
+            
+            $("body").on("click", ".btn-operate.updown", function(){
+                var selected = $("#dg").datagrid("getSelected");
+                    
+                productCtrl.operate.updown(selected);
+            });
+        </script>
+	</body>
+</html>

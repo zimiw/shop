@@ -1,0 +1,125 @@
+ <!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <title>洋流管理系统</title>
+
+        <link rel="stylesheet" href="css/page/reset_both.css" />
+        <link rel="stylesheet" href="css/page/orderManage.css" />
+    </head>
+    <body>
+        <div class="wrap" ms-controller="change">
+        	<div class="yl-personal">
+        		<div class="left-part">
+        			<div class="yl-leftinfo">
+        				<p class="title">换货申请</p>
+        				<div class="leftinfo-cnt">
+        					<div class="good-info">
+        						<img ms-attr-src="img" />
+        						<span>{{name}}</span>
+        					</div>
+        					<div class="yl-datagrid word three">
+	        					<div class="item">
+	        						<label>单价：</label>
+	        						<p class="form-ctt">{{price}}</p>
+	        					</div>
+	        					<div class="item">
+	        						<label>数量：</label>
+	        						<p class="form-ctt">{{num}}</p>
+	        					</div>
+	        					<div class="item">
+	        						<label>小计：</label>
+	        						<p class="form-ctt color-price">{{price*num | currency}}</p>
+	        					</div>
+	        				</div>
+        				</div>
+        			</div>
+        			<div class="division-line"></div>
+        			<div class="yl-leftinfo">
+        				<p class="title">订单详情</p>
+        				<div class="leftinfo-cnt">
+        					<div class="yl-datagrid word five">
+	        					<div class="item">
+	        						<label>订单编号：</label>
+	        						<p class="form-ctt">{{oid}}</p>
+	        					</div>
+	        					<div class="item">
+	        						<label>运费：</label>
+	        						<p class="form-ctt">¥0.00</p>
+	        					</div>
+	        					<div class="item">
+	        						<label>订单金额：</label>
+	        						<p class="form-ctt color-price">{{total | currency}}</p>
+	        					</div>
+	        					<div class="item">
+	        						<label>成交时间：</label>
+	        						<p class="form-ctt">{{odate | date("yyyy-MM-dd")}}</p>
+	        					</div>
+	        					<div class="item">
+	        						<label></label>
+	        						<p class="form-ctt">{{odate | date("HH:mm:ss")}}</p>
+	        					</div>
+	        				</div>
+        				</div>
+        			</div>
+        		</div>
+        		<div class="right-part">
+        			<div class="yl-dialog">
+        				<p class="title">退款详情</p>
+        				<div class="dialog-cnt">
+        					<div class="yl-form">
+        						<div class="item">
+	        						<label>退款原因：</label>
+	        						<p class="form-ctt"></p>
+	        					</div>
+        						<div class="item">
+	        						<label>退款金额：</label>
+	        						<p class="form-ctt"></p>
+	        					</div>
+	        					<div class="item">
+	        						<label>退款说明：</label>
+	        						<p class="form-ctt"></p>
+	        					</div>
+	        					<div class="item">
+	        						<label>退款凭证：</label>
+	        						<div class="form-cnt">
+                                        <img src="js/ui/images/ui-bg_flat_55_c0402a_40x100.png" />
+                                    </div>
+	        					</div>
+	        					<div class="item forBtn">
+	        						<label></label>
+	        						<button class="yl-btn middle" ms-click="submit">同意</button>
+	        						<button class="yl-btn-add middle" ms-click="submit">驳回</button>
+	        					</div>
+        					</div>
+        				</div>
+        			</div>
+        		</div>
+        	</div>
+        </div>
+
+        <script src="js/avalon.shim.sn.js"></script>
+        <script src="js/jquery.min.js"></script>
+        <script>
+            $(function(){
+                var changeCtrl = avalon.define({
+                    $id: "change",
+                    param: {
+                        
+                    },
+                    name: "TAKEO KIKUCHI/菊池武2015A 男士牛皮鳄鱼纹",
+                    img: "img/demo_1.png",
+                    num: "2",
+                    price: "3",
+                    oid: "12566666",
+                    total: "1250",
+                    odate: "2015-06-08 22:15:41",
+                    returnPrice: 0
+                });
+
+                avalon.scan();
+            });
+        </script>
+    </body>
+</html>

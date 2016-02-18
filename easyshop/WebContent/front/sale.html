@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <title>洋流网</title>
+
+        <link rel="stylesheet" href="../css/front/reset.css" />
+        <link rel="stylesheet" href="../css/front/sale.css" />
+    </head>
+    <body ms-controller="common">
+        <div class="header">
+            <div class="buy-info">
+                <div class="wrap">
+                    <a class="logo" href="">
+                        <img src="../img/logo.png" />
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="banner">
+            <img src="../img/demo_10.png" />
+        </div>
+        <div class="cnt-box" ms-controller="sale">
+            <div class="product-box type3">
+                <div class="wrap">
+                    <img class="title" src="img/sale_1.png" />
+                    <div class="cnt">
+                        <a ms-repeat="product1">
+                            <img ms-attr-src="el.img" />
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="product-box type2">
+                <div class="wrap">
+                    <img class="title" src="img/sale_1.png" />
+                    <div class="cnt">
+                        <a ms-repeat="product2">
+                            <img ms-attr-src="el.img" />
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="product-box type8">
+                <div class="wrap">
+                    <img class="title" src="img/sale_2.png" />
+                    <div class="cnt">
+                        <a ms-repeat="product3" ms-class="no-mgl: $index%4 == 0">
+                            <img ms-attr-src="el.img" />
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="product-box type8">
+                <div class="wrap">
+                    <img class="title" src="img/sale_3.png" />
+                    <div class="cnt">
+                        <a ms-repeat="product4" ms-class="no-mgl: $index%4 == 0">
+                            <img ms-attr-src="el.img" />
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="product-box type8">
+                <div class="wrap">
+                    <img class="title" src="img/sale_4.png" />
+                    <div class="cnt">
+                        <a ms-repeat="product5" ms-class="no-mgl: $index%4 == 0">
+                            <img ms-attr-src="el.img" />
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div ms-include-src="'../template/footer.html'" data-include-replace="true"></div>
+
+        <script src="../js/avalon.shim.sn.js"></script>
+        <script src="../js/jquery.min.js"></script>
+        <script src="../js/main.js"></script>
+        <script src="../js/data-interface.js"></script>
+        <script>
+            $(function(){
+                var saleCtrl = avalon.define({
+                    $id: "sale",
+                    product1: [],
+                    product2: [],
+                    product3: [],
+                    product4: [],
+                    product5: []
+                });
+
+                avalon.scan();
+
+                $.ajax({
+                    type: "post",
+                    url: "",
+                    dataType: "json",
+                    success: function(data){
+                        var data = {
+                                product1: [
+                                    {
+                                        "img": "img/demo_12.png"
+                                    },
+                                    {
+                                        "img": "img/demo_12.png"
+                                    },
+                                    {
+                                        "img": "img/demo_12.png"
+                                    }
+                                ],
+                                product2: [
+                                    {
+                                        "img": "img/demo_11.png"
+                                    },
+                                    {
+                                        "img": "img/demo_11.png"
+                                    }
+                                ],
+                                product3: [
+                                    {
+                                        "img": "img/demo_13.png"
+                                    },
+                                    {
+                                        "img": "img/demo_13.png"
+                                    },
+                                    {
+                                        "img": "img/demo_13.png"
+                                    },
+                                    {
+                                        "img": "img/demo_13.png"
+                                    },
+                                    {
+                                        "img": "img/demo_13.png"
+                                    },
+                                    {
+                                        "img": "img/demo_13.png"
+                                    },
+                                    {
+                                        "img": "img/demo_13.png"
+                                    },
+                                    {
+                                        "img": "img/demo_13.png"
+                                    }
+                                ],
+                                product4: [
+                                    {
+                                        "img": "img/demo_13.png"
+                                    },
+                                    {
+                                        "img": "img/demo_13.png"
+                                    },
+                                    {
+                                        "img": "img/demo_13.png"
+                                    },
+                                    {
+                                        "img": "img/demo_13.png"
+                                    },
+                                    {
+                                        "img": "img/demo_13.png"
+                                    },
+                                    {
+                                        "img": "img/demo_13.png"
+                                    },
+                                    {
+                                        "img": "img/demo_13.png"
+                                    },
+                                    {
+                                        "img": "img/demo_13.png"
+                                    }
+                                ],
+                                product5: [
+                                    {
+                                        "img": "img/demo_13.png"
+                                    },
+                                    {
+                                        "img": "img/demo_13.png"
+                                    },
+                                    {
+                                        "img": "img/demo_13.png"
+                                    },
+                                    {
+                                        "img": "img/demo_13.png"
+                                    },
+                                    {
+                                        "img": "img/demo_13.png"
+                                    },
+                                    {
+                                        "img": "img/demo_13.png"
+                                    },
+                                    {
+                                        "img": "img/demo_13.png"
+                                    },
+                                    {
+                                        "img": "img/demo_13.png"
+                                    }
+                                ]
+                        };
+                        saleCtrl.product1 = data.product1;
+                        saleCtrl.product2 = data.product2;
+                        saleCtrl.product3 = data.product3;
+                        saleCtrl.product4 = data.product4;
+                        saleCtrl.product5 = data.product5;
+                    },
+                    error: function(err){
+                        console.log(err);
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>

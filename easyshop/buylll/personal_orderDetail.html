@@ -1,0 +1,182 @@
+ <!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <title>洋流网</title>
+
+        <link rel="stylesheet" href="css/reset.css" />
+        <link rel="stylesheet" href="css/personal-orderDetail.css" />
+    </head>
+    <body ms-controller="common">
+        <div ms-include-src="'template/header.html'" data-include-replace="true" data-include-loaded="initHeader"></div>
+        <div ms-include-src="'template/nav.html'" data-include-replace="true" data-include-loaded="initNav"></div>
+        <div class="wrap" ms-controller="order">
+        	<p class="yl-breadcrum">首页 &gt; 个人中心 &gt; 订单详情</p>
+        	<div class="order-status">
+        		<p>订单号：1189 2344 5566</p>
+        		<p>下单时间：2015-11-23 23:12:34</p>
+        		<p>状态：<span ms-class="ready: status==3">审批中</span></p>
+        		<div class="btn-box" ms-visible="status==0">
+        			<a class="cancel" href="javascript:;">取消订单</a>
+        			<button class="yl-btn middle">立即支付</button>
+        		</div>
+        		<div class="btn-box" ms-visible="status==1">
+        			<a class="cancel" href="javascript:;">取消订单</a>
+        		</div>
+        		<div class="btn-box" ms-visible="status==2">
+        			<button class="yl-btn-special contact">请联系客服</button>
+        			<button class="apply">申请退换货</button>
+        		</div>
+        		<div class="btn-box" ms-visible="status==3">
+        			<button class="apply">申请退换货</button>
+        		</div>
+        	</div>
+        	<div class="order-detail">
+        		<div class="status" ms-class="status{{status}}"></div>
+        		<div class="time-box">
+        			<div class="date">
+        				<p>2015-06-06</p>
+        				<p>22:33:14</p>
+        			</div>
+        		</div>
+        		<div class="yl-dialog">
+        			<p class="title">收货人信息</p>
+        			<div class="dialog-cnt">
+        				<div class="yl-datagrid five">
+        					<div class="item">
+        						<label>收货人：</label>
+        						<p class="form-ctt">刘梦雅</p>
+        					</div>
+        					<div class="item">
+        						<label>地址：</label>
+        						<p class="form-ctt">上海市浦东新区香江丽晶889号蒲昌元69号201室</p>
+        					</div>
+        					<div class="item">
+        						<label>手机号码：</label>
+        						<p class="form-ctt">189****7987</p>
+        					</div>
+        				</div>
+        			</div>
+        		</div>
+        		<div class="yl-dialog">
+        			<p class="title">支付及配送方式</p>
+        			<div class="dialog-cnt">
+        				<div class="yl-datagrid five">
+        					<div class="item">
+        						<label>支付方式：</label>
+        						<p class="form-ctt">支付宝在线支付/银联在线支付/微信在线支付</p>
+        					</div>
+        					<div class="item">
+        						<label>运单号：</label>
+        						<p class="form-ctt">718031660539</p>
+        					</div>
+        					<div class="item">
+        						<label>物流公司：</label>
+        						<p class="form-ctt">EMS国际快递</p>
+        					</div>
+        				</div>
+        			</div>
+        		</div>
+        		<div class="yl-dialog withTb">
+        			<p class="title">商品清单</p>
+        			<div class="dialog-cnt">
+        				<table class="yl-tb goods">
+        					<thead>
+        						<tr>
+	        						<th class="col1"></th>
+	        						<th class="col2">商品 </th>
+	        						<th class="col3">售价（元）</th>
+	        						<th class="col4">数量</th>
+        						</tr>
+        					</thead>
+        					<tbody>
+        						<tr>
+        							<td class="col1"><img class="img" src="img/demo_1.png" /></td>
+        							<td class="col2">AKEO KIKUCHI/菊池武2015A 男士牛皮鳄鱼纹设计感皮带</td>
+        							<td class="col3">988</td>
+        							<td class="col4">2</td>
+        						</tr>
+        						<tr>
+        							<td class="col1"><img class="img" src="img/demo_1.png" /></td>
+        							<td class="col2">AKEO KIKUCHI/菊池武2015A 男士牛皮鳄鱼纹设计感皮带</td>
+        							<td class="col3">988</td>
+        							<td class="col4">2</td>
+        						</tr>
+        					</tbody>
+        				</table>
+        			</div>
+        		</div>
+        		<div class="total-box">
+        			<p>
+        				<span>运费：</span>
+        				<span class="freight price">¥10</span>
+        			</p>
+        			<p>
+        				<span>应付金额：</span>
+        				<span class="price"><span class="symbol">¥</span><span class="total">1000</span></span>
+        			</p>
+        		</div>
+        	</div>
+        </div>
+        <div ms-include-src="'template/footer.html'" data-include-replace="true"></div>
+
+        <script src="js/avalon.js"></script>
+        <script src="js/jquery.min.js"></script>
+        <script src="js/main.js"></script>
+        <script>
+            $(function(){
+                var headerCtrl = avalon.define({
+                    $id: "header",
+                    productNum: "",
+                    keywords: []
+                });
+
+                var orderCtrl = avalon.define({
+                    $id: "order",
+                    oid: "1189 2344 5566",
+                    odate: "2015-11-23  23:12:34",
+                    status: "2",
+                    dateList: [
+                    	{
+	                    	"day": "2015-06-06",
+	                    	"time": "22:33:14"
+                    	},
+                    	{
+	                    	"day": "2015-06-06",
+	                    	"time": "22:33:14"
+                    	}
+                    ],
+                    consigneeInfo: {
+                		consignee: "刘梦雅",
+                		addr: "上海市浦东新区香江丽晶889号蒲昌元69号201室",
+                		phone: "189****7987"
+                	},
+                    pay: {
+                		type: "支付宝在线支付/银联在线支付/微信在线支付",
+                		oid: "718031660539",
+                		company: "EMS国际快递"
+                	},
+                	goods: [
+                    	{
+	                    	"img": "img/demo_1.png",
+	                    	"name": "AKEO KIKUCHI/菊池武2015A 男士牛皮鳄鱼纹设计感皮带",
+	                    	"price": "988",
+	                    	"num": "1"
+                    	},
+                    	{
+	                    	"img": "img/demo_1.png",
+	                    	"name": "AKEO KIKUCHI/菊池武2015A 男士牛皮鳄鱼纹设计感皮带",
+	                    	"price": "988",
+	                    	"num": "1"
+                    	}
+                    ],
+                    freight: "10",
+                    total: "5236"
+                });
+
+                avalon.scan();
+            });
+        </script>
+    </body>
+</html>

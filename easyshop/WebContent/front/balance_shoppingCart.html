@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <title>洋流网</title>
+
+        <link rel="stylesheet" href="../css/front/reset.css" />
+        <link rel="stylesheet" href="../css/front/balance-cart.css" />
+    </head>
+    <body ms-controller="common">
+        <div ms-include-src="'../template/header.html'" data-include-replace="true" data-include-loaded="initHeader"></div>
+        
+        <div class="wrap" ms-controller="cart">
+        	<div ms-visible="items.length > 0">
+	            <table class="tb-cart thead">
+	                <thead>
+	                    <tr>
+	                        <th class="col1">
+	                            <div class="yl-chkbox" ms-click="check('all')">
+	                                <em></em>
+	                                <span>全选</span>
+	                            </div>
+	                        </th>
+	                        <th class="col2">商品信息</th>
+	                        <th class="col3">单价（元）</th>
+	                        <th class="col4">数量</th>
+	                        <th class="col5">金额</th>
+	                        <th class="operate">操作</th>
+	                    </tr>
+	                </thead>
+	            </table>
+	            <table class="tb-cart tbody">
+	                <tbody>
+	                    <tr ms-repeat="items">
+	                        <td class="col1">
+	                            <div class="yl-chkbox" ms-click="check(el)" ms-data-shoppingcartid="el.shoppingcartId">
+	                                <em></em>
+	                            </div>
+	                            <img class="img" ms-attr-src="el.product.imgs[0].imgsource" />
+	                        </td>
+	                        <td class="col2">
+	                            <p>{{el.product.name}}</p>
+	                        </td>
+	                        <td class="col3">
+	                            <p>{{el.product.currentPrice | currency(" ")}}&nbsp;</p>
+	                        </td>
+	                        <td class="col4">
+	                            <div class="yl-num">
+	                                <a class="minus" href="javascript:;" ms-click="minus(el)">-</a>
+	                                <input class="ipt_num" type="text" ms-duplex="el.number" />
+	                                <a class="add" href="javascript:;" ms-click="add(el)">+</a>
+	                            </div>
+	                        </td>
+	                        <td class="col5">
+	                            <p class="total">{{el.product.currentPrice * el.number | currency(" ")}}&nbsp;</p>
+	                        </td>
+	                        <td class="operate">
+	                            <a href="javascript:;" ms-click="del(el)">删除</a>
+	                            <a href="javascript:;" ms-click="favorite(el.productId)">加入收藏夹</a>
+	                        </td>
+	                    </tr>
+	                </tbody>
+	            </table>
+	            <div class="balance-box">
+	            	<div class="info-box">
+	            		<!--<div class="yl-chkbox">
+		                    <em></em>
+		                    <span>全选</span>
+		                </div>-->
+		                <a class="del" href="javascript:;" ms-click="delCheck">删除选中商品</a>
+		                <p class="freight">运费：<span>¥0</span></p>
+		                <p class="all-chk">
+		                	已选择<span>{{product}}</span>件商品，总计<span>{{total | currency}}</span>
+		                </p>
+	            	</div>
+	            	<button class="btn-balance" ms-click="balance">立即结算</button>
+	            </div>
+        	</div>
+        	<div ms-visible="items.length == 0">
+        		<div class="cart-empty">
+        			<p class="go">购物车空空如也，赶紧去<a href="home.html">逛逛吧▶▶</a></p>
+        			<div class="login">
+        				<p>或者您也可以进行</p>
+        				<a class="btn-login" href="login.html"></a>
+        			</div>
+        		</div>
+        	</div>
+        </div>
+        <div ms-include-src="'../template/footer.html'" data-include-replace="true"></div>
+
+        <script src="../js/avalon.shim.sn.js"></script>
+        <script src="../js/jquery.min.js"></script>
+        <script src="../js/main.js"></script>
+        <script src="../js/data-interface.js"></script>
+        <script>
+            $(function(){
+                var cartCtrl = avalon.define({
+                    $id: "cart",
+                    items: [],
+                    product: 0,
+                    total: 0,
+                    minus: function(el){
+                        el.number = Number(el.number);
+                        el.number = el.number - 1 > 1 ? el.number - 1 : 1;
+                        $.ajax({
+                            type: "post",
+                            url: DI.modifyNumber,
+                            dataType: "json",
+                            data: {
+                                shoppingcartId: el.shoppingcartId,
+                                number: el.number
+                            },
+                            success: function(data){
+                                if(data.status == "success"){
+                                    total();
+                                }else{
+                                    el.number = Number(el.number);
+                                    el.number += 1;
+                                }
+                            },
+                            error: function(err){
+                                console.log(err);
+                            }
+                        });
+                    },
+                    add: function(el){
+                        el.number = Number(el.number);
+                        el.number += 1;
+                        $.ajax({
+                            type: "post",
+                            url: DI.modifyNumber,
+                            dataType: "json",
+                            data: {
+                                shoppingcartId: el.shoppingcartId,
+                                number: el.number
+                            },
+                            success: function(data){
+                                alert(data.status);
+                                if(data.status == "success"){
+                                    total();
+                                }else{
+                                    el.number = Number(el.number);
+                                    el.number -= 1;
+                                }
+                            },
+                            error: function(err){
+                                console.log(err);
+                            }
+                        });
+                    },
+                    del: function(el){
+                        $.ajax({
+                            type: "post",
+                            url: DI.delShoppingcart,
+                            dataType: "json",
+                            data: {
+                                productId: el.product.productId
+                            },
+                            success: function(data){
+                                alert(data.status);
+                                if(data.status == "success"){
+                                    total();
+                                    checkShoppingcart();
+                                }
+                            },
+                            error: function(err){
+                                console.log(err);
+                            }
+                        });
+                    },
+                    favorite: function(id){
+                        Buylll.addFavorite(id);
+                    },
+                    check: function(el){
+                        var $this = $(this),
+                            operate = 1,
+                            shoppingcartIds = "";
+                            
+                        $this.toggleClass("chked");
+                        
+                        if(el == "all"){
+                            if($this.hasClass("chked")){
+                                $(".tb-cart.tbody .yl-chkbox").addClass("chked");
+                            }else{
+                                $(".tb-cart.tbody .yl-chkbox").removeClass("chked");
+                            }
+                        }
+                            
+                        cartCtrl.product = $(".tb-cart.tbody .yl-chkbox.chked").length;
+                        total();
+                            },
+                    balance: function(){
+                        if(cartCtrl.product == 0) return;
+                        var selected = $(".tb-cart.tbody .yl-chkbox.chked"),
+                            idArr = [];
+                        for(var i = 0; i < selected.length; i++){
+                            idArr.push(selected.eq(i).data("shoppingcartid"));
+                            }
+                        var shoppingcartIds = idArr.join("@@");
+                        Buylll.modifySelected(1, shoppingcartIds);
+                    },
+                    delCheck: function(){
+                        $(".tb-cart .yl-chkbox").removeClass("chked");
+                        cartCtrl.product = 0;
+                        total();
+                    }
+                });
+
+                avalon.scan();
+                checkShoppingcart();
+                
+                function checkShoppingcart(){
+                    $.ajax({
+                        type: "post",
+                        url: DI.checkShoppingcart,
+                        dataType: "json",
+                        success: function(data){
+                            cartCtrl.items = data.data;
+//                          cartCtrl.items = [
+//                              {
+//                                  product: {
+//                                      "imgsource": "img/demo_1.png",
+//                                      "name": "TAKEO KIKUCHI/菊池武夫 2015AW 男士牛皮鳄鱼纹公",
+//                                      "currentPrice": 120
+//                                  },
+//                                  shoppingcartId: 5,
+//                                  number: 5
+//                              },
+//                              {
+//                                  product: {
+//                                      "imgsource": "img/demo_1.png",
+//                                      "name": "TAKEO KIKUCHI/菊池武夫 2015AW 男士牛皮鳄鱼纹公",
+//                                      "currentPrice": 60
+//                                  },
+//                                  shoppingcartId: 6,
+//                                  number: 3
+//                              }
+//                          ];
+                        },
+                        error: function(err){
+                            console.log(err);
+                        }
+                    });
+                }
+                
+                function total(){
+                    var items = $(".tb-cart.tbody .yl-chkbox.chked"),
+                        total = 0;
+                    for(var i = 0; i < items.length; i++){
+                        total += Number(items.eq(i).parents("tr").find(".total").text());
+                    }
+                    cartCtrl.total = total;
+                }
+            });
+        </script>
+    </body>
+</html>

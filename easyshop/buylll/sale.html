@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <title>洋流网</title>
+
+        <link rel="stylesheet" href="css/reset.css" />
+        <link rel="stylesheet" href="css/sale.css" />
+    </head>
+    <body ms-controller="common">
+        <div ms-include-src="'template/header.html'" data-include-replace="true" data-include-loaded="initHeader"></div>
+        <div ms-controller="">
+	        <div class="banner">
+	            <img src="img/demo_10.png" />
+	        </div>
+	        <div class="cnt-box">
+	            <div class="product-box type3">
+	                <div class="wrap">
+	                    <img class="title" src="img/title.png" />
+	                    <div class="cnt">
+	                        <img src="img/demo_12.png" />
+	                        <img src="img/demo_12.png" />
+	                        <img class="noMgr" src="img/demo_12.png" />
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="product-box type2">
+	                <div class="wrap">
+	                    <img class="title" src="img/title.png" />
+	                    <div class="cnt">
+	                        <img src="img/demo_11.png" />
+	                        <img src="img/demo_11.png" />
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="product-box type8">
+	                <div class="wrap">
+	                    <img class="title" src="img/title.png" />
+	                    <div class="cnt">
+	                        <img class="no-mgl" src="img/demo_13.png" />
+	                        <img src="img/demo_13.png" />
+	                        <img src="img/demo_13.png" />
+	                        <img src="img/demo_13.png" />
+	                        <img class="no-mgl" src="img/demo_13.png" />
+	                        <img src="img/demo_13.png" />
+	                        <img src="img/demo_13.png" />
+	                        <img src="img/demo_13.png" />
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+        </div>
+        <div ms-include-src="'template/footer.html'" data-include-replace="true"></div>
+
+        <script src="js/avalon.js"></script>
+        <script src="js/jquery.min.js"></script>
+        <script src="js/main.js"></script>
+        <script>
+            $(function(){
+                var saleCtrl = avalon.define({
+                    $id: "sale",
+                    banner: "",
+                    products: [],
+                    productNum: "0"
+                });
+
+                avalon.scan();
+
+                $.ajax({
+                    type: "get",
+                    url: "fakeData/sale.json", // 根据需要换成实际url
+                    dataType: "json",
+                    success: function(data){
+                        saleCtrl.banner = data.banner;
+                        saleCtrl.products = data.products;
+                    },
+                    error: function(err){
+                        console.log(err);
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>

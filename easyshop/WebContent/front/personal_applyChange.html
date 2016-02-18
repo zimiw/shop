@@ -1,0 +1,198 @@
+ <!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <title>洋流网</title>
+
+        <link rel="stylesheet" href="../css/front/reset.css" />
+    </head>
+    <body ms-controller="common">
+        <div ms-include-src="'../template/header.html'" data-include-replace="true" data-include-loaded="initHeader"></div>
+        <div ms-include-src="'../template/nav.html'" data-include-replace="true" data-include-loaded="initNav"></div>
+        
+        <div class="wrap" ms-controller="change">
+        	<p class="yl-breadcrum">首页 &gt; 个人中心 &gt; 换货申请</p>
+        	<div class="yl-personal">
+        		<div class="left-part">
+        			<div class="yl-leftinfo">
+        				<p class="title">换货申请</p>
+        				<div class="leftinfo-cnt">
+        					<div class="good-info">
+        						<img ms-attr-src="img" />
+        						<span>{{name}}</span>
+        					</div>
+        					<div class="yl-datagrid word three">
+	        					<div class="item">
+	        						<label>单价：</label>
+	        						<p class="form-ctt">{{price}}</p>
+	        					</div>
+	        					<div class="item">
+	        						<label>数量：</label>
+	        						<p class="form-ctt">{{num}}</p>
+	        					</div>
+	        					<div class="item">
+	        						<label>小计：</label>
+	        						<p class="form-ctt color-price">{{price*num | currency}}</p>
+	        					</div>
+	        				</div>
+        				</div>
+        			</div>
+        			<div class="division-line"></div>
+        			<div class="yl-leftinfo">
+        				<p class="title">订单详情</p>
+        				<div class="leftinfo-cnt">
+        					<div class="yl-datagrid word five">
+	        					<div class="item">
+	        						<label>订单编号：</label>
+	        						<p class="form-ctt">{{oid}}</p>
+	        					</div>
+	        					<div class="item">
+	        						<label>运费：</label>
+	        						<p class="form-ctt">¥0.00</p>
+	        					</div>
+	        					<div class="item">
+	        						<label>订单金额：</label>
+	        						<p class="form-ctt color-price">{{total | currency}}</p>
+	        					</div>
+	        					<div class="item">
+	        						<label>成交时间：</label>
+	        						<p class="form-ctt">{{odate | date("yyyy-MM-dd")}}</p>
+	        					</div>
+	        					<div class="item">
+	        						<label></label>
+	        						<p class="form-ctt">{{odate | date("HH:mm:ss")}}</p>
+	        					</div>
+	        				</div>
+        				</div>
+        			</div>
+        		</div>
+        		<div class="right-part">
+        			<div class="yl-dialog">
+        				<p class="title">换货申请</p>
+        				<div class="dialog-cnt">
+        					<form class="yl-form six" id="form_change" enctype="multipart/form-data">
+        					    <input type="hidden" name="orderId" ms-attr-val="orderId" />
+                                <input type="hidden" name="productId" ms-attr-val="productId" />
+                                <input type="hidden" name="num" ms-attr-val="param.num" />
+                                <input type="hidden" name="amount" ms-attr-val="param.amount" />
+        						<div class="item">
+	        						<label><span>*</span>换货原因：</label>
+	        						<select class="yl-select" name="changeReason" ms-duplex="param.changeReason" data-duplex-changed="selectchange">
+                                        <option value="0">质量问题</option>
+                                        <option value="1">颜色/款式/图案与描述不符</option>
+                                        <option value="2">假冒品牌</option>
+                                        <option value="3">收到商品破损</option>
+                                        <option value="4">材质、面料与商品描述不符</option>
+                                        <option value="5">大小尺寸与商品描述不符</option>
+                                        <option value="6">卖家发错货</option>
+                                        <option value="7">尺码不合适</option>
+                                        <option value="8">其他</option>
+                                    </select>
+	        					</div>
+        						<div class="item">
+	        						<label><span>*</span>退款金额：</label>
+	        						<input class="ipt-form" ms-attr-value="returnPrice" />
+	        						<p class="ipt-intro">元（最多{{price*num}}）</p>
+	        					</div>
+	        					<div class="item">
+	        						<label>退款说明：</label>
+	        						<textarea class="yl-textarea"></textarea>
+	        					</div>
+	        					<div class="item">
+	        						<label>退款凭证：</label>
+	        						<div class="form-cnt">
+                                        <div class="yl-uploadimg">
+                                            <img src="../img/defaultHead.jpg">
+                                            <p class="as-btn">点击上传</p>
+                                            <input type="file" name="image1">
+                                        </div>
+                                    </div>
+	        						<a href="javascript:;" class="help-tip">上传帮助</a>
+	        					</div>
+	        					<div class="item forBtn">
+	        						<label></label>
+	        						<button class="yl-btn middle" ms-click="submit">申请</button>
+	        					</div>
+        					</form>
+        				</div>
+        			</div>
+        		</div>
+        	</div>
+        </div>
+        <div ms-include-src="'../template/footer.html'" data-include-replace="true"></div>
+
+        <script src="../js/avalon.shim.sn.js"></script>
+        <script src="../js/jquery.min.js"></script>
+        <script src="../js/main.js"></script>
+        <script src="../js/data-interface.js"></script>
+        <script>
+            $(function(){
+                var param = Buylll.getUrlArgs();
+                
+                var changeCtrl = avalon.define({
+                    $id: "change",
+                    param: {
+                        orderId: param.orderId,
+                        productId: param.productId,
+                        num: 0,
+                        amount: 0,
+                        changeReason: 0,
+                        remark: ""
+                    },
+                    name: "TAKEO KIKUCHI/菊池武2015A 男士牛皮鳄鱼纹",
+                    img: "img/demo_1.png",
+                    num: "2",
+                    price: "3",
+                    oid: "12566666",
+                    total: "1250",
+                    odate: "2015-06-08 22:15:41",
+                    returnPrice: 0,
+                    submit: function(){
+                        $("#form_return").ajaxSubmit({
+                            type: "post",
+                            url: DI.orderReturn,
+                            dataType: "json",
+                            success: function(data){
+                                console.log(data)
+                            },
+                            error: function(XMLHttpRequest, textStatus, errorThrown){
+                                console.log("ajax error");
+                                console.log(XMLHttpRequest);
+                            }
+                        });
+                    }
+                });
+
+                avalon.scan();
+                
+                $.ajax({
+                    type: "post",
+                    url: DI.getOrderAndProduct,
+                    data: {
+                        orderId: Number(param.orderId),
+                        productId: Number(param.productId)
+                    },
+                    dataType: "json",
+                    success: function(data){
+                        returnCtrl.name = data.name;
+                        returnCtrl.img = data.img;
+                        returnCtrl.num = data.num;
+                        returnCtrl.price = data.price;
+                        returnCtrl.oid = data.oid;
+                        returnCtrl.total = data.total;
+                        returnCtrl.odate = data.odate;
+                        
+                        returnCtrl.param.amount = data.price * data.num;
+                        returnCtrl.param.num = data.num;
+                    },
+                    error: function(err){
+                        console.log(err);
+                    }
+                });
+                
+                Buylll.uploadPreview();
+            });
+        </script>
+    </body>
+</html>

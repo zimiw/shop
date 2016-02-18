@@ -1,0 +1,24 @@
+<div class="nav">
+    <ul class="wrap">
+        <li>
+            <div class="nav-first" href="#">
+                <a class="first homepage" href="home.html">首页</a>
+            </div>
+        </li>
+       <li ms-repeat="navigation">
+            <div class="nav-first">
+                <a class="first" ms-attr-href="'list.html?catalogId=' + el.catalogId">{{el.catalogName}}</a>
+                <div class="nav-second">
+                    <div class="wrap">
+                        <div class="nav-box" ms-repeat-sub="el.subCatalogs">
+                            <p class="title">{{sub.catalogName}}</p>
+                            <div class="second-box">
+                                <a class="second"  ms-attr-href="'list.html?catalogId=' + subsub.catalogId" ms-repeat-subsub="sub.subCatalogs">{{subsub.catalogName}}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>

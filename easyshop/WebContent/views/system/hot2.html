@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<title>洋流管理系统</title>
+        <link rel="stylesheet" href="css/easyui/metro-gray/easyui.css"/>
+        <link rel="stylesheet" href="css/easyui/icon.css"/>
+		<link rel="stylesheet" href="css/reset.css" />
+        <link rel="stylesheet" href="css/platform.css"/>
+        <link rel="stylesheet" href="css/page.css"/>
+	</head>
+	<body ms-controller="hot">
+        <p class="u-title">热卖商品管理2</p>
+        <div class="u-top-btns">
+            <button type="button" class="u-btn small" ms-click="operate.add">新增</button>
+        </div>
+        <table id="dg" class="easyui-datagrid" data-options="
+                    autoRowHeight: false,
+                    method: 'post',
+                    singleSelect: true,
+                    striped: true,
+                    fitColumns: true,
+                    rownumbers: true,
+                    nowrap: false,
+                    pagination: true">
+            <thead>
+                <tr>
+                    <th data-options="field:'productId', width:150, align:'center'">商品编码</th>
+                    <th data-options="field:'name', width:150, align:'center'">商品名称</th>
+                    <th data-options="field:'minPrice', width:80, align:'center'">洋流价</th>
+                    <th data-options="field:'storeCount', width:100, align:'center'">库存</th>
+                    <th data-options="field:'operate', width:100, align:'center', formatter: function(value,rowData,index){
+                        return '&lt;a href=&quot;javascript:;&quot; class=&quot;btn-operate del&quot;&gt;删除&lt;a&gt;';
+                    }">操作</th>
+                </tr>
+            </thead>
+        </table>
+        
+        <div class="u-popup" ms-visible="popup.product">
+            <div class="bg"></div>
+            <div class="asTable-box">
+                <div class="asTable">
+                    <div class="asTableCell">
+                        <div class="asCell dialog goods">
+                            <a href="javascript:;" class="close" ms-click="popup.close">×</a>
+                            <p class="title">添加商品</p>
+                            <div class="container">
+                                <div class="u-multiform">
+                                    <div class="column">
+                                        <div class="cell">
+                                            <label>商品编码：</label>
+                                            <input class="u-ipt" ms-duplex="param.code">
+                                        </div>
+                                    </div>
+                                    <div class="column">
+                                        <div class="cell">
+                                            <label>商品名称：</label>
+                                            <input class="u-ipt" ms-duplex="param.name">
+                                        </div>
+                                    </div>
+                                    <div class="column">
+                                        <div class="cell">
+                                            <label>商品状态：</label>
+                                            <select ms-duplex="param.status" data-duplex-changed="statusChange">
+                                                <option value="0">全部</option>
+                                                <option value="1">已参加</option>
+                                                <option value="2">未参加</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="column btn-box">
+                                        <div class="cell">
+                                            <label></label>
+                                            <div class="cnt-box">
+                                                <button class="u-btn small" ms-click="param.search">查询</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tb-box">
+                                    <table id="dg-product" class="easyui-datagrid" data-options="
+                                                autoRowHeight: false,
+                                                method: 'post',
+                                                singleSelect: true,
+                                                striped: true,
+                                                fitColumns: true,
+                                                rownumbers: true,
+                                                nowrap: false,
+                                                pagination: true">
+                                        <thead>
+                                            <tr>
+                                                <th data-options="field:'productId', width:150, align:'center'">商品编码</th>
+                                                <th data-options="field:'name', width:150, align:'center'">商品名称</th>
+                                                <th data-options="field:'catalogName', width:80, align:'center'">商品类目</th>
+                                                <th data-options="field:'supplierName', width:100, align:'center'">供应商</th>
+                                                <th data-options="field:'activityType', width:100, align:'center'">活动类型</th>
+                                                <th data-options="field:'storeCount', width:100, align:'center'">库存</th>
+                                                <th data-options="field:'operate', width:100, align:'center', formatter: function(value,rowData,index){
+                                                    return '&lt;a href=&quot;javascript:;&quot; class=&quot;btn-operate choose&quot;&gt;选择&lt;a&gt;';
+                                                }">操作</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="u-headTip"><p></p></div>
+        
+        
+        <script src="js/jquery.min.js"></script>
+        <script src="js/avalon.shim.sn.js"></script>
+        <script src="js/easyui/jquery.easyui.min.js"></script>
+        <script src="js/easyui/easyui-lang-zh_CN.js"></script>
+        <script src="js/platform.js"></script>
+        <script src="js/data-interface.js"></script>
+        <script>
+            var hotCtrl = avalon.define({
+                $id: "hot",
+                param: {
+                    code: "",
+                    name: "",
+                    status: "0",
+                    search: function(){
+                        
+                    }
+                },
+                statusChange: function(val){
+                    hotCtrl.param.status = val;
+                },
+                popup: {
+                    product: false,
+                    close: function(){
+                        hotCtrl.popup.product = false;
+                    }
+                },
+                operate: {
+                    add: function(){
+                        hotCtrl.popup.product = true;
+                        var timer = setTimeout(function(){
+                            $("#dg-product").datagrid({url: DI.queryActivityProductList});
+                            
+                            clearTimeout(timer);
+                            timer = null;
+                        }, 0);
+                    },
+                    del: function(el){
+                        $.ajax({
+                            type: "post",
+                            url: DI.delActivtyHeat,
+                            data: {
+                                id: el.id,
+                                productId: el.productId,
+                                type: 2,
+                            },
+                            dataType: "json",
+                            success: function(data){
+                                if(data.status == "success"){
+                                    $("#dg").datagrid("load");
+                                }
+                            },
+                            error: function(err){
+                                console.log(err);
+                            }
+                        });
+                    },
+                    choose: function(el){
+                    	el.type = 2;
+                        $.ajax({
+                            type: "post",
+                            url: DI.saveActivtyHeat,
+                            data: el,
+                            dataType: "json",
+                            success: function(data){
+                                if(data.status == "success"){
+                                    hotCtrl.popup.product = false;
+                                    $("#dg").datagrid("load");
+                                }
+                            },
+                            error: function(err){
+                                console.log(err);
+                            }
+                        });
+                    }
+                }
+            });
+            avalon.scan();
+            
+            $(function(){
+                $("#dg").datagrid({url: DI.queyActivtyHeatTwoList});
+            });
+            
+            $("body").on("click", ".btn-operate.del", function(){
+                var selected = $("#dg").datagrid("getSelected");
+                    
+                hotCtrl.operate.del(selected);
+            });
+            $("body").on("click", ".btn-operate.choose", function(){
+                var selected = $("#dg-product").datagrid("getSelected");
+                    
+                hotCtrl.operate.choose(selected);
+            });
+        </script>
+	</body>
+</html>

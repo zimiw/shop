@@ -1,0 +1,163 @@
+ <!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <title>洋流管理系统</title>
+
+        <link rel="stylesheet" href="css/page/reset_both.css" />
+        <link rel="stylesheet" href="css/page/orderManage.css" />
+        <link rel="stylesheet" href="css/page.css"/>
+    </head>
+    <body>
+        <div class="wrap" ms-controller="return">
+        	<div class="yl-personal">
+        		<div class="left-part">
+        			<div class="yl-leftinfo">
+        				<p class="title">退款商品</p>
+        				<div class="leftinfo-cnt">
+        					<div class="good-info">
+        						<img ms-attr-src="img" />
+        						<span>{{name}}</span>
+        					</div>
+        					<div class="yl-datagrid word three">
+	        					<div class="item">
+	        						<label>单价：</label>
+	        						<p class="form-ctt">{{price}}</p>
+	        					</div>
+	        					<div class="item">
+	        						<label>数量：</label>
+	        						<p class="form-ctt">{{num}}</p>
+	        					</div>
+	        					<div class="item">
+	        						<label>小计：</label>
+	        						<p class="form-ctt color-price">{{price*num | currency}}</p>
+	        					</div>
+	        				</div>
+        				</div>
+        			</div>
+        			<div class="division-line"></div>
+        			<div class="yl-leftinfo">
+        				<p class="title">订单详情</p>
+        				<div class="leftinfo-cnt">
+        					<div class="yl-datagrid word five">
+	        					<div class="item">
+	        						<label>订单编号：</label>
+	        						<p class="form-ctt">{{oid}}</p>
+	        					</div>
+	        					<div class="item">
+	        						<label>运费：</label>
+	        						<p class="form-ctt">¥0.00</p>
+	        					</div>
+	        					<div class="item">
+	        						<label>订单金额：</label>
+	        						<p class="form-ctt color-price">{{total | currency}}</p>
+	        					</div>
+	        					<div class="item">
+	        						<label>成交时间：</label>
+	        						<p class="form-ctt">{{odate | date("yyyy-MM-dd")}}</p>
+	        					</div>
+	        					<div class="item">
+	        						<label></label>
+	        						<p class="form-ctt">{{odate | date("HH:mm:ss")}}</p>
+	        					</div>
+	        				</div>
+        				</div>
+        			</div>
+        		</div>
+        		<div class="right-part">
+        			<div class="yl-dialog">
+        				<p class="title">换货详情</p>
+        				<div class="dialog-cnt">
+        					<div class="yl-form six">
+        						<div class="item">
+	        						<label>换货原因：</label>
+	        						<p class="form-ctt"></p>
+	        					</div>
+	        					<div class="item">
+	        						<label>换货个数：</label>
+	        						<p class="form-ctt"></p>
+	        					</div>
+	        					<div class="item">
+	        						<label>换货说明：</label>
+	        						<p class="form-ctt"></p>
+	        					</div>
+	        					<div class="item">
+	        						<label>调换商品：</label>
+	        						<p class="form-ctt"></p>
+	        					</div>
+	        					<div class="item forBtn" ms-visible="!operated">
+                                    <label></label>
+                                    <button class="yl-btn middle" ms-click="submit">同意</button>
+                                    <button class="yl-btn-add middle" ms-click="submit">驳回</button>
+                                </div>
+        					</div>
+        				</div>
+        				<div class="f-mgt20" ms-visible="operated">
+            				<p class="title">换货物流</p>
+            				<div class="dialog-cnt">
+            					<div class="yl-form six" id="form_return" enctype="multipart/form-data">
+            						<div class="item">
+    	        						<label>物流公司：</label>
+    	        						<p class="form-ctt">顺丰</p>
+    	        					</div>
+    	        					<div class="item">
+    	        						<label>物流单号：</label>
+    	        						<p class="form-ctt">0000</p>
+    	        					</div>
+    	        					<div class="item">
+    	        						<label>物流跟踪：</label>
+    	        						<p class="form-ctt">
+    	        						    <p>0000</p>
+    	        						</p>
+    	        					</div>
+            					</div>
+            				</div>
+        				</div>
+        			</div>
+        		</div>
+        	</div>
+        </div>
+        <div ms-include-src="'../template/footer.html'" data-include-replace="true"></div>
+
+        <script src="js/jquery.min.js"></script>
+        <script src="js/avalon.shim.sn.js"></script>
+        <script src="js/platform.js"></script>
+        <script src="js/data-interface.js"></script>
+        <script>
+            $(function(){
+                var returnCtrl = avalon.define({
+                    $id: "return",
+                    operated: true,
+                    param: {
+                    },
+                    selectchange: function(val){
+                        returnCtrl.param.changeReason = val;
+                    },
+                    name: "",
+                    img: "",
+                    num: "",
+                    price: "",
+                    oid: "",
+                    total: "",
+                    odate: "",
+                    apply: function(){
+                        $("#form_return").ajaxSubmit({
+                            type: "post",
+                            url: DI.orderReturn,
+                            dataType: "json",
+                            success: function(data){
+                                location.href = "personal_myOrder.html";
+                            },
+                            error: function(err){
+                                console.log(err);
+                            }
+                        });
+                    }
+                });
+
+                avalon.scan();
+            });
+        </script>
+    </body>
+</html>

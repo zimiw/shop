@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta http-equiv="Access-Control-Allow-Origin" content="*">
+		<title>洋流管理系统</title>
+		<style type="text/css">
+			body {
+				font-size: 12px;
+			}
+			li{
+				list-style-type:none;
+			}
+			a{
+				text-decoration: none;
+			}
+		</style>
+		<script src="js/jquery.min.js"></script>
+        <script src="js/avalon.shim.sn.js"></script>
+        <script src="js/jquery.form.js"></script>
+        <script src="js/easyui/jquery.easyui.min.js"></script>
+        <script src="js/easyui/easyui-lang-zh_CN.js"></script>
+        <script src="js/platform.js"></script>
+        <script src="js/data-interface.js"></script>
+        <script>
+        	$(function(){
+        		initDatas();
+        	});
+        	
+        	function initDatas(status){
+        		$.ajax({
+           			type:"post",
+           			dataType:"json",
+           			data:{status:status},
+           			url:"../../hotdict/getHotdictByStatus",
+           			success:function(data){
+           				$('ul li').remove();
+           				if(data.stats != "fail"){
+           					for(var i=0;i<data.length;i++){
+           						if(data[i].status == false){
+           							$("#allHotWordUl").append("<li><input type='checkbox' value='"+data[i].name+"'/>"+data[i].name+" <a href='javascript:void(0);' onclick='delHotWord(\""+data[i].name+"\");'>删除</a></li>");
+           						}else{
+           							$("#nowHotWordUl").append("<li><input type='checkbox' value='"+data[i].name+"'/>"+data[i].name+"</li>");
+           						}
+           					}
+           				}else{
+           					alert(data.msg);
+           				}
+           			}
+           		});
+        	}
+        
+            function addHotWord(){
+            	var newWord = $('#newHotWord').val();
+            	if(newWord == ''){
+            		alert('请先输入要新增的热词');
+            		return;
+            	}
+            	if(newWord.length > 10){
+            		alert('热词长度不能大于10');
+            		return;
+            	}
+            	$.ajax({
+           			type:"post",
+           			dataType:"json",
+           			data:{
+           				name:newWord
+           			},
+           			url:"../../hotdict/addHotdict",
+           			success:function(data){
+           				if(data.status != "fail"){
+           					initDatas();
+       						$('#newHotWord').val('');
+           				}else{
+           					alert(data.msg);
+           				}
+           			}
+           		});
+            	
+            }
+            
+            function delHotWord(hotWord){
+          		$.ajax({
+           			type:"post",
+           			dataType:"json",
+           			data:{name:hotWord},
+           			url:"../../hotdict/delHotdict",
+           			success:function(data){
+           				if(data.status != "fail"){
+           					initDatas();
+           				}else{
+           					alert(data.msg);
+           				}
+           			}
+           		});
+            }
+            
+            function changeCurrentHotWord(){
+            	var wordChecks = $('#allHotWordUl li input:checked');
+            	if(wordChecks != null && wordChecks.length > 0){
+            		var hotWords = $("#nowHotWordUl li");
+            		if(hotWords != null && hotWords.length >= 5){
+            			alert("今日热词最多只能添加5个");
+            			return;
+            		}
+            		for(var i=0;i<wordChecks.length;i++){
+            			$.ajax({
+		           			type:"post",
+		           			dataType:"json",
+		           			data:{
+		           				name:$(wordChecks[i]).val(),
+		           				status:true
+		           			},
+		           			url:"../../hotdict/setHotdictStatus",
+		           			success:function(data){
+				           		if(data.status != "fail"){
+		           					initDatas();
+		           				}else{
+		           					alert(data.msg);
+		           				}
+		           			}
+		           		});
+            		}
+            	}
+            }
+            
+            function removeCurrentHotWord(){
+            	var wordChecks = $('#nowHotWordUl li input:checked');
+            	if(wordChecks != null && wordChecks != ''){
+            		for(var i=0;i<wordChecks.length;i++){
+            			$.ajax({
+		           			type:"post",
+		           			dataType:"json",
+		           			data:{
+		           				name:$(wordChecks[i]).val(),
+		           				status:false
+		           			},
+		           			url:"../../hotdict/setHotdictStatus",
+		           			success:function(data){
+		           				initDatas();
+		           			}
+		           		});
+            		}
+            	}
+            }
+        </script>
+	</head>
+	<body>
+	    <div>
+            <p style="font-size: 12px;color: #4698FF;">搜索配置 > 热词配置</p>
+            
+            <table>
+            	<tr>
+            		<td>
+            		 	<input type="text" size="13" id="newHotWord"/> <a href="javascript:void(0);" onclick="addHotWord();">+新建</a>
+            		</td>
+            		<td rowspan="2">
+            			<button class="u-btn small" style="margin-left: 10px;" onclick="changeCurrentHotWord();">添加</button><br/>
+            			<button class="u-btn small" style="margin-left: 10px;" onclick="removeCurrentHotWord();">移除</button>
+            		</td>
+            		<td><span style="font-size: 12px;">今日热词(最多选择5个)</span></td>
+            	</tr>
+            	<tr>
+            		<td>
+            		 	<div style="border: solid 1px;width: 190px;height: 500px;">
+            		 		<ul id="allHotWordUl">
+            		 		</ul>
+            		 	<div/>
+            		</td>
+            		<td>
+            			<div style="border: solid 1px;width: 190px;height: 500px;">
+            				<ul id="nowHotWordUl">
+            				</ul>
+            			</div>
+            		</td>
+            	</tr>
+            </table>
+        </div>
+	</body>
+</html>

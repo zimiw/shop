@@ -1,0 +1,158 @@
+ <!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <title>洋流网</title>
+
+        <link rel="stylesheet" href="../css/front/reset.css" />
+        <link rel="stylesheet" href="../css/front/personal-returnDetail.css" />
+    </head>
+    <body ms-controller="common">
+        <div ms-include-src="'../template/header.html'" data-include-replace="true" data-include-loaded="initHeader"></div>
+        <div ms-include-src="'../template/nav.html'" data-include-replace="true" data-include-loaded="initNav"></div>
+        
+        <div class="wrap" ms-controller="return">
+        	<p class="yl-breadcrum">首页 &gt; 个人中心 &gt; 退换货详情</p>
+        	<div class="return-detail">
+        		<div class="yl-dialog">
+        			<p class="title">换货申请<button class="yl-btn middle">取消申请</button></p>
+        			<div class="dialog-cnt">
+		        		<div class="status" ms-class="status{{status}}"></div>
+		        		<div class="time-box">
+		        			<div class="date" ms-repeat="dateList">
+		        				<p>{{el.day}}</p>
+		        				<p>{{el.time}}</p>
+		        			</div>
+		        		</div>
+        			</div>
+        		</div>
+        		<div class="yl-dialog">
+        			<p class="title">换货信息</p>
+        			<div class="dialog-cnt">
+        				<div class="yl-datagrid five">
+        					<div class="item">
+        						<label>服务类型：</label>
+        						<p class="form-ctt">{{returnInfo.type}}</p>
+        					</div>
+        					<div class="item">
+        						<label>退款金额：</label>
+        						<p class="form-ctt">{{returnInfo.price}}</p>
+        					</div>
+        					<div class="item">
+        						<label>退货数量：</label>
+        						<p class="form-ctt">{{returnInfo.num}}</p>
+        					</div>
+        					<div class="item">
+        						<label>退货方式：</label>
+        						<p class="form-ctt">{{returnInfo.way}}</p>
+        					</div>
+        					<div class="item">
+        						<label>退货原因：</label>
+        						<p class="form-ctt">{{returnInfo.reason}}</p>
+        					</div>
+        					<div class="item">
+        						<label>详情描述：</label>
+        						<p class="form-ctt">{{returnInfo.intro}}</p>
+        					</div>
+        				</div>
+        			</div>
+        		</div>
+        		<div class="yl-dialog">
+        			<p class="title">进度追踪</p>
+        			<div class="dialog-cnt">
+        				<div class="yl-datagrid process">
+        					<div class="item" ms-repeat="process">
+        						<label>{{el.pdate}}</label>
+        						<p class="form-ctt">{{el.info | html}}</p>
+        					</div>
+        				</div>
+        			</div>
+        		</div>
+    			<div class="dialog-cnt">
+    				<table class="yl-tb return">
+    					<thead>
+    						<tr>
+        						<th class="col1">订单</th>
+        						<th class="col2"></th>
+        						<th class="col3">商品名称</th>
+        						<th class="col4">提交时间</th>
+        						<th class="col5">服务类型</th>
+    						</tr>
+    					</thead>
+    					<tbody>
+    						<tr ms-repeat="goods">
+    							<td class="col1">{{el.oid}}</td>
+    							<td class="col2"><img class="img" ms-attr-src="el.img" /></td>
+    							<td class="col3">{{el.name}}</td>
+    							<td class="col4">
+    								<p>{{el.odate | date("yyyy-MM-dd")}}</p>
+    								<p>{{el.odate | date("HH:mm:ss")}}</p>
+    							</td>
+    							<td class="col5">{{el.type}}</td>
+    						</tr>
+    					</tbody>
+    				</table>
+    			</div>
+        	</div>
+        </div>
+        <div ms-include-src="'../template/footer.html'" data-include-replace="true"></div>
+
+        <script src="../js/avalon.shim.sn.js"></script>
+        <script src="../js/jquery.min.js"></script>
+        <script src="../js/main.js"></script>
+        <script src="../js/data-interface.js"></script>
+        <script>
+            $(function(){
+                var returnCtrl = avalon.define({
+                    $id: "return",
+                    oid: "1189 2344 5566",
+                    odate: "2015-11-23  23:12:34",
+                    dateList: [
+                    	{
+	                    	"day": "2015-06-06",
+	                    	"time": "22:33:14"
+                    	},
+                    	{
+	                    	"day": "2015-06-06",
+	                    	"time": "22:33:14"
+                    	}
+                    ],
+                    returnInfo: {
+                		type: "退货",
+                		price: "88.00",
+                		num: "1",
+                		way: "退货到付款账户",
+                		reason: "其他",
+                		intro: "商品不是自己想要的"
+                	},
+                    process: [
+                    	{
+                    		pdate: "2015-08-19 14:21:54",
+                    		info: "买家已提交退货申请"
+                    	},
+                    	{
+                    		pdate: "2015-08-19 14:21:54",
+                    		info: "商家审核通过，请退货给商家并填写物流信息;<br />退货地址:江苏南通市海门市三星镇宝兴小区,徐于建,18061307827,226100<br />备注：同意"
+                    	},
+                    	{
+                    		pdate: "2015-08-19 14:21:54",
+                    		info: "退货处理已完成，退款处理中"
+                    	}
+                    ],
+                    goods: [
+                    	{
+                    		"oid": "1891 3444 6565",
+	                    	"img": "img/demo_1.png",
+	                    	"name": "AKEO KIKUCHI/菊池武2015A 男士牛皮鳄鱼纹设计感皮带",
+	                    	"odate": "2015-05-06 12:05:04",
+	                    	"type": "1"
+                    	}
+                    ]
+                });
+
+                avalon.scan();
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,7 @@
+.yl-addrbox .addr {
+	margin-right: 50px;
+	margin-bottom: 40px;
+}
+.yl-addrbox .addr.noMgr {
+	margin-right: 0
+}

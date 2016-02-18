@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <title>洋流网</title>
+
+        <link rel="stylesheet" href="css/reset.css" />
+        <link rel="stylesheet" href="css/balance-cart.css" />
+    </head>
+    <body ms-controller="common">
+        <div ms-include-src="'template/header.html'" data-include-replace="true" data-include-loaded="initHeader"></div>
+        <div class="wrap" ms-controller="common">
+        	<div ms-visible="!empty">
+	            <table class="tb-cart thead">
+	                <thead>
+	                    <tr>
+	                        <th class="col1">
+	                            <div class="yl-chkbox">
+	                                <em></em>
+	                                <span>全选</span>
+	                            </div>
+	                        </th>
+	                        <th class="col2">商品信息</th>
+	                        <th class="col3">单价（元）</th>
+	                        <th class="col4">数量</th>
+	                        <th class="col5">金额</th>
+	                        <th class="operate">操作</th>
+	                    </tr>
+	                </thead>
+	            </table>
+	            <table class="tb-cart tbody">
+	                <tbody>
+	                    <tr>
+	                        <td class="col1">
+	                            <div class="yl-chkbox">
+	                                <em></em>
+	                            </div>
+	                            <img class="img" src="img/demo_1.png" />
+	                        </td>
+	                        <td class="col2">
+	                            <p>aaaa</p>
+	                        </td>
+	                        <td class="col3">
+	                            <p>12.00</p>
+	                        </td>
+	                        <td class="col4">
+	                            <div class="yl-num">
+	                                <a class="minus" href="javascript:;">-</a>
+	                                <input class="ipt_num" type="text" value="1" />
+	                                <a class="add" href="javascript:;">+</a>
+	                            </div>
+	                        </td>
+	                        <td class="col5">
+	                            <p class="total">50</p>
+	                        </td>
+	                        <td class="operate">
+	                            <a href="javascript:;" ms-click="del(el)">删除</a>
+	                            <a href="javascript:;" ms-click="favorite(el)">加入收藏夹</a>
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td class="col1">
+	                            <div class="yl-chkbox">
+	                                <em></em>
+	                            </div>
+	                            <img class="img" src="img/demo_1.png" />
+	                        </td>
+	                        <td class="col2">
+	                            <p>aaaa</p>
+	                        </td>
+	                        <td class="col3">
+	                            <p>12.00</p>
+	                        </td>
+	                        <td class="col4">
+	                            <div class="yl-num">
+	                                <a class="minus" href="javascript:;">-</a>
+	                                <input class="ipt_num" type="text" value="1" />
+	                                <a class="add" href="javascript:;">+</a>
+	                            </div>
+	                        </td>
+	                        <td class="col5">
+	                            <p class="total">50</p>
+	                        </td>
+	                        <td class="operate">
+	                            <a href="javascript:;" ms-click="del(el)">删除</a>
+	                            <a href="javascript:;" ms-click="favorite(el)">加入收藏夹</a>
+	                        </td>
+	                    </tr>
+	                </tbody>
+	            </table>
+	            <div class="balance-box">
+	            	<div class="info-box">
+	            		<div class="yl-chkbox">
+		                    <em></em>
+		                    <span>全选</span>
+		                </div>
+		                <a class="del" href="javascript:;">删除选中商品</a>
+		                <p class="freight">运费：<span>10.00</span></p>
+		                <p class="all-chk">
+		                	已选择<span>5</span>件商品，总计<span>500.00</span>
+		                </p>
+	            	</div>
+	            	<button class="btn-balance">立即结算</button>
+	            </div>
+        	</div>
+        	<div ms-visible="empty">
+        		<div class="cart-empty">
+        			<p class="go">购物车空空如也，赶紧去<a href="javascript:;">逛逛吧▶▶</a></p>
+        			<div class="login">
+        				<p>或者您也可以进行</p>
+        				<button class="btn-login"></button>
+        			</div>
+        		</div>
+        	</div>
+        </div>
+        <div ms-include-src="'template/footer.html'" data-include-replace="true"></div>
+
+        <script src="js/avalon.js"></script>
+        <script src="js/jquery.min.js"></script>
+        <script src="js/main.js"></script>
+        <script>
+            $(function(){
+                var cartCtrl = avalon.define({
+                    $id: "cart",
+                    empty: true,
+                    items:[
+                        {
+                            "img": "img/demo_1.png",
+                            "name": "TAKEO KIKUCHI/菊池武夫 2015AW 男士牛皮鳄鱼纹公",
+                            "price": 60.60,
+                            "num": 2
+                        },
+                        {
+                            "img": "img/demo_1.png",
+                            "name": "TAKEO KIKUCHI/菊池武夫 2015AW 男士牛皮鳄鱼纹公",
+                            "price": 50,
+                            "num": 3
+                        }
+                    ],
+                    freight: 0,
+                    product: 0,
+                    total: 0,
+                    del: function(el){
+                    },
+                    favorite: function(el){
+                    }
+                });
+
+                avalon.scan();
+            });
+        </script>
+    </body>
+</html>

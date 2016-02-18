@@ -1,0 +1,203 @@
+.sec-login {
+	height: 720px;
+	background: url(../front/images/login_bg.png) repeat-x;
+}
+.sec-login .cnt {
+	position: relative;
+	height: 100%;
+	background: url(../front/images/login_bg2.jpg) no-repeat center center;
+}
+
+.login-box {
+	position: absolute;
+    top: 131px;
+    right: -9px;
+	width: 448px;
+	height: 458px;
+	padding: 0 49px;
+	background: url(../front/images/login-box_bg.png) no-repeat;
+}
+.login-box .title {
+	height: 82px;
+	margin-bottom: 20px;
+    padding-top: 57px;
+	font-size: 0;
+}
+.login-box .title p,
+.login-box .title a {
+	display: inline-block;
+	vertical-align: bottom;
+	line-height: 1;
+}
+.login-box .title p {
+	width: 294px;
+	font-size: 26px;
+}
+.login-box .title a {
+	font-size: 14px;
+	color: #ee087e;
+}
+.login-box .err-tip {
+	height: 32px;
+	margin-bottom: 5px;
+	padding-left: 33px;
+	border: 1px solid #ff8d8c;
+	font-size: 12px;
+	line-height: 32px;
+	color: #ff3333;
+	background: #fff2f2 url(../front/images/err-tip.png) no-repeat 10px center;
+}
+.login-box .info-box {
+	height: 18px;
+	margin-top: 23px;
+	font-size: 0;
+}
+.login-box .info-box .yl-chkbox,
+.login-box .info-box a {
+	display: inline-block;
+	vertical-align: middle;
+}
+.login-box .info-box .yl-chkbox {
+	width: 280px;
+}
+.login-box .info-box a {
+	font-size: 14px;
+	color: #ee087e;
+    line-height: 1;
+}
+
+.ipt {
+	width: 350px;
+	height: 45px;
+	padding-left: 47px;
+	border: 1px solid #ddd;
+	background: #fff url(../front/images/icons_ipt.png) no-repeat left center;
+}
+.ipt:focus {
+	border-color: #66ccff;
+}
+.ipt.err {
+	border-color: #ff8d8c;
+}
+.ipt-user {
+	background-position: 0 0;
+}
+.ipt-user:focus {
+	background-position: 0 -86px;
+}
+.ipt-user.err {
+	background-position: 0 -43px;
+}
+.ipt-pwd {
+	background-position: 0 -129px;
+}
+.ipt-pwd:focus {
+	background-position: 0 -215px;
+}
+.ipt-pwd.err {
+	background-position: 0 -172px;
+}
+.ipt-validate {
+	background-position: 0 -258px;
+}
+.ipt-validate:focus {
+	background-position: 0 -344px;
+}
+.ipt-validate.err {
+	background-position: 0 -301px;
+}
+.ipt-phone {
+	background-position: 0 -387px;
+}
+.ipt-phone:focus {
+	background-position: 0 -473px;
+}
+.ipt-phone.err {
+	background-position: 0 -430px;
+}
+
+.btn {
+	width: 350px;
+	height: 45px;
+	margin-top: 17px;
+	text-align: center;
+	line-height: 45px;
+	color: #fff;
+	font-size: 18px;
+	letter-spacing: 1px;
+	background-color: #ee087e;
+}
+.validate-code {
+	position: relative;
+}
+.validate-code .validatecode {
+	position: absolute;
+    right: 7px;
+    top: 7px;
+}
+.ipt.code {
+	width: 180px;
+	margin-right: 20px;
+}
+.yl-btn.code {
+	width: 150px;
+	vertical-align: top;
+    background-color: #fff;
+    color: #333;
+    border: 1px solid #ddd;
+    font-size: 15px;
+}
+
+.pwd-box {
+	position: relative;
+}
+.pwd-box .visible,
+.pwd-box .invisible {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 45px;
+	height: 45px;
+	background: url(../front/images/icons_pwd.png) no-repeat;
+}
+.pwd-box .invisible {
+	background-position: 0 -45px;
+}
+
+.phone-code {
+	font-size: 0;
+}
+
+.f-mgt0 {
+	margin-top: 0;
+}
+.f-mgt5 {
+	margin-top: 5px;
+}
+.f-mgt15 {
+	margin-top: 15px;
+}
+.f-mgt20 {
+	margin-top: 20px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

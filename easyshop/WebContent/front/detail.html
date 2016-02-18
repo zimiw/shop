@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <title>洋流网</title>
+
+        <link rel="stylesheet" href="../css/front/reset.css" />
+        <link rel="stylesheet" href="../css/front/detail.css" />
+    </head>
+    <body ms-controller="common">
+        <div ms-include-src="'../template/header.html'" data-include-replace="true" data-include-loaded="initHeader"></div>
+        <div ms-include-src="'../template/nav.html'" data-include-replace="true" data-include-loaded="initNav"></div>
+        <div ms-controller="detail">
+            <div class="buy-box wrap">
+                <p class="ly-breadcrumb"></p>
+                <div class="product-box">
+                    <div class="img-box">
+                        <img class="big-pic" ms-attr-src="imgs[0].imgsource" />
+                        <ul>
+                            <li ms-repeat-color="imgs" ms-class="chked: $index == 0" ms-on-click="imgClk">
+                                <img ms-attr-src="color.imgsource" />
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="info-box">
+                        <div class="yl-area">
+                            <em ms-class="{{country}}"></em>
+                            <span>{{country | area}}</span>
+                        </div>
+                        <p class="title">{{title}}</p>
+                        <div class="form">
+                            <div class="item">
+                                <label>洋流原价</label>
+                                <p class="cnt price">¥<span>{{price}}</span></p>
+                            </div>
+                            <div class="item mgt1">
+                                <label>国内参考价</label>
+                                <p class="cnt reference">¥{{reference}}</p>
+                            </div>
+                            <div class="item mgt1">
+                                <label>颜色</label>
+                                <div class="cnt">
+                                    <span class="choice color" ms-repeat="colors" ms-on-click="colorClk(el)" ms-class="chked: $index==0" ms-class-1="dis: el.flag == 0">{{el.color}}</span>
+                                </div>
+                            </div>
+                            <div class="item mgt2">
+                                <label>尺码</label>
+                                <div class="cnt">
+                                    <span class="choice size" ms-repeat="sizes" ms-on-click="sizeClk(el)" ms-class="chked: $index==0" ms-class-1="dis: el.flag == 0">{{el.size}}</span>
+                                </div>
+                            </div>
+                            <div class="item mgt2">
+                                <label>购买数量</label>
+                                <div class="cnt">
+                                    <div class="yl-stock">
+                                        <a href="javascript:;" class="minus" ms-click="minus">-</a>
+                                        <input type="text" ms-attr-value="num" />
+                                        <a href="javascript:;" class="add" ms-click="add">+</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="item mgt3">
+                                <label></label>
+                                <div class="cnt btn-box">
+                                    <button class="yl-btn" ms-click="directAddToSelected">立即购买</button>
+                                    <button class="yl-btn-add" ms-click="addShoppingcart">加入购物车</button>
+                                </div>
+                            </div>
+                            <div class="item mgt4">
+                                <label></label>
+                                <div class="cnt">
+                                    <a class="collection" href="javascript:;" ms-class="collected: collection" ms-click="addFavorite(productId)">收藏商品</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="toolbar">
+                <div class="wrap">
+                    <a class="chked" href="#001">商品详情</a>
+                    <div class="line"></div>
+                    <a href="#evaluate_box">商品评价</a>
+                    <div class="line"></div>
+                </div>
+            </div>
+            <div class="detail-box wrap" name="detail_box" id="detail_box">
+                <img ms-repeat="details" ms-attr-src="el.imgsource" />
+            </div>
+            <div class="evaluate-box wrap" name="evaluate_box" id="evaluate_box" ms-controller="evaluate">
+                <p class="title">商品评论</p>
+                <ul class="tag-list">
+                    <li>
+                        <input type="radio" data-duplex-changed="changeRadio" />好评(&nbsp;{{goodnum}}&nbsp;)
+                    </li>
+                    <li>
+                        <input type="radio" data-duplex-changed="changeRadio" />中评(&nbsp;{{normalnum}}&nbsp;)
+                    </li>
+                    <li>
+                        <input type="radio" data-duplex-changed="changeRadio" />差评(&nbsp;{{badnum}}&nbsp;)
+                    </li>
+                </ul>
+                <div class="evaluate-detail">
+                    <div class="item" ms-repeat="evaluateDetail">
+                        <img src="../img/defaultHead.jpg" />
+                        <div class="cnt">
+                            <p>{{el.content}}</p>
+                            <p class="from"><span>{{el.date}}</span><span>来自：{{el.person.phone}}</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div ms-include-src="'../template/footer.html'" data-include-replace="true"></div>
+
+        <script src="../js/avalon.shim.sn.js"></script>
+        <script src="../js/jquery.min.js"></script>
+        <script src="../js/main.js"></script>
+        <script src="../js/common.js"></script>
+        <script src="../js/data-interface.js"></script>
+        <script>
+            $(function(){
+            	var productId = storeUED.GetQueryString("productId");
+                var detailCtrl = avalon.define({
+                    $id: "detail",
+                    classify: "",
+                    title: "",
+                    productId: "",
+                    imgs: [],
+                    colorSelect: "0",
+                    imgClk: function(){
+                        var $this = $(this);
+                        $this.siblings().removeClass("chked");
+                        $this.addClass("chked");
+                        $(".big-pic").attr("src", $this.find("img").attr("src"));
+                    },
+                    country: "",
+                    price: "-",
+                    reference: "-",
+                    directAddToSelected: function(id){
+                        detailCtrl.getProductTypeId();
+                        $.ajax({
+                            type: "post",
+                            url: DI.directAddToSelected,
+                            data:{
+                                productId: Number(productId),
+                                productTypeId: Number(detailCtrl.productTypeId),
+                                number: detailCtrl.num
+                            },
+                            dataType: "json",
+                            success: function(data){
+                                if(data.status == "sucess"){
+                                    location.href = "balance_writeOrder.html?selectedType=2";
+                                }else{
+                                    alert(data.status);
+                                }
+                            },
+                            error: function(err){
+                                console.log(err);
+                            }
+                        });
+                    },
+                    addShoppingcart: function(){
+                        detailCtrl.getProductTypeId();
+                        Buylll.addShoppingcart(productId, detailCtrl.productTypeId, detailCtrl.num);
+                    },
+                    getProductTypeId: function(){
+                        var size = $(".choice.size.chked").html(),
+                            color = $(".choice.color.chked").html();
+                        
+                        detailCtrl.productTypes.some(function(item){
+                            if(item.size == size && item.color == color){
+                                detailCtrl.productTypeId = item.productTypeId;
+                                detailCtrl.price = item.currentPrice;
+                                detailCtrl.reference = item.originPrice;
+                                return true;
+                            }
+                        });
+                    },
+                    productTypeId: "",
+                    addFavorite: function(id){
+                        Buylll.addFavorite(id);
+                    },
+                    colorClk: function(el){
+                    	var $this = $(this);
+                    	if($this.hasClass("dis")) return;
+                        $this.siblings().removeClass("chked");
+                        $this.addClass("chked");
+                        
+                        detailCtrl.sizes.forEach(function(item){
+                            var flag = detailCtrl.productColors[el.color].some(function(size){
+                                if(item.size == size) return true;
+                            });
+            
+                            item.flag = flag ? 1 : 0;
+                        });
+                        detailCtrl.getProductTypeId();
+                    },
+                    sizeClk: function(el){
+                    	var $this = $(this);
+                    	if($this.hasClass("dis")) return;
+                        $this.siblings().removeClass("chked");
+                        $this.addClass("chked");
+                        
+                        detailCtrl.colors.forEach(function(item){
+                            var flag = detailCtrl.productSizes[el.size].some(function(color){
+                                if(item.color == color) return true;
+                            });
+            
+                            item.flag = flag ? 1 : 0;
+                        });
+                        detailCtrl.getProductTypeId();
+                    },
+                    sizes: [],
+                    colors: [],
+                    num: 1,
+                    minus: function(){
+                        detailCtrl.num = detailCtrl.num - 1 < 1 ? 1 : detailCtrl.num - 1;
+                    },
+                    add: function(){
+                        detailCtrl.num += 1;
+                    },
+                    collection: false,
+                    details: [],
+                    productSizes: {},
+                    productColors: {},
+                    productTypes: []
+                });
+				//评论
+                var evaluateCtrl = avalon.define({
+                    $id: "evaluate",
+                    evaluateTag: [],
+                    evaluateDetail: [],
+                    goodnum:0,
+                    normalnum:0,
+                    badnum:0,
+                    radio: "",
+                    changeRadio: function(type){
+                        getCommentTypes(type);
+                    }
+                });
+
+                avalon.scan();
+    	
+                $.ajax({
+                    type: "post",
+                    url: DI.getDetailInfo,
+                    data:{
+                    	productId:productId
+                    },
+                    dataType: "json",
+                    success: function(data){
+                        detailCtrl.title = data.productInfo.name;
+                        detailCtrl.imgs = data.topImgs;
+                        detailCtrl.productId = productId;
+                        detailCtrl.country = data.productInfo.country;
+                        detailCtrl.price = data.productTypes[0].currentPrice;
+                        detailCtrl.reference = data.productTypes[0].originPrice;
+                        detailCtrl.details = data.detailImgs;
+                        
+                        data.productTypes.forEach(function(item){
+                            if(detailCtrl.productColors[item.color]){
+                                detailCtrl.productColors[item.color].push(item.size);
+                            }else{
+                                detailCtrl.productColors[item.color] = [item.size];
+                            }
+                            if(detailCtrl.productSizes[item.size]){
+                                detailCtrl.productSizes[item.size].push(item.color);
+                            }else{
+                                detailCtrl.productSizes[item.size] = [item.color];
+                            }
+                            var cFlag = detailCtrl.colors.some(function(color){
+                                if(item.color == color.color) return true;
+                            });
+                            if(!cFlag) detailCtrl.colors.push({color: item.color, flag: 1});
+                            var sFlag = detailCtrl.sizes.some(function(size){
+                                if(item.size == size.size) return true;
+                            });
+                            if(!sFlag) detailCtrl.sizes.push({size: item.size, flag: 1});
+                        });
+                        
+                        detailCtrl.productTypes = data.productTypes;
+                    },
+                    error: function(err){
+                        console.log(err);
+                    }
+                });
+	
+                // 评论
+                $.ajax({
+                    type: "post",
+                    url: DI.queryCommentsbyproductID,
+                    data:{
+                    	productId:productId
+                    },
+                    dataType: "json",
+                    success: function(data){
+                    	evaluateCtrl.evaluateDetail=data.rows;
+                    },
+                    error: function(err){
+                        console.log(err);
+                    }
+                });
+	                  
+                getCommentTypes(1);
+	                
+                function getCommentTypes(type){
+                    $.ajax({
+                    	type: "post",
+                        url: DI.getCommentTypes,
+                        data:{
+  	                      	productId:productId,
+  	                      	type: 1
+                        },
+                        dataType: "json",
+                        success: function(data){
+                        	evaluateCtrl.evaluateDetail = data.rows;
+                        	evaluateCtrl.goodnum = data.commentTypes.goods.length;
+                        	evaluateCtrl.normalnum = data.commentTypes.normals.length;
+                      	    evaluateCtrl.badnum = data.commentTypes.bads.length;
+                        },
+                        error: function(err){
+                            console.log(err);
+                        }
+                    });
+      	        }
+            });
+        </script>
+    </body>
+</html>

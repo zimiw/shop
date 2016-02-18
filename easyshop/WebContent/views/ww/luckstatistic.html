@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<title>洋流管理系统</title>
+        <link rel="stylesheet" href="css/easyui/metro-gray/easyui.css"/>
+        <link rel="stylesheet" href="css/easyui/icon.css"/>
+		<link rel="stylesheet" href="css/reset.css" />
+        <link rel="stylesheet" href="css/platform.css"/>
+        <style type="text/css">
+        	input {
+				width: 15px;
+			}
+        </style>
+        <script src="js/jquery.min.js"></script>
+        <script src="js/avalon.shim.sn.js"></script>
+        <script src="js/jquery.form.js"></script>
+        <script src="js/easyui/jquery.easyui.min.js"></script>
+        <script src="js/easyui/easyui-lang-zh_CN.js"></script>
+        <script src="js/platform.js"></script>
+        <script src="js/data-interface.js"></script>
+        <script type="text/javascript">
+        	var luckDetailTable = null;
+        	
+        	$(function(){
+        		initCategoryOptions();
+        		initSaleDetailTable();
+        	});
+        	
+        	function initCategoryOptions(){
+				$("#fromDate").datebox({
+			        editable:false
+			    });
+			    $("#toDate").datebox({
+			        editable:false
+			    });
+        	}
+        	
+        	function initSaleDetailTable(){
+        		luckDetailTable = $("#salesDetailTable").datagrid({
+			        url:DI.luckstatistic,
+			        fit:true,
+			        pagination:true,
+			        rownumbers:true,
+			        columns:[[
+			            {field:"orderId",title:"订单号",width:250},
+			            {field:"amount",title:"实收款(元)",width:150},
+			            {field:"nickname",title:"买家昵称",width:250},
+			            {field:"chargePaidTime",title:"成交时间",width:150},
+			            {field:"lotteryTime",title:"中奖日期",width:150}
+			        ]],
+			        onLoadSuccess : function(data) {
+						if(data != undefined || data.length > 0){
+							//luckDetailTable.datagrid("loaded");
+						}
+					}
+			    });
+        	}
+        	
+        	function queryDatas(){
+        		luckDetailTable.datagrid("load", {
+			        beginTime:$("#fromDate").datebox("getValue"),
+			        endTime:$("#toDate").datebox("getValue"),
+			    });
+        	}
+        	
+        	function exportDatas(){
+	        	var url = "";
+				$("#exportForm").action = url;
+				$("#exportForm").submit();
+        	}
+        </script>
+	</head>
+	<body class="easyui-layout">
+		<p style="font-size: 12px;color: #4698FF;">数据统计 > 抽奖统计</p>
+        <div data-options="region:'north'" style="padding:5px;height:90px;margin-top: 50px;">
+        	<table class="input_table" style="margin-top: 20px;">
+        		<tr>
+		            <td>
+		            	时间：<input id="fromDate" type="text" style="width: 150px;">~
+		            </td>
+		            <td>
+		            	<input id="toDate" type="text" style="width: 150px;">
+		            </td>
+		            <td>
+		            	<button class="u-btn small" style="margin-left: 10px;" onclick="queryDatas();">查询</button>
+		            </td>
+		          </tr>
+        	</table>
+        	<!-- 
+        	<a href="javascript:void();" style="float: right;" onclick="exportDatas();">导出表格</a>
+        	<form id="exportForm" action="" target="tempFrame"></form> -->
+        	<iframe name="tempFrame" id="tempFrame" style="display:none;width:1px;height:1px;"></iframe>
+        	
+        </div>
+        <div data-options="region:'center'" style="padding:5px;background:#eee;">
+        	<table id="salesDetailTable"></table>
+        </div>
+    </body>
+</html>

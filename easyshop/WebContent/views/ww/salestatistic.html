@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<title>洋流管理系统</title>
+        <link rel="stylesheet" href="css/easyui/metro-gray/easyui.css"/>
+        <link rel="stylesheet" href="css/easyui/icon.css"/>
+		<link rel="stylesheet" href="css/reset.css" />
+        <link rel="stylesheet" href="css/platform.css"/>
+        <style type="text/css">
+        	input {
+				width: 15px;
+			}
+        </style>
+        <script src="js/jquery.min.js"></script>
+        <script src="js/avalon.shim.sn.js"></script>
+        <script src="js/jquery.form.js"></script>
+        <script src="js/easyui/jquery.easyui.min.js"></script>
+        <script src="js/easyui/easyui-lang-zh_CN.js"></script>
+        <script src="js/platform.js"></script>
+        <script src="js/data-interface.js"></script>
+        <script type="text/javascript">
+        	var salesDetailTable = null;
+        	
+        	$(function(){
+        		initCategoryOptions();
+        		initSaleDetailTable();
+        	});
+        	
+        	function initCategoryOptions(){
+        		//品牌下拉框
+        		$("#brand").combobox({
+					url: DI.loadBrandList,
+					valueField:"brandId",
+					textField:"brandName",
+					editable:false,
+				});
+				//品类下拉框
+				$("#kind").combobox({
+					url:DI.loadCatalogIdList,
+					valueField:"catalogId",
+					textField:"catalogName",
+					editable:false 
+				});
+				//供应商下拉框
+				$("#provider").combobox({
+					url: DI.loadSupplierList,
+					valueField:"id",
+					textField:"name",
+					editable:false 
+				});
+				
+				$("#fromDate").datebox({
+			        editable:false
+			    });
+			    $("#toDate").datebox({
+			        editable:false
+			    });
+			    
+			    $("#statisticKind").combobox({   
+			    	value:"",
+				    onChange : function(n,o){
+				    	$("span[name='span1']").hide();
+		        		var id = $("#statisticKind").combobox("getValue");
+		        		if(id == "2"){
+		        			$("#brandSpan").show();
+		        		}else if(id == "3"){
+		        			$("#kindSpan").show();
+		        		}else if(id == "4"){
+		        			$("#providerSpan").show();
+		        		}
+				    } 
+				}); 
+        	}
+        	
+        	function initSaleDetailTable(){
+        		salesDetailTable = $("#salesDetailTable").datagrid({
+			        url:DI.salestatistic,
+			        fit:true,
+			        pagination:true,
+			        rownumbers:true,
+			        columns:[[
+			            {field:"name",title:"商品",width:400},
+			            {field:"minPrice",title:"单价(元)",width:150,align:"right"},
+			            {field:"num",title:"销量",width:150,align:"right"},
+			            {field:"price",title:"销售额(元)",width:150,align:"right"}
+			        ]],
+			        onLoadSuccess : function(data) {
+						if(data != undefined || data.length > 0){
+							//accountgrid.datagrid("loaded");
+						}
+					}
+			    });
+        	}
+        	
+        	function queryDatas(){
+        		var brand = "";
+        		var kind = "";
+        		var provider = "";
+        		var statisticKind = $("#statisticKind").combobox("getValue");
+        		if(statisticKind == 2){
+        			brand = $("#brand").combobox("getValue");
+        		}else if(statisticKind == 3){
+        			kind = $("#kind").combobox("getValue");
+        		}else if(statisticKind == 4){
+        			provider = $("#provider").combobox("getValue");
+        		}
+        		salesDetailTable.datagrid("load", {
+			  
+			        beginTime:$("#fromDate").datebox("getValue"),
+			        endTime:$("#toDate").datebox("getValue"),
+			        type:statisticKind,
+			        kind:kind,
+			        provider:provider,
+			        brand:brand
+			    });
+        	}
+        	
+        	function exportDatas(){
+	        	var url = "";
+				$("#exportForm").action = url;
+				$("#exportForm").submit();
+        	}
+        </script>
+	</head>
+	<body class="easyui-layout">
+		<p style="font-size: 12px;color: #4698FF;">数据统计 > 销售统计</p>
+        <div data-options="region:'north'" style="padding:5px;height:90px;margin-top: 50px;">
+        	<table class="input_table" style="margin-top: 20px;">
+        		<tr>
+		            <td width="80px">统计类型:</td>
+		            <td width="250px">
+		              <select id="statisticKind" class="easyui-combobox" name="type" style="width:150px;">
+					    <option selected="selected" value="1">单品</option>
+	                  	<option value="2">品牌</option>
+	                  	<option value="3">品类</option>
+	                  	<option value="4">供应商</option>
+					  </select>
+		            </td> 
+		            <td>
+		              	<span name="span1" id="brandSpan" style="display: none;">品牌：<input id="brand" name="brand" style="width: 150px;"></span>
+		              	<span name="span1" id="kindSpan" style="display: none;">品类：<input id="kind" name="kind" style="width: 150px;"></span>
+		              	<span name="span1" id="providerSpan" style="display: none;">供应商：<input id="provider" name="provider" style="width: 150px;"></span>
+		            </td>
+		            <td>
+		            	时间：<input id="fromDate" type="text" style="width: 150px;">~
+		            </td>
+		            <td>
+		            	<input id="toDate" type="text" style="width: 150px;">
+		            </td>
+		            <td>
+		            	<button class="u-btn small" style="margin-left: 10px;" onclick="queryDatas();">查询</button>
+		            </td>
+		          </tr>
+        	</table>
+        	
+        	<!-- 
+        	<a href="javascript:void();" style="float: right;" onclick="exportDatas();">导出表格</a> -->
+        	<form id="exportForm" action="" target="tempFrame"></form>
+        	<iframe name="tempFrame" id="tempFrame" style="display:none;width:1px;height:1px;"></iframe>
+        	
+        </div>
+        <div data-options="region:'center'" style="padding:5px;background:#eee;">
+        	<table id="salesDetailTable"></table>
+        </div>
+    </body>
+</html>

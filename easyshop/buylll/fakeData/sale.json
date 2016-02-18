@@ -1,0 +1,151 @@
+{
+    "banner": "img/demo_10.png",
+    "products": [
+        {
+            "type": "3",
+            "title": "img/title.png",
+            "product": [
+                {
+                    "img": "img/demo_12.png",
+                    "link": "http://www.baidu.com"
+                },
+                {
+                    "img": "img/demo_12.png",
+                    "link": "http://www.baidu.com"
+                },
+                {
+                    "img": "img/demo_12.png",
+                    "link": "http://www.baidu.com"
+                }
+            ]
+        },
+        {
+            "type": "2",
+            "title": "img/title.png",
+            "product": [
+                {
+                    "img": "img/demo_11.png",
+                    "link": "http://www.suning.com"
+                },
+                {
+                    "img": "img/demo_11.png",
+                    "link": "http://www.suning.com"
+                }
+            ]
+        },
+        {
+            "type": "8",
+            "title": "img/title.png",
+            "product": [
+                {
+                    "img": "img/demo_13.png",
+                    "link": "http://www.taobao.com"
+                },
+                {
+                    "img": "img/demo_13.png",
+                    "link": "http://www.taobao.com"
+                },
+                {
+                    "img": "img/demo_13.png",
+                    "link": "http://www.taobao.com"
+                },
+                {
+                    "img": "img/demo_13.png",
+                    "link": "http://www.taobao.com"
+                },
+                {
+                    "img": "img/demo_13.png",
+                    "link": "http://www.taobao.com"
+                },
+                {
+                    "img": "img/demo_13.png",
+                    "link": "http://www.taobao.com"
+                },
+                {
+                    "img": "img/demo_13.png",
+                    "link": "http://www.taobao.com"
+                },
+                {
+                    "img": "img/demo_13.png",
+                    "link": "http://www.taobao.com"
+                }
+            ]
+        },
+        {
+            "type": "8",
+            "title": "img/title.png",
+            "product": [
+                {
+                    "img": "img/demo_13.png",
+                    "link": "http://www.taobao.com"
+                },
+                {
+                    "img": "img/demo_13.png",
+                    "link": "http://www.taobao.com"
+                },
+                {
+                    "img": "img/demo_13.png",
+                    "link": "http://www.taobao.com"
+                },
+                {
+                    "img": "img/demo_13.png",
+                    "link": "http://www.taobao.com"
+                },
+                {
+                    "img": "img/demo_13.png",
+                    "link": "http://www.taobao.com"
+                },
+                {
+                    "img": "img/demo_13.png",
+                    "link": "http://www.taobao.com"
+                },
+                {
+                    "img": "img/demo_13.png",
+                    "link": "http://www.taobao.com"
+                },
+                {
+                    "img": "img/demo_13.png",
+                    "link": "http://www.taobao.com"
+                }
+            ]
+        },
+        {
+            "type": "8",
+            "title": "img/title.png",
+            "product": [
+                {
+                    "img": "img/demo_13.png",
+                    "link": "http://www.taobao.com"
+                },
+                {
+                    "img": "img/demo_13.png",
+                    "link": "http://www.taobao.com"
+                },
+                {
+                    "img": "img/demo_13.png",
+                    "link": "http://www.taobao.com"
+                },
+                {
+                    "img": "img/demo_13.png",
+                    "link": "http://www.taobao.com"
+                },
+                {
+                    "img": "img/demo_13.png",
+                    "link": "http://www.taobao.com"
+                },
+                {
+                    "img": "img/demo_13.png",
+                    "link": "http://www.taobao.com"
+                },
+                {
+                    "img": "img/demo_13.png",
+                    "link": "http://www.taobao.com"
+                },
+                {
+                    "img": "img/demo_13.png",
+                    "link": "http://www.taobao.com"
+                }
+            ]
+        }
+    ]
+}

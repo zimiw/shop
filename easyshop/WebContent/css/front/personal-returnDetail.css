@@ -1,0 +1,67 @@
+.return-detail {
+	padding: 40px;
+	background-color: #fff;
+}
+.return-detail .status {
+	width: 1090px;
+	height: 30px;
+	margin: 0 auto;
+	background: url(images/order_status.png) no-repeat;
+}
+.return-detail .status.status1 {
+	background-position: 0 0;
+}
+.return-detail .status.status2 {
+	background-position: 0 -30px;
+}
+.return-detail .status.status3 {
+	background-position: 0 -60px;
+}
+.return-detail .status.status4 {
+	background-position: 0 -90px;
+}
+.return-detail .status.status5 {
+	background-position: 0 -120px;
+}
+.return-detail .time-box {
+	width: 1090px;
+	height: 60px;
+	margin: 0 auto;
+	font-size: 0;
+}
+.return-detail .time-box .date {
+	display: inline-block;
+	vertical-align: middle;
+	width: 218px;
+	padding-top: 10px;
+	line-height: 10px;
+	font-size: 12px;
+	text-align: center;
+}
+.return-detail .time-box .date p:first-child {
+	padding-bottom: 5px;
+}
+.return-detail .yl-dialog {
+	padding-left: 0;
+	padding-right: 0;
+	border-bottom: 1px solid #eee;
+}
+.return-detail .yl-dialog:first-child {
+	padding: 0;
+	border-bottom-style: none;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

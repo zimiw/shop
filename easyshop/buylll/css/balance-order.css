@@ -1,0 +1,133 @@
+.order-box {
+	margin-top: 40px;
+	margin-bottom: 20px;
+	background-color: #fff;
+}
+.order-box .title {
+	position: relative;
+	height: 63px;
+	padding-left: 30px;
+	border-bottom: 1px solid #f1f1f1;
+}
+.order-box .title span {
+	display: inline-block;
+	height: 63px;
+	border-bottom: 1px solid #ee087e;
+	font-size: 20px;
+	color: #404040;
+	line-height: 86px;
+}
+.order-box .title a {
+    position: absolute;
+    right: 20px;
+    top: 30px;
+    font-size: 12px;
+    color: #999;
+    line-height: 1;
+}
+.order-box .cnt {
+	padding-top: 20px;
+}
+.order-box .cnt .yl-addrbox .addr {
+	margin-right: 20px;
+}
+.order-box.addr .cnt {
+	padding: 20px 30px 30px;
+}
+
+.tb-goods {
+	width: 100%;
+	text-align: center;
+}
+.tb-goods thead tr {
+    height: 45px;
+    font-size: 12px;
+    color: #404040;
+    border-bottom: 1px solid #f1f1f1;
+}
+.tb-goods tbody tr {
+    height: 60px;
+}
+.tb-goods .col1 {
+	width: 80px;
+	padding-left: 30px;
+}
+.tb-goods .col1 img {
+	display: block;
+	width: 40px;
+	height: 40px;
+}
+.tb-goods .col2 {
+	width: 535px;
+	text-align: left;
+}
+.tb-goods thead .col2 {
+	padding-left: 100px;
+}
+.tb-goods .col3 {
+	width: 240px;
+}
+.tb-goods .col4 {
+	width: 125px;
+}
+.tb-goods tbody .col5 {
+	color: #ee087e;
+}
+
+.balance-box {
+	margin-top: 30px;
+	overflow: hidden;
+	color: #404040;
+}
+.balance-box .rule {
+	float: left;
+	font-size: 0;
+}
+.balance-box .rule span {
+	display: inline-block;
+	vertical-align: middle;
+	margin-left: 5px;
+	font-size: 12px;
+}
+.balance-box .total-box {
+	float: right;
+	text-align: right;
+	line-height: 1;
+}
+.balance-box .total-box span {
+    vertical-align: middle;
+	font-size: 14px;
+	color: #ee087e;
+}
+.balance-box .total-box .total {
+	margin-top: 10px;
+}
+.balance-box .total-box .total span {
+	font-size: 20px;
+}
+.balance-box .total-box button {
+    width: 200px;
+    height: 60px;
+    margin-top: 20px;
+    text-align: center;
+    line-height: 60px;
+    font-size: 22px;
+    color: #fff;
+    background-color: #ee087e;
+}
+
+.order-box.add .cnt {
+	padding-left: 67px;
+	padding-bottom: 30px;
+}
+
+
+
+
+
+
+
+
+
+
+

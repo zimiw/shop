@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <title>洋流网</title>
+
+        <link rel="stylesheet" href="../css/front/reset.css" />
+        <link rel="stylesheet" href="../css/front/list.css" />
+        <link rel="stylesheet" href="../js/vendor/skin/laypage.css" />
+    </head>
+    <body ms-controller="common">
+        <div ms-include-src="'../template/header.html'" data-include-replace="true" data-include-loaded="initHeader"></div>
+        <div ms-include-src="'../template/nav.html'" data-include-replace="true" data-include-loaded="initNav"></div>
+        <div class="list wrap" ms-controller="list">
+            <p class="ly-breadcrumb"></p>
+            <div class="brand-box">
+                <div class="first-brand">
+                    <p>品牌：<a href="javascript:;" ms-repeat="brands" ms-click="getProducts(el.brandId)">{{el.brandName}}</a><a class="more" href="javascript:;" ms-click="more">更多</a></p>
+                </div>
+            </div>
+            <div class="rank-box">
+                <a class="rank up">综合</a>
+                <a class="rank updown">价格</a>
+                <a class="rank up">销量</a>
+                <div class="limit">
+                    <input type="checkbox" />限时抢购
+                </div>
+            </div>
+            <div class="list-box">
+                <a class="list-item" ms-class="no-mgl: $index%4 == 0" ms-class-1="no-mgt: $index < 4" ms-repeat="items" ms-attr-href="'detail.html?productId=' + el.productId">
+                    <img class="product" ms-attr-src="el.imgs[0].imgsource" />
+                    <p class="name">{{el.name}}</p>
+                    <div class="info-box">
+                        <div class="yl-area">
+                            <em ms-class="{{el.country}}"></em>
+                            <span>{{el.country | area}}</span>
+                        </div>
+                        <span class="price">¥{{el.currentPrice}}</span>
+                        <del class="reference">¥{{el.originPrice}}</del>
+                    </div>
+                </a>
+            </div>
+            <div class="pagination" id="pagination"></div>
+            <div class="recent-box" ms-visible="recent.length != 0">
+                <p class="title">最近浏览</p>
+                <div class="table-box">
+                    <table>
+                        <tr>
+                            <td ms-repeat="recent">
+                                <a class="list-item" ms-attr-href="el.url">
+                                    <img class="product" ms-attr-src="el.img" />
+                                    <p class="name">{{el.name}}</p>
+                                    <div class="info-box">
+                                        <div class="yl-area">
+                                            <img ms-attr-src="el.flag" />
+                                            <span>{{el.area}}</span>
+                                        </div>
+                                        <span class="price">¥{{el.price}}</span>
+                                        <del class="reference">¥{{el.reference}}</del>
+                                    </div>
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <a class="arrow lt" href="javascript:;"></a>
+                <a class="arrow rt" href="javascript:;"></a>
+            </div>
+        </div>
+        <div ms-include-src="'../template/footer.html'" data-include-replace="true"></div>
+
+        <script src="../js/avalon.shim.sn.js"></script>
+        <script src="../js/jquery.min.js"></script>
+        <script src="../js/vendor/laypage.js"></script>
+        <script src="../js/main.js"></script>
+        <script src="../js/common.js"></script>
+        <script src="../js/data-interface.js"></script>
+        <script>
+            $(function(){
+                var param = Buylll.getUrlArgs();
+
+                var listCtrl = avalon.define({
+                    $id: "list",
+                    brands: [],
+                    items: [],
+                        recent: [],
+                        getProducts: function(id){
+                            getProducts(id);
+                        }
+                });
+
+                avalon.scan();
+
+                if(param.brand != "false"){
+                $.ajax({
+                        type: "post",
+                        url: DI.queryBrandByCatalogId,
+                        data: {
+                            catalogId: catalogId
+                        },
+                        dataType: "json",
+                        success: function(data){
+                            listCtrl.brands = data.results;
+                        },
+                        error: function(err){
+                            console.log(err);
+                        }
+                    });
+                }
+                    $.ajax({
+                        type: "post",
+                        url: DI.getRecent,
+                    dataType: "json",
+                    success: function(data){
+                            listCtrl.recent = data.recent;
+                    },
+                    error: function(err){
+                        console.log(err);
+                    }
+                });
+
+                getProducts();
+                    
+                function getProducts(data){
+                $.ajax({
+                            type: "post",
+                            url: DI.getProducts,
+                        data: data,
+                    dataType: "json",
+                    success: function(data){
+                                listCtrl.items = data.products;
+                                
+                                if(data.products.length > 16){
+                                    laypage({
+                                        cont: $("#pagination"),
+                                        pages: Math.ceil(data.products.length / 16),
+                                        skin: 'molv',
+                                        first: 1,
+                                        last: Math.ceil(data.products.length / 16),
+                                        prev: '<',
+                                        next: '>'
+                                    });
+                                }
+                    },
+                    error: function(err){
+                        console.log(err);
+                    }
+                });
+                };
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,197 @@
+ <!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <title>洋流网</title>
+
+        <link rel="stylesheet" href="css/reset.css" />
+        <link rel="stylesheet" href="css/personal-account.css" />
+    </head>
+    <body ms-controller="common">
+        <div ms-include-src="'template/header.html'" data-include-replace="true" data-include-loaded="initHeader"></div>
+        <div ms-include-src="'template/nav.html'" data-include-replace="true" data-include-loaded="initNav"></div>
+        <div class="wrap" ms-controller="account">
+        	<p class="yl-breadcrum">首页 &gt; 个人中心</p>
+        	<div class="yl-personal">
+        		<div class="left-part">
+        			<ul class="menu-box">
+        				<li>
+        					<a class="title" href="javascript:;">个人中心</a>
+        				</li>
+        				<li>
+        					<a class="menu order" href="javascript:;">我的订单</a>
+        				</li>
+        				<li>
+        					<a class="menu favorite" href="javascript:;">我的收藏</a>
+        				</li>
+        				<li>
+        					<a class="menu addr" href="javascript:;">地址管理</a>
+        				</li>
+        				<li>
+        					<a class="menu account sel" href="javascript:;">账户管理</a>
+        				</li>
+        			</ul>
+        		</div>
+        		<div class="right-part">
+        			<div class="tab-box">
+        				<div class="tabs">
+        					<div class="tab" ms-class="sel: cnt==1">
+        						<a href="javascript:;" ms-click="tab(1)">个人资料 </span></a>
+        					</div>
+        					<div class="tab" ms-class="sel: cnt==2">
+        						<a href="javascript:;" ms-click="tab(2)">账户安全</a>
+        					</div>
+        				</div>
+        				<div class="cnts">
+        					<div class="cnt userinfo" ms-visible="cnt == 1">
+        						<div class="yl-form five">
+	        						<div class="item">
+		        						<label>用户名：</label>
+		        						<p class="form-ctt"> 18653768877</p>
+		        					</div>
+		        					<div class="item">
+		        						<label>头像：</label>
+		        						<div class="form-cnt"></div>
+		        					</div>
+		        					<div class="item">
+		        						<label>真实姓名：</label>
+		        						<input class="ipt-form" value="张三" />
+		        					</div>
+		        					<div class="item">
+		        						<label>昵称：</label>
+		        						<input class="ipt-form" value="agnbaby" />
+		        					</div>
+		        					<div class="item">
+		        						<label>昵称：</label>
+		        						<div class="form-cnt sex-box">
+			        						<a class="yl-radio" href="javascript:;">男</a>
+			        						<a class="yl-radio" href="javascript:;">女</a>
+		        						</div>
+		        					</div>
+		        					<div class="item">
+		        						<label>手机：</label>
+		        						<p class="form-ctt">159******34 </p>
+		        						<a class="btn-modify" href="javascript:;">修改</a>
+		        					</div>
+		        					<div class="item">
+		        						<label>邮箱：</label>
+		        						<p class="form-ctt">ti***1@outlook.com</p>
+		        						<a class="btn-modify" href="javascript:;">修改</a>
+		        					</div>
+		        					<div class="item">
+		        						<label>出生日期：</label>
+		        						<div class="form-cnt"></div>
+		        					</div>
+		        					<div class="item">
+		        						<label>居住地址：</label>
+		        						<select class="yl-select">
+		        							<option>质量问题</option>
+		        							<option>颜色/款式/图案与描述不符</option>
+		        							<option>假冒品牌</option>
+		        							<option>收到商品破损</option>
+		        							<option>材质、面料与商品描述不符</option>
+		        							<option>大小尺寸与商品描述不符</option>
+		        							<option>卖家发错货</option>
+		        							<option>其他</option>
+		        						</select>
+		        					</div>
+		        					<div class="item">
+		        						<label></label>
+		        						<input class="ipt-form long" placeholder="请输入详细地址" />
+		        					</div>
+		        					<div class="item forBtn">
+		        						<label></label>
+		        						<button class="yl-btn middle">保存</button>
+		        					</div>
+	        					</div>
+        					</div>
+        					<div class="cnt" ms-visible="cnt == 2">
+        						<div class="safe-info">
+        							<div class="level" ms-class="level{{safe.level}}"></div>
+        							<div class="tips">
+        								<p>建议您启用全部安全设置，以保障账户安全</p>
+        								<p class="last-login"><span>上次登录：</span>南京&nbsp;&nbsp;2015-06-08 12:50:48</p>
+        								<p class="modify">非本人登录？<a href="javascript:;">修改密码</a></p>
+        							</div>
+        							<button class="yl-btn">重新评测</button>
+        						</div>
+        						<div class="safe-way">
+        							<div class="item">
+        								<p class="icon pwd">中</p>
+        								<p class="name">登录密码</p>
+        								<p class="intro">安全性高的密码可以使账户更安全，建议您定期更换密码</p>
+        								<div class="operate-box">
+        									<a class="link-normal" href="javascript:;">修改</a>
+        								</div>
+        							</div>
+        							<div class="item">
+        								<p class="icon warning">是</p>
+        								<p class="name">绑定邮箱</p>
+        								<p class="intro">验证后可用于邮箱找回密码、接受订单提醒等，保障您的账户更加安全</p>
+        								<div class="operate-box">
+        									<button class="yl-btn-normal">立即设置</button>
+        								</div>
+        							</div>
+        							<div class="item">
+        								<p class="icon">否</p>
+        								<p class="name">绑定手机</p>
+        								<p class="intro">绑定后可用于手机找回密码、接收手机动态验证码等，是您的账户更加安全</p>
+        								<div class="operate-box">
+        									<a class="link-normal" href="javascript:;">绑定解除</a>
+        									<a class="link-normal" href="javascript:;">修改</a>
+        								</div>
+        							</div>
+        						</div>
+        					</div>
+        				</div>
+        			</div>
+        		</div>
+        	</div>
+        </div>
+        <div ms-include-src="'template/footer.html'" data-include-replace="true"></div>
+
+        <script src="js/avalon.js"></script>
+        <script src="js/jquery.min.js"></script>
+        <script src="js/main.js"></script>
+        <script>
+            $(function(){
+                var headerCtrl = avalon.define({
+                    $id: "header",
+                    productNum: "",
+                    keywords: []
+                });
+
+                var accountCtrl = avalon.define({
+                    $id: "account",
+                    cnt: 2,
+                    userinfo: {
+                    	name: "18653768877",
+                    	avator: "img/demo_detail-11.png",
+                    	truename: "张三",
+                    	nickname: "agnbaby",
+                    	sex: 0,
+                    	phone: "159******34",
+                    	email: "ti***1@outlook.com",
+                    	birth: "1988-06-06",
+                    	province: "",
+                    	address: ""
+                    },
+                    safe: {
+                    	level: 1,
+                    	city: "南京",
+                    	lastdate: "2015-06-08 12:50:48",
+                    	pwd: "中",
+                    	bindEmail: true,
+                    	bindPhone: false
+                    },
+                    tab: function(idx){
+                    	accountCtrl.cnt = idx;
+                    }
+                });
+
+                avalon.scan();
+            });
+        </script>
+    </body>
+</html>

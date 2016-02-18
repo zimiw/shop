@@ -1,0 +1,548 @@
+ <!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <title>洋流网</title>
+
+        <link rel="stylesheet" href="../css/front/reset.css" />
+        <link rel="stylesheet" href="../css/front/personal-order.css" />
+    </head>
+    <body ms-controller="common">
+        <div ms-include-src="'../template/header.html'" data-include-replace="true" data-include-loaded="initHeader"></div>
+        <div ms-include-src="'../template/nav.html'" data-include-replace="true" data-include-loaded="initNav"></div>
+        
+        <div class="wrap" ms-controller="order">
+        	<p class="yl-breadcrum">首页 &gt; 个人中心</p>
+        	<div class="yl-personal">
+        		<div class="left-part">
+        			<ul class="menu-box">
+        				<li>
+                            <a class="title" href="personal_home.html">个人中心</a>
+                        </li>
+                        <li>
+                            <a class="menu order sel" href="personal_myOrder.html">我的订单</a>
+                        </li>
+                        <li>
+                            <a class="menu favorite" href="personal_myFavorite.html">我的收藏</a>
+                        </li>
+                        <li>
+                            <a class="menu addr" href="personal_addrManage.html">地址管理</a>
+                        </li>
+                        <li>
+                            <a class="menu account" href="personal_accountManage.html">账户管理</a>
+                        </li>
+        			</ul>
+        		</div>
+        		<div class="right-part">
+        			<div class="tab-box">
+        				<div class="tabs">
+        					<div class="tab" ms-class="sel: cnt==999">
+        						<a href="javascript:;" ms-click="tab(999)">全部订单&nbsp;<span>{{all}}</span></a>
+        					</div>
+        					<div class="tab" ms-class="sel: cnt==101">
+        						<a href="javascript:;" ms-click="tab(101)">待付款&nbsp;<span>{{waitPay}}</span></a>
+        					</div>
+        					<div class="tab" ms-class="sel: cnt==102">
+        						<a href="javascript:;" ms-click="tab(102)">待发货&nbsp;<span>{{waitDeliver}}</span></a>
+        					</div>
+        					<div class="tab" ms-class="sel: cnt==103">
+        						<a href="javascript:;" ms-click="tab(103)">待收货&nbsp;<span>{{waitReceive}}</span></a>
+        					</div>
+        					<div class="tab" ms-class="sel: cnt==104">
+        						<a href="javascript:;" ms-click="tab(104)">待评价&nbsp;<span>{{waitEvaluate}}</span></a>
+        					</div>
+        					<div class="tab" ms-class="sel: cnt==105">
+        						<a href="javascript:;" ms-click="tab(105)">退换货订单</a>
+        					</div>
+        				</div>
+        				<div class="cnts">
+        					<div class="cnt" ms-visible="cnt == 999">
+        						<!--<div class="search-order">
+        							<input type="text" placeholder="输入订单号和商品名称" />
+        							<button>搜索</button>
+        						</div>-->
+        						<div class="tb-head">
+        							<p class="asTd col1">商品</p>
+        							<p class="asTd col2">售价（元）</p>
+        							<p class="asTd col3">数量</p>
+        							<p class="asTd col4">实付款（元）</p>
+        							<p class="asTd col5">订单状态</p>
+        							<p class="asTd col6">操作</p>
+        						</div>
+        						<div>
+	        						<div class="tb-body" ms-repeat="allList">
+	        							<div class="title-box">
+	        								<p>订单号：{{el.orderId}}</p>
+	        								<p>下单时间：{{el.createTime}}</p>
+	        							</div>
+	        							<div class="asTr">
+	        								<div class="good-box">
+	        									<div class="item" ms-repeat-good="el.products" ms-class="long: el.products.length == 1">
+	        										<div class="asTd col1">
+	        											<img ms-attr-src="good.imgs[0].imgsource" />
+	        										</div>
+	        										<p class="asTd col2">{{good.title}}</p>
+	        										<p class="asTd col3">{{good.price}}</p>
+	        										<p class="asTd col4">{{good.num}}</p>
+	        										<a class="link-grey aftersale" href="javascript:;" ms-click="applySaleafter(good.productId)" ms-visible="el.status == 102 || el.status == 103 || el.status == 104">申请售后</a>
+	        										<button class="yl-btn-add small btn-evaluate" ms-click="applyEvaluate(good.productId)" ms-visible="el.status == 104">评价</button>
+	        									</div>
+	        								</div>
+	        								<div class="operate-box">
+	        									<p class="asTd col5">{{el.amount}}</p>
+	        									<div class="asTd col6">
+	        										<p class="status">{{el.status | orderStatus}}</p>
+	        										<a class="link-normal" ms-attr-href="'personal_orderDetail.html?orderId=' + el.orderId">订单详情</a>
+	        									</div>
+	        									<div class="asTd col7" ms-visible="el.status == 101">
+	        										<a class="yl-btn small" ms-attr-href="'balance_pay.html?orderId=' + el.orderId">立刻付款</a>
+	        										<a class="link-normal" href="javascript:;" ms-click="cancelOrder(el.orderId)">取消订单</a>
+	        									</div>
+	        									<div class="asTd col7" ms-visible="el.status == 103">
+	        										<button class="yl-btn small">确认收货</button>
+	        										<a class="link-normal first" ms-attr-href="'personal_orderLogistics.html?orderId=' + el.orderId">查看物流</a>
+	        										<button class="yl-btn-special contact">请联系客服</button>
+	        									</div>
+	        									<div class="asTd col7" ms-visible="el.status == 104">
+	        										<a class="link-normal" ms-attr-href="'personal_orderLogistics.html?orderId=' + el.orderId">查看物流</a>
+	        										<button class="yl-btn-special last">剩余售后时间{{el.last}}天</button>
+	        									</div>
+	        								</div>
+	        							</div>
+	        						</div>
+        						</div>
+        					</div>
+        					<div class="cnt" ms-visible="cnt == 101">
+        						<!--<div class="search-order">
+        							<input type="text" placeholder="输入订单号和商品名称" />
+        							<button>搜索</button>
+        						</div>-->
+        						<div class="tb-head">
+        							<p class="asTd col1">商品</p>
+        							<p class="asTd col2">售价（元）</p>
+        							<p class="asTd col3">数量</p>
+        							<p class="asTd col4">实付款（元）</p>
+        							<p class="asTd col5">订单状态</p>
+        							<p class="asTd col6">操作</p>
+        						</div>
+        						<div>
+	        						<div class="tb-body" ms-repeat="noPyaList">
+	        							<div class="title-box">
+	        								<p>订单号：{{el.payno}}</p>
+	        								<p>下单时间：{{el.paydate}}</p>
+	        							</div>
+	        							<div class="asTr">
+                                            <div class="good-box">
+                                                <div class="item" ms-repeat-good="el.products" ms-class="long: el.products.length == 1">
+                                                    <div class="asTd col1">
+                                                        <img ms-attr-src="good.imgs[0].imgsource" />
+                                                    </div>
+                                                    <p class="asTd col2">{{good.title}}</p>
+                                                    <p class="asTd col3">{{good.price}}</p>
+                                                    <p class="asTd col4">{{good.num}}</p>
+                                                </div>
+                                            </div>
+                                            <div class="operate-box">
+                                                <p class="asTd col5">{{el.amount}}</p>
+                                                <div class="asTd col6">
+                                                    <p class="status">{{el.status | orderStatus}}</p>
+                                                    <a class="link-normal" ms-attr-href="'personal_orderDetail.html?orderId=' + el.orderId">订单详情</a>
+                                                </div>
+                                                <div class="asTd col7">
+                                                    <a class="yl-btn small" ms-attr-href="'balance_pay.html?orderId=' + el.orderId">立刻付款</a>
+                                                    <a class="link-normal" href="javascript:;" ms-click="cancelOrder(el.orderId)">取消订单</a>
+                                                </div>
+                                            </div>
+                                        </div>
+	        						</div>
+        						</div>
+        					</div>
+        					<div class="cnt" ms-visible="cnt == 102">
+        						<!--<div class="search-order">
+        							<input type="text" placeholder="输入订单号和商品名称" />
+        							<button>搜索</button>
+        						</div>-->
+        						<div class="tb-head">
+        							<p class="asTd col1">商品</p>
+        							<p class="asTd col2">售价（元）</p>
+        							<p class="asTd col3">数量</p>
+        							<p class="asTd col4">实付款（元）</p>
+        							<p class="asTd col5">订单状态</p>
+        							<p class="asTd col6">操作</p>
+        						</div>
+        						<div>
+	        						<div class="tb-body" ms-repeat="noDeliverList">
+	        							<div class="title-box">
+	        								<p>订单号：{{el.payno}}</p>
+	        								<p>下单时间：{{el.paydate}}</p>
+	        							</div>
+	        							<div class="asTr">
+                                            <div class="good-box">
+                                                <div class="item" ms-repeat-good="el.products" ms-class="long: el.products.length == 1">
+                                                    <div class="asTd col1">
+                                                        <img ms-attr-src="good.imgs[0].imgsource" />
+                                                    </div>
+                                                    <p class="asTd col2">{{good.title}}</p>
+                                                    <p class="asTd col3">{{good.price}}</p>
+                                                    <p class="asTd col4">{{good.num}}</p>
+                                                    <a class="link-grey aftersale" href="javascript:;" ms-click="applySaleafter(good.productId)" ms-visible="el.status == 102 || el.status == 103 || el.status == 104">申请售后</a>
+                                                    <button class="yl-btn-add small btn-evaluate" ms-click="applyEvaluate(good.productId)" ms-visible="el.status == 104">评价</button>
+                                                </div>
+                                            </div>
+                                            <div class="operate-box">
+                                                <p class="asTd col5">{{el.amount}}</p>
+                                                <div class="asTd col6">
+                                                    <p class="status">{{el.status | orderStatus}}</p>
+                                                    <a class="link-normal" ms-attr-href="'personal_orderDetail.html?orderId=' + el.orderId">订单详情</a>
+                                                </div>
+                                            </div>
+                                        </div>
+	        						</div>
+        						</div>
+        					</div>
+        					<div class="cnt" ms-visible="cnt == 103">
+        						<!--<div class="search-order">
+        							<input type="text" placeholder="输入订单号和商品名称" />
+        							<button>搜索</button>
+        						</div>-->
+        						<div class="tb-head">
+        							<p class="asTd col1">商品</p>
+        							<p class="asTd col2">售价（元）</p>
+        							<p class="asTd col3">数量</p>
+        							<p class="asTd col4">实付款（元）</p>
+        							<p class="asTd col5">订单状态</p>
+        							<p class="asTd col6">操作</p>
+        						</div>
+        						<div>
+	        						<div class="tb-body" ms-repeat="noReceiveList">
+	        							<div class="title-box">
+	        								<p>订单号：{{el.payno}}</p>
+	        								<p>下单时间：{{el.paydate}}</p>
+	        							</div>
+	        							<div class="asTr">
+                                            <div class="good-box">
+                                                <div class="item" ms-repeat-good="el.products" ms-class="long: el.products.length == 1">
+                                                    <div class="asTd col1">
+                                                        <img ms-attr-src="good.imgs[0].imgsource" />
+                                                    </div>
+                                                    <p class="asTd col2">{{good.title}}</p>
+                                                    <p class="asTd col3">{{good.price}}</p>
+                                                    <p class="asTd col4">{{good.num}}</p>
+                                                    <a class="link-grey aftersale" href="javascript:;" ms-click="applySaleafter(good.productId)" ms-visible="el.status == 102 || el.status == 103 || el.status == 104">申请售后</a>
+                                                    <button class="yl-btn-add small btn-evaluate" ms-click="applyEvaluate(good.productId)" ms-visible="el.status == 104">评价</button>
+                                                </div>
+                                            </div>
+                                            <div class="operate-box">
+                                                <p class="asTd col5">{{el.amount}}</p>
+                                                <div class="asTd col6">
+                                                    <p class="status">{{el.status | orderStatus}}</p>
+                                                    <a class="link-normal" ms-attr-href="'personal_orderDetail.html?orderId=' + el.orderId">订单详情</a>
+                                                </div>
+                                                <div class="asTd col7">
+                                                    <button class="yl-btn small">确认收货</button>
+                                                    <a class="link-normal first" ms-attr-href="'personal_orderLogistics.html?orderId=' + el.orderId">查看物流</a>
+                                                    <button class="yl-btn-special contact">请联系客服</button>
+                                                </div>
+                                            </div>
+                                        </div>
+	        						</div>
+        						</div>
+        					</div>
+        					<div class="cnt" ms-visible="cnt == 104">
+        						<!--<div class="search-order">
+        							<input type="text" placeholder="输入订单号和商品名称" />
+        							<button>搜索</button>
+        						</div>-->
+        						<div class="tb-head">
+        							<p class="asTd col1">商品</p>
+        							<p class="asTd col2">售价（元）</p>
+        							<p class="asTd col3">数量</p>
+        							<p class="asTd col4">实付款（元）</p>
+        							<p class="asTd col5">订单状态</p>
+        							<p class="asTd col6">操作</p>
+        						</div>
+        						<div>
+	        						<div class="tb-body" ms-repeat="noEvluateList">
+	        							<div class="title-box">
+	        								<p>订单号：{{el.payno}}</p>
+	        								<p>下单时间：{{el.paydate}}</p>
+	        							</div>
+	        							<div class="asTr">
+                                            <div class="good-box">
+                                                <div class="item" ms-repeat-good="el.products" ms-class="long: el.products.length == 1">
+                                                    <div class="asTd col1">
+                                                        <img ms-attr-src="good.imgs[0].imgsource" />
+                                                    </div>
+                                                    <p class="asTd col2">{{good.title}}</p>
+                                                    <p class="asTd col3">{{good.price}}</p>
+                                                    <p class="asTd col4">{{good.num}}</p>
+                                                    <a class="link-grey aftersale" href="javascript:;" ms-click="applySaleafter(good.productId)" ms-visible="el.status == 102 || el.status == 103 || el.status == 104">申请售后</a>
+                                                    <button class="yl-btn-add small btn-evaluate" ms-click="applyEvaluate(good.productId)" ms-visible="el.status == 104">评价</button>
+                                                </div>
+                                            </div>
+                                            <div class="operate-box">
+                                                <p class="asTd col5">{{el.amount}}</p>
+                                                <div class="asTd col6">
+                                                    <p class="status">{{el.status | orderStatus}}</p>
+                                                    <a class="link-normal" ms-attr-href="'personal_orderDetail.html?orderId=' + el.orderId">订单详情</a>
+                                                </div>
+                                                <div class="asTd col7">
+                                                    <a class="link-normal" ms-attr-href="'personal_orderLogistics.html?orderId=' + el.orderId">查看物流</a>
+                                                    <button class="yl-btn-special last">剩余售后时间{{el.last}}天</button>
+                                                </div>
+                                            </div>
+                                        </div>
+	        						</div>
+        						</div>
+        					</div>
+        					<div class="cnt" ms-visible="cnt == 105">
+        						<div class="tb-head return">
+        							<p class="asTd col1">订单</p>
+        							<p class="asTd col2"></p>
+        							<p class="asTd col3">商品名称</p>
+        							<p class="asTd col4">提交时间</p>
+        							<p class="asTd col5">服务类型</p>
+        							<p class="asTd col6">操作</p>
+        						</div>
+        						<div class="tb-return">
+        							<div class="item" ms-repeat="returnList">
+        								<div class="asTd col1">{{el.oid}}</div>
+        								<div class="asTd col2">
+        									<img class="img" ms-attr-src="el.imgs[0].imgsource" />
+        								</div>
+        								<div class="asTd col3">{{el.name}}</div>
+        								<div class="asTd col4">
+        									<p>{{el.odate | date("yyyy-MM-dd")}}</p>
+        									<p>{{el.odate | date("HH:mm:ss")}}</p>
+        								</div>
+        								<div class="asTd col5">{{el.status}}</div>
+        								<div class="asTd col6">
+        									<button class="yl-btn small">取消申请</button>
+        									<a class="link-normal" href="javascript:;">换货详情</a>
+        								</div>
+        							</div>
+        						</div>
+        					</div>
+        				</div>
+        			</div>
+        		</div>
+        	</div>
+        	
+        	<div class="popup" ms-visible="popup.saleafter">
+                <div class="popup-bg"></div>
+                <div class="popup-cnt">
+                    <p class="title">申请售后</p>
+                    <a class="close" href="javascript:;" ms-click="popup.close"></a>
+                    <div class="cnt">
+                        <div class="dissatisfy-box">
+                            <button class="btn-dissatisfy" ms-click="popup.changeFunc">我要换货</button>
+                            <button class="btn-dissatisfy" ms-click="popup.returnFunc">我要退货</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        	
+        	<div class="popup" ms-visible="popup.evaluate">
+                <div class="popup-bg"></div>
+                <div class="popup-cnt">
+                    <p class="title">评价</p>
+                    <a class="close" href="javascript:;" ms-click="popup.close"></a>
+                    <div class="cnt">
+                        <div class="yl-form five">
+                            <div class="item">
+                                <label>评价：</label>
+                                <div class="form-cnt radio-box">
+                                    <input type="radio" name="evaluate" ms-duplex-string="popup.evaluateStyle" value="1" />好评
+                                    <input type="radio" name="evaluate" ms-duplex-string="popup.evaluateStyle" value="2" />中评
+                                    <input type="radio" name="evaluate" ms-duplex-string="popup.evaluateStyle" value="3" />差评
+                                </div>
+                            </div>
+                            <div class="item">
+                                <label>评价内容：</label>
+                                <textarea class="yl-textarea" ms-duplex="popup.evaluateVal"></textarea>
+                            </div>
+                            <div class="item forBtn">
+                                <label></label>
+                                <button class="yl-btn middle" ms-click="popup.evaluateSubmit">确定</button>
+                                <button class="yl-btn-cancel middle" ms-click="popup.close">取消</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        	
+        	<div class="popup" ms-visible="popup.logistics">
+                <div class="popup-bg"></div>
+                <div class="popup-cnt">
+                    <p class="title">物流填写</p>
+                    <a class="close" href="javascript:;" ms-click="popup.close"></a>
+                    <div class="cnt">
+                        <div class="yl-form five">
+                            <div class="item">
+                                <label>物流公司：</label>
+                                <select class="yl-select"ms-duplex="popup.logisticsSel" data-duplex-changed="popup.logisticsSelChange">
+                                    <option value="1">质量问题</option>
+                                    <option value="2">颜色/款式/图案与描述不符</option>
+                                </select>
+                            </div>
+                            <div class="item">
+                                <label>运单号：</label>
+                                <input class="ipt-form" ms-duplex="popup.logisticsOrder" />
+                            </div>
+                            <div class="item forBtn">
+                                <label></label>
+                                <button class="yl-btn middle" ms-click="popup.logisticsSubmit">确定</button>
+                                <button class="yl-btn-cancel middle" ms-click="popup.close">取消</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div ms-include-src="'../template/footer.html'" data-include-replace="true"></div>
+
+        <script src="../js/avalon.shim.sn.js"></script>
+        <script src="../js/jquery.min.js"></script>
+        <script src="../js/main.js"></script>
+        <script src="../js/data-interface.js"></script>
+        <script>
+            $(function(){
+                var orderCtrl = avalon.define({
+                    $id: "order",
+                    cnt: 999,
+                    all: 0,
+                    waitPay: 0,
+                    waitDeliver: 0,
+                    waitReceive: 0,
+                    waitEvaluate: 0,
+                    allList: [],
+                    noPyaList:[],
+                	noDeliverList:[],
+                	noReceiveList:[],
+                	noEvluateList:[],
+                    returnList: [],
+                    tab: function(idx){
+                    	orderCtrl.cnt = idx;
+                    	
+                    	if(idx == 999){
+                    	    $.ajax({
+                                type: "post",
+                                url: DI.getOrders,
+                                data: {
+                                    pageNum: 1,
+                                    pageSize: 20
+                                },
+                                dataType: "json",
+                                success: function(data){
+                                    orderCtrl.allList = data.data;
+                                }
+                            });
+                    	}else{
+                    	    $.ajax({
+                                type: "post",
+                                url: DI.getOrdersByStatus,
+                                data: {
+                                    status: idx,
+                                    pageNum: 1,
+                                    pageSize: 20
+                                },
+                                dataType: "json",
+                                success: function(data){
+                                    if(idx == 101){
+                                        orderCtrl.noPyaList = data.data;
+                                    }else if(idx == 102){
+                                        orderCtrl.noDeliverList = data.data;
+                                    }else if(idx == 103){
+                                        orderCtrl.noReceiveList = data.data;
+                                    }else if(idx == 104){
+                                        orderCtrl.noEvluateList = data.data;
+                                    }else if(idx == 105){
+                                        orderCtrl.returnList = data.data;
+                                    }
+                                }
+                            });
+                    	}
+                    },
+                    popup: {
+                        productId: "",
+                        saleafter: false,
+                        evaluate: false,
+                        evaluateStyle: "1",
+                        evaluateVal: "",
+                        evaluateSubmit: function(){
+                            
+                        },
+                        logistics: false,
+                        logisticsSel: "",
+                        logisticsSelChange: function(val){
+                            orderCtrl.popup.logisticsSel = val;
+                        },
+                        logisticsOrder: "",
+                        logisticsSubmit: function(){
+                            
+                        },
+                        close: function(){
+                            orderCtrl.popup.saleafter = orderCtrl.popup.evaluate = orderCtrl.popup.logistics = false;
+                        },
+                        changeFunc: function(){
+                            location.href = "personal_applyChange.html?productId=" + orderCtrl.popup.productId;
+                        },
+                        returnFunc: function(){
+                            location.href = "personal_applyReturn.html?productId=" + orderCtrl.popup.productId;
+                        }
+                    },
+                    applySaleafter: function(productId){
+                        orderCtrl.popup.saleafter = true;
+                        orderCtrl.popup.productId = productId;
+                    },
+                    applyEvaluate: function(productId){
+                        orderCtrl.popup.evaluate = true;
+                        orderCtrl.popup.productId = productId;
+                    }
+                });
+
+                avalon.scan();
+                
+                //获取用户订单数
+                $.ajax({
+                	type: "post",
+                	url: DI.getAllCountByStatus,
+                	dataType: "json",
+                	success: function(data){
+                	    var item = data.count,
+                	        row = null;
+                	    for(var i=0; i<item.length; i++){
+                	        row = item[i];
+                	        if(row.status == "101"){
+                	            orderCtrl.waitPay = row.count;
+                	        }else if(row.status == "102"){
+                	            orderCtrl.waitDeliver = row.count;
+                	        }else if(row.status == "103"){
+                	            orderCtrl.waitReceive = row.count;
+                	        }else if(row.status == "104"){
+                	            orderCtrl.waitEvaluate = row.count;
+                	        }
+                	        
+            	            orderCtrl.all += orderCtrl.waitPay + orderCtrl.waitDeliver + orderCtrl.waitReceive + orderCtrl.waitEvaluate;
+                	    }
+                	}
+                });
+                
+                //获取订单信息
+                $.ajax({
+                    type: "post",
+                    url: DI.getOrders,
+                    data: {
+                        pageNum: 1,
+                        pageSize: 20
+                    },
+                    dataType: "json",
+                    success: function(data){
+                        orderCtrl.allList = data.data;
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>

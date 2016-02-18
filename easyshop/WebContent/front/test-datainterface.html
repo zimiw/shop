@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <title>洋流网</title>
+
+    </head>
+    <body>
+        <!--<form id="form" enctype="multipart/form-data">
+            <input type="text" name="orderId" value="123" />
+            <input type="text" name="productId" value="456" />
+            <input type="text" name="num" value="1" />
+            <input type="text" name="amount" value="5" />
+            <input type="text" name="changeReason" value="5" />
+            <input type="text" name="remark" value="aaaa" />
+            <input type="file" name="image1" />
+        </form>-->
+            <button id="apply">提交</button>
+        
+        <script src="../js/avalon.shim.sn.js"></script>
+        <script src="../js/jquery.min.js"></script>
+        <script src="../js/jquery.form.js"></script>
+        <script src="../js/main.js"></script>
+        <script src="../js/data-interface.js"></script>
+        <script>
+            $(function(){
+//              Buylll.addShoppingcart(6,"m","red",2);
+                
+                $("#apply").click(function(){
+//                  $("#form").ajaxSubmit({
+//                      type: "post",
+//                      url: DI.orderReturn,
+//                      success: function(data){
+//                          console.log(data)
+//                      },
+//                      error: function(err){
+//                          console.log(err);
+//                      }
+//                  });
+                    Buylll.addShoppingcart(2,"137",1);
+                });
+            });
+        </script>
+    </body>
+</html>

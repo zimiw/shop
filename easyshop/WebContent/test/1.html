@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <title>洋流网</title>
+
+    </head>
+    <body ms-controller="common">
+        <button onclick="copyText()">Copy Text</button>
+        <script src="pingpp-pc.js"></script>
+        <script>
+		
+		var charge=
+		{
+  "id": "ch_8qPKK0rrvHS0TWHO00ePGqTS",
+  "object": "charge",
+  "created": 1452705646,
+  "livemode": false,
+  "paid": false,
+  "refunded": false,
+  "app": "app_qLO880GuzXv1K8qT",
+  "channel": "upacp_pc",
+  "order_no": "test123456781",
+  "client_ip": "127.0.0.1",
+  "amount": 100,
+  "amount_settle": 100,
+  "currency": "cny",
+  "subject": "网球拍",
+  "body": "进口网球拍",
+  "time_paid": null,
+  "time_expire": 1452792046,
+  "time_settle": null,
+  "transaction_no": null,
+  "refunds": {
+    "object": "list",
+    "url": "/v1/charges/ch_8qPKK0rrvHS0TWHO00ePGqTS/refunds",
+    "has_more": false,
+    "data": []
+  },
+  "amount_refunded": 0,
+  "failure_code": null,
+  "failure_msg": null,
+  "metadata": {},
+  "credential": {
+    "object": "credential",
+    "upacp_pc": {
+      "accessType": "0",
+      "backUrl": "https://api.pingxx.com/notify/charges/ch_8qPKK0rrvHS0TWHO00ePGqTS",
+      "bizType": "000000",
+      "certId": "Oun1S8TOyn90KCWj90Gabn5K",
+      "channelType": "07",
+      "currencyCode": "156",
+      "customerIp": "127.0.0.1",
+      "encoding": "UTF-8",
+      "frontUrl": "http://baidu.com",
+      "merId": "724256295577835",
+      "orderDesc": "网球拍",
+      "orderId": "test123456781",
+      "payTimeout": "20160115012046",
+      "reqReserved": "ch_8qPKK0rrvHS0TWHO00ePGqTS",
+      "signMethod": "01",
+      "txnAmt": "100",
+      "txnSubType": "01",
+      "txnTime": "20160114012046",
+      "txnType": "01",
+      "version": "5.0.0",
+      "signature": "T3F2RDg0WDk0OE9HcXZ2THVIR2U5bXZU"
+    }
+  },
+  "extra": {
+    "result_url": "http://baidu.com"
+  },
+  "description": null
+}
+		
+		
+		
+		
+		;
+		
+            false&&pingppPc.createPayment(charge, function(result, err){
+// 处理错误信息
+debugger;
+});
+        </script>
+    </body>
+</html>

@@ -1,0 +1,22 @@
+.menu-help li a {
+	display: block;
+	height: 50px;
+	padding-left: 40px;
+	line-height: 50px;
+	color: #333;
+}
+.menu-help li a:hover,
+.menu-help li a.sel {
+	color: #fff;
+	background-color: #e4007f;
+}
+
+.help-intro {
+	margin-top: 20px;
+	line-height: 2;
+}
+.help-intro img {
+	display: block;
+	width: 100%;
+	height: auto;
+}
