@@ -2,7 +2,7 @@
  * 用来存放所有的数据接口 
  * */
 ;var DI = DI || {};
-DI.baseURL = "http://localhost:8080/easyshop";
+DI.baseURL = "/easyshop";
 //DI.baseURL = "http://10.24.47.52:8080/easyshop";
 
 // 查询类目

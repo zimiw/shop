@@ -52,9 +52,32 @@ public class ReportModule {
 			@Param("kind") String kind, @Param("provider") String provider,
 			@Param("rows") int pageSize, @Param("page") int pageNum) {
 
+		Map<String, Object> result = new HashMap<String, Object>();
 		List<String> paramsList = new ArrayList<String>();
 		Map<String, Object> valMap = new HashMap<String, Object>();
 
+		String sqlStr2 = " SELECT count(1) "
+				+ " FROM product t, "
+				+ "    (SELECT b.productId,  SUM(b.number) num, SUM(b.number*b.price) price "
+				+ "        FROM orders a, connectorop b "
+				+ "        WHERE a.orderId = b.orderId "
+				+ "        AND a.status IN (102,103,104,106 ) ";
+
+		if (!StringUtils.isEmpty(beginTime)) {// 支付完成时间
+			sqlStr2 += " and DATE_FORMAT(a.chargePaidTime, '%Y-%m-%d') >=@beginTime ";
+			paramsList.add("beginTime");
+			valMap.put("beginTime", beginTime);
+		}
+
+		if (!StringUtils.isEmpty(endTime)) {// 支付完成时间
+			sqlStr2 += " and DATE_FORMAT(a.chargePaidTime, '%Y-%m-%d') <=@endTime ";
+			paramsList.add("endTime");
+			valMap.put("endTime", endTime);
+		}
+		sqlStr2 += "        GROUP BY b.productId ) c "
+				+ " WHERE t.productId = c.productId ";
+
+		String sqlWhere = "";
 		String sqlStr = " SELECT t.productId,t.name, t.minPrice, c.num, c.price "
 				+ " FROM product t, "
 				+ "    (SELECT b.productId,  SUM(b.number) num, SUM(b.number*b.price) price "
@@ -64,14 +87,10 @@ public class ReportModule {
 
 		if (!StringUtils.isEmpty(beginTime)) {// 支付完成时间
 			sqlStr += " and DATE_FORMAT(a.chargePaidTime, '%Y-%m-%d') >=@beginTime ";
-			paramsList.add("beginTime");
-			valMap.put("beginTime", beginTime);
 		}
 
 		if (!StringUtils.isEmpty(endTime)) {// 支付完成时间
 			sqlStr += " and DATE_FORMAT(a.chargePaidTime, '%Y-%m-%d') <=@endTime ";
-			paramsList.add("endTime");
-			valMap.put("endTime", endTime);
 		}
 
 		sqlStr += "        GROUP BY b.productId ) c "
@@ -79,30 +98,41 @@ public class ReportModule {
 
 		if ("2".equals(type)) { // type 1 单品 2品牌， 3品类， 4供应商
 			if (!StringUtils.isEmpty(brand)) {
-				sqlStr += " and t.brandId = @brandId";
+				sqlWhere += " and t.brandId = @brandId";
 				paramsList.add("brandId");
 				valMap.put("brandId", brand);
 			}
 		} else if ("3".equals(type)) {// 分类
 
 			if (!StringUtils.isEmpty(kind)) {// 第3级
-				sqlStr += " and (t.catalogId1 = @kind or t.catalogId2 = @kind or t.catalogId3 = @kind)";
+				sqlWhere += " and (t.catalogId1 = @kind or t.catalogId2 = @kind or t.catalogId3 = @kind)";
 				paramsList.add("kind");
 				valMap.put("kind", kind);
 			}
 		} else if ("4".equals(type)) {// 供应商
 			if (!StringUtils.isEmpty(provider)) {// 第3级
-				sqlStr += " and t.provider = @provider";
+				sqlWhere += " and t.provider = @provider";
 				paramsList.add("provider");
 				valMap.put("provider", provider);
 			}
 		}
 
+		Sql sql = Sqls.create(sqlStr2 + sqlWhere);
+		for (String str : paramsList) {
+			sql.params().set(str, valMap.get(str));
+		}
+		sql.setCallback(Sqls.callback.integer());
+		dao.execute(sql);
+		int total = sql.getInt();
+		result.put("total", total);
+		if (total == 0) {
+			return result;
+		}
+
 		Pager pager = dao.createPager(pageNum, pageSize);
-		sqlStr += " limit @pageNum, @pageSize ";
+		sqlStr += sqlWhere + " limit @pageNum, @pageSize ";
 
-		Sql sql = Sqls.create(sqlStr);
-
+		sql = Sqls.create(sqlStr);
 		sql.params().set("pageNum", pager.getOffset());
 		sql.params().set("pageSize", pager.getPageSize());
 		for (String str : paramsList) {
@@ -112,7 +142,8 @@ public class ReportModule {
 		sql.setCallback(Sqls.callback.maps());
 		dao.execute(sql);
 		List<Map> list = sql.getList(Map.class);
-		return list;
+		result.put("rows", list);
+		return result;
 	}
 
 	/**
@@ -131,6 +162,12 @@ public class ReportModule {
 
 		List<String> paramsList = new ArrayList<String>();
 		Map<String, Object> valMap = new HashMap<String, Object>();
+		Map<String, Object> result = new HashMap<String, Object>();
+		String sqlStr2 = "select count(1) FROM orders a, connectorOP b, "
+				+ "    producttype t, product c "
+				+ "WHERE a.orderId = b.orderId "
+				+ "AND b.productTypeId = t.productTypeId "
+				+ "AND t.productId = c.productId ";
 
 		String sqlStr = "SELECT c.productId, c.name, SUM(b.number) num,SUM(a.amount) amount, "
 				+ "    SUM(t.supplyPrice) supplyPrice, SUM(a.amount)-SUM(t.supplyPrice) amount2,  "
@@ -143,29 +180,43 @@ public class ReportModule {
 				+ "AND b.productTypeId = t.productTypeId "
 				+ "AND t.productId = c.productId ";
 
+		String sqlWhere = "";
 		if (!StringUtils.isEmpty(beginTime)) {// 支付完成时间
-			sqlStr += " and DATE_FORMAT(a.chargePaidTime, '%Y-%m-%d') >=@beginTime ";
+			sqlWhere += " and DATE_FORMAT(a.chargePaidTime, '%Y-%m-%d') >=@beginTime ";
 			paramsList.add("beginTime");
 			valMap.put("beginTime", beginTime);
 		}
 
 		if (!StringUtils.isEmpty(endTime)) {// 支付完成时间
-			sqlStr += " and DATE_FORMAT(a.chargePaidTime, '%Y-%m-%d') <=@endTime ";
+			sqlWhere += " and DATE_FORMAT(a.chargePaidTime, '%Y-%m-%d') <=@endTime ";
 			paramsList.add("endTime");
 			valMap.put("endTime", endTime);
 		}
 
 		if ("1".equals(type)) {// 销售
-			sqlStr += "  AND a.status IN (102,103,104,106 ) ";
+			sqlWhere += "  AND a.status IN (102,103,104,106 ) ";
 		} else if ("2".equals(type)) {// 退换货
-			sqlStr += "  AND a.status IN (105 ) ";
+			sqlWhere += "  AND a.status IN (105 ) ";
 		}
 
-		sqlStr += "GROUP BY c.productId, c.name, c.supplierId, c.brandId, c.catalogId3 "
+		sqlStr += sqlWhere
+				+ " GROUP BY c.productId, c.name, c.supplierId, c.brandId, c.catalogId3 "
 				+ "  limit @pageNum, @pageSize";
 
+		Sql sql = Sqls.create(sqlStr2 + sqlWhere);
+		for (String str : paramsList) {
+			sql.params().set(str, valMap.get(str));
+		}
+		sql.setCallback(Sqls.callback.integer());
+		dao.execute(sql);
+		int total = sql.getInt();
+		result.put("total", total);
+		if (total == 0) {
+			return result;
+		}
+
 		Pager pager = dao.createPager(pageNum, pageSize);
-		Sql sql = Sqls.create(sqlStr);
+		sql = Sqls.create(sqlStr);
 		sql.params().set("pageNum", pager.getOffset());
 		sql.params().set("pageSize", pager.getPageSize());
 		for (String str : paramsList) {
@@ -175,7 +226,8 @@ public class ReportModule {
 		sql.setCallback(Sqls.callback.maps());
 		dao.execute(sql);
 		List<Map> list = sql.getList(Map.class);
-		return list;
+		result.put("rows", list);
+		return result;
 	}
 
 	/**
@@ -188,30 +240,49 @@ public class ReportModule {
 			@Param("endTime") String endTime, @Param("rows") int pageSize,
 			@Param("page") int pageNum) {
 
+		Map<String, Object> result = new HashMap<String, Object>();
 		List<String> paramsList = new ArrayList<String>();
 		Map<String, Object> valMap = new HashMap<String, Object>();
+
+		String sqlStr2 = "select count(1) FROM orders a, personal t,  activitylottery b "
+				+ "WHERE  a.userId = t.id  AND a.orderId = b.orderId ";
 
 		String sqlStr = "SELECT a.orderId, t.nickname,a.amount,a.chargePaidTime, "
 				+ "    b.lotteryTime "
 				+ "FROM orders a, personal t,  activitylottery b "
-				+ "WHERE  a.userId = t.id " + "AND a.orderId = b.orderId ";
+				+ "WHERE  a.userId = t.id  AND a.orderId = b.orderId ";
 
+		String sqlWhere = "";
 		if (!StringUtils.isEmpty(beginTime)) {// 支付完成时间
-			sqlStr += " and DATE_FORMAT(a.chargePaidTime, '%Y-%m-%d') >=@beginTime ";
+			sqlWhere += " and DATE_FORMAT(a.chargePaidTime, '%Y-%m-%d') >=@beginTime ";
 			paramsList.add("beginTime");
 			valMap.put("beginTime", beginTime);
 		}
 
 		if (!StringUtils.isEmpty(endTime)) {// 支付完成时间
-			sqlStr += " and DATE_FORMAT(a.chargePaidTime, '%Y-%m-%d') <=@endTime ";
+			sqlWhere += " and DATE_FORMAT(a.chargePaidTime, '%Y-%m-%d') <=@endTime ";
 			paramsList.add("endTime");
 			valMap.put("endTime", endTime);
 		}
 
-		sqlStr += " ORDER BY b.lotteryTime  limit @pageNum, @pageSize";
+		Sql sql = Sqls.create(sqlStr2 + sqlWhere);
+		for (String str : paramsList) {
+			sql.params().set(str, valMap.get(str));
+		}
+		sql.setCallback(Sqls.callback.integer());
+		dao.execute(sql);
+		int total = sql.getInt();
+		result.put("total", total);
+
+		if (total == 0) {
+			return result;
+		}
+
+		sqlStr += sqlWhere
+				+ " ORDER BY b.lotteryTime  limit @pageNum, @pageSize";
 
 		Pager pager = dao.createPager(pageNum, pageSize);
-		Sql sql = Sqls.create(sqlStr);
+		sql = Sqls.create(sqlStr);
 		sql.params().set("pageNum", pager.getOffset());
 		sql.params().set("pageSize", pager.getPageSize());
 		for (String str : paramsList) {
@@ -221,7 +292,8 @@ public class ReportModule {
 		sql.setCallback(Sqls.callback.maps());
 		dao.execute(sql);
 		List<Map> list = sql.getList(Map.class);
-		return list;
+		result.put("rows", list);
+		return result;
 	}
 
 	/**
@@ -234,27 +306,50 @@ public class ReportModule {
 			@Param("endTime") String endTime, @Param("rows") int pageSize,
 			@Param("page") int pageNum) {
 
+		Map<String, Object> result = new HashMap<String, Object>();
 		List<String> paramsList = new ArrayList<String>();
 		Map<String, Object> valMap = new HashMap<String, Object>();
+
+		String sqlStr2 = "SELECT count(1) "
+				+ "FROM orders a, connectorOP b, product c "
+				+ "WHERE  a.orderId = b.orderId "
+				+ "AND b.productId = c.productId ";
+
 		String sqlStr = "SELECT a.orderId, c.name, b.price,b.number,a.amount,a.chargePaidTime, 0 expressAmount "
 				+ "FROM orders a, connectorOP b, product c "
 				+ "WHERE  a.orderId = b.orderId "
 				+ "AND b.productId = c.productId ";
+
+		String sqlWhere = "";
 		if (!StringUtils.isEmpty(beginTime)) {// 支付完成时间
-			sqlStr += " and DATE_FORMAT(a.chargePaidTime, '%Y-%m-%d') >=@beginTime ";
+			sqlWhere += " and DATE_FORMAT(a.chargePaidTime, '%Y-%m-%d') >=@beginTime ";
 			paramsList.add("beginTime");
 			valMap.put("beginTime", beginTime);
 		}
 
 		if (!StringUtils.isEmpty(endTime)) {// 支付完成时间
-			sqlStr += " and DATE_FORMAT(a.chargePaidTime, '%Y-%m-%d') <=@endTime ";
+			sqlWhere += " and DATE_FORMAT(a.chargePaidTime, '%Y-%m-%d') <=@endTime ";
 			paramsList.add("endTime");
 			valMap.put("endTime", endTime);
 		}
-		sqlStr += " ORDER BY a.chargePaidTime  limit @pageNum, @pageSize";
+		sqlStr += sqlWhere
+				+ " ORDER BY a.chargePaidTime  limit @pageNum, @pageSize";
+
+		Sql sql = Sqls.create(sqlStr2 + sqlWhere);
+		for (String str : paramsList) {
+			sql.params().set(str, valMap.get(str));
+		}
+		sql.setCallback(Sqls.callback.integer());
+		dao.execute(sql);
+		int total = sql.getInt();
+		result.put("total", total);
+
+		if (total == 0) {
+			return result;
+		}
 
 		Pager pager = dao.createPager(pageNum, pageSize);
-		Sql sql = Sqls.create(sqlStr);
+		sql = Sqls.create(sqlStr);
 		sql.params().set("pageNum", pager.getOffset());
 		sql.params().set("pageSize", pager.getPageSize());
 		for (String str : paramsList) {
@@ -264,7 +359,8 @@ public class ReportModule {
 		sql.setCallback(Sqls.callback.maps());
 		dao.execute(sql);
 		List<Map> list = sql.getList(Map.class);
-		return list;
+		result.put("rows", list);
+		return result;
 	}
 
 	/**

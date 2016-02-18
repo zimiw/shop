@@ -32,6 +32,7 @@ import com.easyshop.bean.ActivtyHeat;
 import com.easyshop.bean.ActivtySpecialty;
 import com.easyshop.bean.Personal;
 import com.easyshop.bean.Product;
+import com.easyshop.bean.ProductType;
 import com.easyshop.utils.StringUtils;
 import com.easyshop.utils.TimeUtils;
 import com.easyshop.vo.ResultVo;
@@ -262,60 +263,74 @@ public class ActivityAdminModule {
 	}
 
 	/**
+	 * 根据商品id获取该商品所有的型号
+	 * 
+	 * @param productId
+	 * @return
+	 */
+	@At
+	public Object queryActivityProductType(@Param("productId") String productId) {
+		List<ProductType> list = dao.query(ProductType.class,
+				Cnd.where("productId", "=", productId).desc("productTypeId"));
+		return list;
+	}
+
+	/**
 	 * 限时活动保存
 	 * 
 	 * @return
 	 */
 	@At
 	public Object saveActivity(
-			@Param("..") final ActivityProduct activityProduct) {
+			@Param("activityproducts") final ActivityProduct[] activityProducts) {
 
 		Map<String, Object> result = new HashMap<String, Object>();
 
-		if (StringUtils.isEmpty(activityProduct.getProductId())
-				|| StringUtils.isEmpty(activityProduct.getBeginTime())
-				|| StringUtils.isEmpty(activityProduct.getEndTime())) {
+		if (activityProducts == null || activityProducts.length == 0) {
 			result.put("status", ResultVo.STATUS_FAIL);
 			result.put("msg", "报错内容不能为空!");
 			return result;
 		}
 
-		String sqlStr = "SELECT COUNT(1) " + "FROM activityproduct a "
-				+ "WHERE status =1 " + " AND a.productId = @productId "
-				+ "AND ((  a.beginTime<= @beginTime "
-				+ "        AND a.endTime>=@beginTime) "
-				+ "    OR  ( a.beginTime<= @endTime "
-				+ "        AND a.endTime>=@endTime ) "
-				+ "    OR  ( a.beginTime>=@beginTime "
-				+ "        AND a.beginTime<=@endTime ) "
-				+ "    OR  ( a.endTime>=@beginTime "
-				+ "       AND a.endTime<=@endTime)) ";
-		Sql sql = Sqls.create(sqlStr);
-		sql.params().set("productId", activityProduct.getProductId());
-		sql.params().set("beginTime", activityProduct.getBeginTime());
-		sql.params().set("endTime", activityProduct.getEndTime());
-		sql.setCallback(Sqls.callback.maps());
-		dao.execute(sql);
-		int count = sql.getInt();
-		if (count > 0) {
-			result.put("status", ResultVo.STATUS_FAIL);
-			result.put("msg", "该商品在该时间段内已经存在限时活动!");
-			return result;
-		}
+		// String sqlStr = "SELECT COUNT(1) " + "FROM activityproduct a "
+		// + "WHERE status =1 " + " AND a.productId = @productId "
+		// + "AND ((  a.beginTime<= @beginTime "
+		// + "        AND a.endTime>=@beginTime) "
+		// + "    OR  ( a.beginTime<= @endTime "
+		// + "        AND a.endTime>=@endTime ) "
+		// + "    OR  ( a.beginTime>=@beginTime "
+		// + "        AND a.beginTime<=@endTime ) "
+		// + "    OR  ( a.endTime>=@beginTime "
+		// + "       AND a.endTime<=@endTime)) ";
+		// Sql sql = Sqls.create(sqlStr);
+		// sql.params().set("productId", activityProduct.getProductId());
+		// sql.params().set("beginTime", activityProduct.getBeginTime());
+		// sql.params().set("endTime", activityProduct.getEndTime());
+		// sql.setCallback(Sqls.callback.maps());
+		// dao.execute(sql);
+		// int count = sql.getInt();
+		// if (count > 0) {
+		// result.put("status", ResultVo.STATUS_FAIL);
+		// result.put("msg", "该商品在该时间段内已经存在限时活动!");
+		// return result;
+		// }
 
 		Trans.exec(new Atom() {
 			@Override
 			public void run() {
-				activityProduct.setStatus(1);
-				activityProduct.setLeftNum(activityProduct.getNum());// 剩余数量和活动数量相关
-				dao.insert(activityProduct);
+
+				for (ActivityProduct ap : activityProducts) {
+					ap.setStatus(1);
+					ap.setLeftNum(ap.getNum());// 剩余数量和活动数量相关
+					dao.insert(ap);
+				}
 
 				// 根据商品中对应的状态
 				dao.update(
 						Product.class,
 						Chain.make("activityType", 1),
 						Cnd.where("productId", "=",
-								activityProduct.getProductId()));
+								activityProducts[0].getProductId()));
 			}
 		});
 
