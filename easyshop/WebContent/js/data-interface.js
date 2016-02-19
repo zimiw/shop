@@ -75,7 +75,7 @@ DI.checkSelected = DI.baseURL+"/shopcar/checkSelected";
 DI.directAddToSelected = DI.baseURL+"/shopcar/directAddToSelected";
 // 列表相关
 DI.queryBrandByCatalogId = DI.baseURL+"/catalog/queryBrandByCatalogId";
-DI.getProducts = DI.baseURL+"/catalog/getProducts";
+DI.getProducts = DI.baseURL + "/catalog/getProducts";
 DI.manualCheckIsHasPaid = DI.baseURL+"/charge/manualCheckIsHasPaid";
 DI.getReturnDetail = DI.baseURL+"/personalorder/getReturnDetail";
 

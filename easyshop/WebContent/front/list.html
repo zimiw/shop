@@ -14,17 +14,17 @@
         <div ms-include-src="'../template/nav.html'" data-include-replace="true" data-include-loaded="initNav"></div>
         <div class="list wrap" ms-controller="list">
             <p class="ly-breadcrumb"></p>
-            <div class="brand-box">
+            <div class="brand-box" ms-visible="fBrand">
                 <div class="first-brand">
                     <p>品牌：<a href="javascript:;" ms-repeat="brands" ms-click="getProducts(el.brandId)">{{el.brandName}}</a><a class="more" href="javascript:;" ms-click="more">更多</a></p>
                 </div>
             </div>
             <div class="rank-box">
-                <a class="rank up">综合</a>
-                <a class="rank updown">价格</a>
-                <a class="rank up">销量</a>
+                <a class="rank up" href="javascript:;" ms-click="orderSynthesize">综合</a>
+                <a class="rank updown" href="javascript:;" ms-click="orderPrice">价格</a>
+                <a class="rank up" href="javascript:;" ms-click="orderSales">销量</a>
                 <div class="limit">
-                    <input type="checkbox" />限时抢购
+                    <input type="checkbox" id="ipt_limit" />限时抢购
                 </div>
             </div>
             <div class="list-box">
@@ -82,18 +82,40 @@
 
                 var listCtrl = avalon.define({
                     $id: "list",
+                    fBrand: true,
                     brands: [],
                     items: [],
-                        recent: [],
-                        getProducts: function(id){
-                            getProducts(id);
-                        }
+                    recent: [],
+                    getProducts: function(id){
+                        param.currentPage = 1;
+                        param.brandId = id;
+                        delete param.activityType;
+                        getProducts();
+                    },
+                    orderSynthesize: function(){
+                        param.currentPage = 1;
+                        param.orderBy = 0;
+                        delete param.activityType;
+                        getProducts();
+                    },
+                    orderPrice: function(){
+                        param.currentPage = 1;
+                        param.orderBy = 12;
+                        delete param.activityType;
+                        getProducts();
+                    },
+                    orderSales: function(){
+                        param.currentPage = 1;
+                        param.orderBy = 34;
+                        delete param.activityType;
+                        getProducts();
+                    }
                 });
 
                 avalon.scan();
 
                 if(param.brand != "false"){
-                $.ajax({
+                    $.ajax({
                         type: "post",
                         url: DI.queryBrandByCatalogId,
                         data: {
@@ -107,47 +129,77 @@
                             console.log(err);
                         }
                     });
+                }else{
+                    listCtrl.fBrand = false;
                 }
-                    $.ajax({
-                        type: "post",
-                        url: DI.getRecent,
+                $.ajax({
+                    type: "post",
+                    url: DI.getRecent,
                     dataType: "json",
                     success: function(data){
-                            listCtrl.recent = data.recent;
+                        listCtrl.recent = data.recent;
                     },
                     error: function(err){
                         console.log(err);
                     }
                 });
 
-                getProducts();
-                    
-                function getProducts(data){
+                param.currentPage = 1;
+                param.peerpageRows = 16;
                 $.ajax({
-                            type: "post",
-                            url: DI.getProducts,
-                        data: data,
+                    type: "post",
+                    url: DI.getProducts,
+                    data: param,
                     dataType: "json",
                     success: function(data){
-                                listCtrl.items = data.products;
-                                
-                                if(data.products.length > 16){
-                                    laypage({
-                                        cont: $("#pagination"),
-                                        pages: Math.ceil(data.products.length / 16),
-                                        skin: 'molv',
-                                        first: 1,
-                                        last: Math.ceil(data.products.length / 16),
-                                        prev: '<',
-                                        next: '>'
-                                    });
-                                }
+                        listCtrl.items = data.rows;
+                        
+                        laypage({
+                            cont: $("#pagination"),
+                            pages: Math.ceil(data.total / 16),
+                            skin: 'molv',
+                            first: 1,
+                            last: Math.ceil(data.total / 16),
+                            prev: '<',
+                            next: '>',
+                            jump: function(obj, first){
+                                if(first) return;
+                                param.currentPage = obj.curr;
+                                getProducts();
+                            }
+                        });
                     },
                     error: function(err){
                         console.log(err);
                     }
                 });
-                };
+                
+                function getProducts(){
+                    $.ajax({
+                        type: "post",
+                        url: DI.getProducts,
+                        data: param,
+                        dataType: "json",
+                        success: function(data){
+                            listCtrl.items = data.rows;
+                        },
+                        error: function(err){
+                            console.log(err);
+                        }
+                    });
+                }
+                
+                $("#ipt_limit").click(function(){
+                    var $this = $(this);
+                    param.currentPage = 1;
+                    delete param.orderBy;
+                    if($this.is(":checked")){
+                        param.activityType = 1;
+                    }else{
+                        delete param.activityType;
+                    }
+                    getProducts();
+                });
             });
         </script>
     </body>

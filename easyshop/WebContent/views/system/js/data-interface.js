@@ -2,7 +2,7 @@
  * 用来存放所有的数据接口 
  * */
 ;var DI = DI || {};
-DI.baseURL = "/easyshop";
+DI.baseURL = "http://localhost:8080/easyshop";
 //DI.baseURL = "http://10.24.47.52:8080/easyshop";
 
 // 查询类目
@@ -16,6 +16,8 @@ DI.getBrandByCatalogId = DI.baseURL+"/catalog/getBrandByCatalogId";
 DI.getSupplierByBrandId = DI.baseURL+"/catalog/getSupplierByBrandId";
 // 新增商品
 DI.addProductByAll = DI.baseURL+"/product/addProductByAll";
+// 编辑商品
+DI.updateProductByAll = DI.baseURL+"/product/updateProductByAll";
 // 查询所有订单
 DI.queryOrderList = DI.baseURL+"/admin/order/queryOrderList";
 // 设置上架下架
@@ -38,6 +40,8 @@ DI.queryActivityProductList = DI.baseURL+"/admin/activity/queryActivityProductLi
 DI.saveActivity = DI.baseURL+"/admin/activity/saveActivity";
 // 删除对应的限时活动
 DI.delActivity = DI.baseURL+"/admin/activity/delActivity";
+// 查询活动商品属性
+DI.queryActivityProductType = DI.baseURL+"/admin/activity/queryActivityProductType";
 // 专场活动获取列表
 DI.queryActivtySpecialtyList = DI.baseURL+"/admin/activity/queryActivtySpecialtyList";
 // 专场活动保存

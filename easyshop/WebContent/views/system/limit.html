@@ -145,28 +145,28 @@
                             <p class="title">设置</p>
                             <div class="container">
                                 <div class="u-form">
-                                    <div>
+                                    <div class="stripe" ms-repeat="setting.producttypes">
                                         <div class="column">
                                             <label>原洋流价：</label>
-                                            <p class="cnt-box word">000</p>
+                                            <p class="cnt-box word">{{el.originPrice}}</p>
                                             <div class="cnt-box">
                                                 <p class="split">元</p>
                                             </div>
                                         </div>
                                         <div class="column">
                                             <label>抢购价：</label>
-                                            <input class="u-ipt" type="text" placeholder="" maxlength="12">
+                                            <input class="u-ipt" type="text" placeholder="" ms-duplex="el.price" />
                                             <div class="cnt-box">
                                                 <p class="split">元</p>
                                             </div>
                                         </div>
                                         <div class="column">
                                             <label>库存：</label>
-                                            <p class="cnt-box word">000</p>                               
+                                            <p class="cnt-box word">{{el.storeCount}}</p>                               
                                         </div>
                                         <div class="column">
                                             <label>参加活动：</label>
-                                            <input class="u-ipt" type="text" placeholder="" maxlength="12">
+                                            <input class="u-ipt" type="text" placeholder="" ms-duplex="el.num" />
                                             <div class="cnt-box">
                                                 <p class="split">件</p>
                                             </div>
@@ -183,7 +183,7 @@
                                 </div>
                             </div>
                             <div class="btn-box">
-                                <button class="u-btn" type="button">保存</button>
+                                <button class="u-btn" type="button" ms-click="operate.save">保存</button>
                                 <button class="u-btn orange" type="button" ms-click="popup.settingClose">取消</button>
                             </div>
                         </div>
@@ -246,25 +246,52 @@
                     },
                     join: function(el){
                         limitCtrl.popup.setting = true;
-                    },
-                    save: function(){
                         $.ajax({
                             type: "post",
-                            url: DI.saveActivity,
+                            url: DI.queryActivityProductType,
                             data: {
-                                productId: "",
-                                price: "",
-                                num: "",
-                                beginTime: limitCtrl.setting.beginTime,
-                                endTime: limitCtrl.setting.endTime
+                                productId: el.productId
                             },
                             dataType: "json",
                             success: function(data){
+                                for(var i = 0; i<data.length; i++){
+                                    data[i].price = 0;
+                                    data[i].num = 0;
+                                }
+                                limitCtrl.setting.producttypes = data;
+                            }
+                        });
+                    },
+                    save: function(){
+                        var vdata = [],
+                            opt = {};
+                        for(var i = 0; i<limitCtrl.setting.producttypes.length; i++){
+                            opt.productId = limitCtrl.setting.producttypes[i].productId;
+                            opt.productTypeId = limitCtrl.setting.producttypes[i].productTypeId;
+                            opt.price = limitCtrl.setting.producttypes[i].price;
+                            opt.num = limitCtrl.setting.producttypes[i].num;
+                            opt.beginTime = limitCtrl.setting.beginTime;
+                            opt.endTime = limitCtrl.setting.endTime;
+                            
+                            vdata.push(opt);
+                            opt = {};
+                        }
+                        $.ajax({
+                            type: "post",
+                            url: DI.saveActivity,
+                            dataType: "json",
+                            data: {
+                            	productId:[1,2],
+                            	activityproducts:vdata
+                            },
+                            success: function(data){
+                                console.log(data)
                             }
                         });
                     }
                 },
                 setting: {
+                    producttypes: [],
                     beginTime: "",
                     endTime: ""
                 },

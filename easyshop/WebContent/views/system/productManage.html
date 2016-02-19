@@ -36,8 +36,8 @@
                         <label>状态：</label>
                         <select class="u-select" ms-duplex="param.status" data-duplex-changed="statusChange"> 
                             <option value="">全部</option>
-                            <option value="0">上架</option>
-                            <option value="1">下架</option>
+                            <option value="true">上架</option>
+                            <option value="false">下架</option>
                         </select>
                     </div>
                 </div>
@@ -239,27 +239,23 @@
                     status: "",
                     allCatalog: [],
                     search: function(){
-                        $.ajax({
-                            type: "post",
-                            url: DI.queryAllProducts,
-                            data: {
+                        var param = {
                                 productId: productCtrl.param.productId,
                                 name: productCtrl.param.name,
                                 catalogId3: productCtrl.param.catalogId3,
-                                status: productCtrl.param.status,
-                            },
+                                page: 1,
+                                rows: 10
+                            };
+                        if(productCtrl.param.status != ""){
+                            param.status = productCtrl.param.status;
+                        }
+                        $.ajax({
+                            type: "post",
+                            url: DI.queryAllProducts,
+                            data: param,
                             dataType: "json",
                             success: function(data){
-                                var allCatalog = [];
-                                for(var i = 0; i < data.items.length; i++){
-                                    if(data.items[i].subCatalogs.length > 0){
-                                        for(var j = 0; j < data.items[i].subCatalogs.length; j++){
-                                            $.merge(allCatalog, data.items[i].subCatalogs[j].subCatalogs);
-                                        }
-                                    }
-                                }
-                                productCtrl.param.allCatalog = allCatalog;
-                                productCtrl.catalog.first = data.items;
+                                $("#dg").datagrid("loadData", data.rows);
                             },
                             error: function(err){
                                 console.log(err);
@@ -455,7 +451,7 @@
                                 storeCount: "",
                                 productTypeId: 0,
                                 sellCount: 0,
-                                limitActivityCount: 0,
+                                limitActivityLeftCount: 0,
                                 specialPrice: 0
                             });
                         }
@@ -513,7 +509,7 @@
                             detailImg = [],
                             productTypeId = [],
                             sellCount = [],
-                            limitActivityCount = [],
+                            limitActivityLeftCount = [],
                             specialPrice= [],
                             param = null,
                             attribute = null;
@@ -528,7 +524,7 @@
                             storeCount.push(attribute.storeCount);
                             productTypeId.push(attribute.productTypeId);
                             sellCount.push(attribute.sellCount);
-                            limitActivityCount.push(attribute.limitActivityCount);
+                            limitActivityLeftCount.push(attribute.limitActivityLeftCount);
                             specialPrice.push(attribute.specialPrice);
                         }
                         
@@ -557,16 +553,22 @@
                             topImg: topImg.join("@"),
                             detailImg: detailImg.join("@")
                         };
+                        var url = "";
                         if(productCtrl.odata.productId != ""){
+                            param.productId = productCtrl.odata.productId;
                             param.productTypeId = productTypeId.join("@");
                             param.sellCount = sellCount.join("@");
-                            param.limitActivityCount = limitActivityCount.join("@");
+                            param.limitActivityLeftCount = limitActivityLeftCount.join("@");
                             param.specialPrice = specialPrice.join("@");
+                            
+                            url = DI.updateProductByAll;
+                        }else{
+                            url = DI.updateProductByAll;
                         }
                         
                         $.ajax({
                             type: "post",
-                            url: DI.addProductByAll,
+                            url: url,
                             data: param,
                             dataType: "json",
                             success: function(data){

@@ -36,10 +36,11 @@
         		$.ajax({
            			type:"post",
            			dataType:"json",
-           			url:"../../functions/queryAllFunctions",
+           			url:"../../functions/getAllFunctions",
+           			data:{id:1},
            			success:function(data){
            				if(data.status != "fail"){
-           					allFunctions = data.rows;
+           					allFunctions = data.rows[0].subFunctions;
            				}else{
            					alert(data.msg);
            				}

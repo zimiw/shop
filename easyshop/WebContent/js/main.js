@@ -212,7 +212,7 @@ $(function(){
             keyword: "",
             keywords: [],
             search: function(){
-                location.href = "list.html?name=" + commonCtrl.header.keyword;
+                location.href = "list.html?brand=false&name=" + commonCtrl.header.keyword;
             },
             quit: function(){
                 location.href = DI.logout;
