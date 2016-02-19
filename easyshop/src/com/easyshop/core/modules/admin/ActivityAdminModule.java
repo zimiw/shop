@@ -284,22 +284,20 @@ public class ActivityAdminModule {
 	 */
 	@At
 	public Object saveActivity(HttpServletRequest request) {
-//System.out.println(productIds);
-	    
-//	    String[] productIds = request.getParameter("productId[]");
-	    
-	    System.out.println(request.getParameter("productId[]"));
+		// System.out.println(productIds);
 
-	    
-	    final ActivityProduct[] activityProducts = null;
+		// String[] productIds = request.getParameter("productId[]");
 
-//private int productId;// 商品id
-//private int productTypeId;//商品规格ID
-//private double price;// 抢购价格
-//private int num;// 参加活动数量
-//private String beginTime;// 开始时间
-//private String endTime;// 结束时间
+		System.out.println(request.getParameter("productId[]"));
 
+		final ActivityProduct[] activityProducts = null;
+
+		// private int productId;// 商品id
+		// private int productTypeId;//商品规格ID
+		// private double price;// 抢购价格
+		// private int num;// 参加活动数量
+		// private String beginTime;// 开始时间
+		// private String endTime;// 结束时间
 
 		Map<String, Object> result = new HashMap<String, Object>();
 
@@ -661,12 +659,13 @@ public class ActivityAdminModule {
 		ActivityLottery activityLottery = dao.fetch(ActivityLottery.class,
 				Cnd.where("orderId", "=", orderId));
 
-		if (activityLottery != null) {
+		if (activityLottery != null) {// 参与的删除就不参与
 			dao.clear(ActivityLottery.class, Cnd.where("orderId", "=", orderId));
 		} else {
 			activityLottery = new ActivityLottery();
 			activityLottery.setOrderId(orderId);
 			activityLottery.setIsLottery(0);
+			activityLottery.setInsertTime(new Date());
 			dao.insert(activityLottery);
 		}
 
@@ -695,8 +694,8 @@ public class ActivityAdminModule {
 
 		ActivityLotteryConf conf = new ActivityLotteryConf();
 		conf.setId(1);
-		conf.setLotteryTime(rate);
-		conf.setRate(Double.parseDouble(rate));
+		conf.setLotteryTime(lotteryTime);
+		conf.setRate(Double.parseDouble(rate) / 100);// 页面上是%，这样除以100
 
 		int count = dao.count(ActivityLotteryConf.class);
 		if (count > 0) {

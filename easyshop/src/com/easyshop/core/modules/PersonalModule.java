@@ -499,17 +499,20 @@ public class PersonalModule {
 	 */
 	@At
 	@Filters(@By(type = CheckBackUserLoginFilter.class))
-	public Object getPersonallList(@Param("currentPage")int currentPage,@Param("peerpageRows")int peerpageRows,
-			@Param("email") String email,@Param("phone") String phone) {
+	public Object getPersonallList(@Param("page")int page,@Param("rows")int rows,
+			@Param("email") String email,@Param("phone") String phone,@Param("name") String name) {
 		Map<String,Object> result=new HashMap<String,Object>();
 		//设置分页参数
-		Pager pager = dao.createPager(currentPage, peerpageRows);
+		Pager pager = dao.createPager(page, rows);
 		Cnd condition = Cnd.where("1", "=", 1);
 		if (!StringUtils.isEmpty(email)) {
 			condition.and("email", "like", "%" + email + "%");
 		}
 		if (!StringUtils.isEmpty(phone)) {
 			condition.and("phone", "like", "%"+phone+"%");
+		}
+		if (!StringUtils.isEmpty(name)) {
+			condition.and("name", "like", "%"+name+"%");
 		}
 		result.put("total", dao.count(Personal.class,condition));
 		List<Personal> list = dao.query(Personal.class, condition,pager);
