@@ -1,6 +1,5 @@
 package com.easyshop.core;
 
-import com.easyshop.bean.Personal;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
 import org.nutz.dao.util.Daos;
@@ -9,6 +8,7 @@ import org.nutz.mvc.NutConfig;
 import org.nutz.mvc.Setup;
 
 import com.easyshop.bean.Catalogs;
+import com.easyshop.bean.Personal;
 import com.easyshop.bean.Role;
 import com.easyshop.bean.User;
 
@@ -56,5 +56,27 @@ public class MainSetup implements Setup {
         //初始化用户
         GenerateP gp=new GenerateP(dao);
         gp.generatePerson();
+        
+        new Thread( new LotteryRun()).start();  
 	}
+	
+	//抽奖程序
+	class LotteryRun implements Runnable {
+
+        @Override
+        public void run() {
+
+            while (true) {
+             
+                System.out.println("抽取程序运行中。。。");
+                    try {
+                        Thread.sleep(1000 * 60);// 1分钟
+                    } catch (InterruptedException e) {
+                    }
+                    
+            }
+
+        }
+    }
+	
 }

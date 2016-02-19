@@ -10,10 +10,13 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.nutz.mvc.Mvcs;
 import org.nutz.mvc.RequestPath;
 
+import com.easyshop.core.modules.UserModule;
+import com.easyshop.core.modules.admin.OrderConstant;
 import com.easyshop.utils.AntPathMatcher;
 
 /**
@@ -34,8 +37,8 @@ public class TokenAuthFilter implements Filter {
 	public static void main(String[] args) {
 
 		AntPathMatcher antPath = new AntPathMatcher();
-		System.out.println(antPath.match("/views/**/*.html",
-				"/views/system/productManage.html"));
+		System.out.println(antPath.match("/front/personal_*.html",
+				"/front/personal_accountManage.html"));
 	}
 
 	@Override
@@ -46,14 +49,22 @@ public class TokenAuthFilter implements Filter {
 		HttpServletResponse response = (HttpServletResponse) resp;
 		RequestPath path = Mvcs.getRequestPathObject(request);
 		String matchUrl = path.getUrl();
-		System.out.println("1111" + matchUrl);
-
-		if (!"/views/login.html".equals(matchUrl)
-				&& antPath.match("/views/**/*.html", matchUrl)) {// 后台管理页面
-
-			// response.sendRedirect(request.getContextPath()
-			// + "/views/login.html");
-		}
+//		String str = matchUrl.substring(matchUrl.indexOf("."), matchUrl.length());
+		if(antPath.match("/views/login.html", matchUrl)||  antPath.match("/front/login.html", matchUrl) ){//前后台登录界面
+		    
+		}else if (antPath.match("/views/**/*.html", matchUrl)) {// 后台管理页面
+		    HttpSession session = request.getSession();
+		    if (session == null || null == session.getAttribute(UserModule.BACK_USER_ID)) {
+		      response.sendRedirect(request.getContextPath()+ "/views/login.html");
+		      return ;
+		    }
+		}else if (antPath.match("/front/personal_*.html",matchUrl)) {// 前台管理页面
+            HttpSession session = request.getSession();
+            if (session == null || null == session.getAttribute(OrderConstant.FRONT_USER_ID)) {
+                response.sendRedirect(request.getContextPath()+ "/front/login.html");
+                return ;
+            }
+        }
 
 		chain.doFilter(req, response);
 	}

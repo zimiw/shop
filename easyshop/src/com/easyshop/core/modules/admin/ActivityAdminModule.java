@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
@@ -281,14 +283,29 @@ public class ActivityAdminModule {
 	 * @return
 	 */
 	@At
-	public Object saveActivity(
-			@Param("activityproducts") final ActivityProduct[] activityProducts) {
+	public Object saveActivity(HttpServletRequest request) {
+//System.out.println(productIds);
+	    
+//	    String[] productIds = request.getParameter("productId[]");
+	    
+	    System.out.println(request.getParameter("productId[]"));
+
+	    
+	    final ActivityProduct[] activityProducts = null;
+
+//private int productId;// 商品id
+//private int productTypeId;//商品规格ID
+//private double price;// 抢购价格
+//private int num;// 参加活动数量
+//private String beginTime;// 开始时间
+//private String endTime;// 结束时间
+
 
 		Map<String, Object> result = new HashMap<String, Object>();
 
 		if (activityProducts == null || activityProducts.length == 0) {
 			result.put("status", ResultVo.STATUS_FAIL);
-			result.put("msg", "报错内容不能为空!");
+			result.put("msg", "保存内容不能为空!");
 			return result;
 		}
 

@@ -14,7 +14,6 @@ import org.nutz.mvc.annotation.Fail;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.Param;
 
-import com.alibaba.druid.sql.visitor.functions.Function;
 import com.easyshop.bean.ConnectorFR;
 import com.easyshop.bean.Functions;
 import com.easyshop.bean.Role;
@@ -35,6 +34,11 @@ public class RoleModule {
 	public Object getRoleLists(){
 		this.result=new HashMap<String,Object>();
 		List<Role> roles = dao.query(Role.class, null);
+		
+		for(Role role : roles){
+		    role.setFunctions(dao.query(Functions.class, Cnd.wrap(" id in (select functionId from connectorFR t where t.roleId ="+role.getRoleId()+" )")));
+		}
+		
 		this.result.put("total", roles.size());
 		this.result.put("rows", roles);
 		return this.result;
