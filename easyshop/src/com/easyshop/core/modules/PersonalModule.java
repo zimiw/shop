@@ -309,7 +309,7 @@ public class PersonalModule {
 					.and("password", "=", password));
 		}
 		if (person == null) {
-			return new ResultVo("fail", "该用户不存在");
+			return new ResultVo("fail", "用户名或者密码错误");
 		} else {
 			session.setAttribute("frontUserId", person.getId());
 			// httpServletResponse.sendRedirect(httpServletRequest.getContextPath()
