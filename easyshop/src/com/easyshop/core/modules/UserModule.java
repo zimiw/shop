@@ -1,12 +1,17 @@
 package com.easyshop.core.modules;
 
+import com.alibaba.druid.util.StringUtils;
 import com.easy.core.filters.CheckBackUserLoginFilter;
 import com.easyshop.bean.Personal;
 import com.easyshop.bean.Role;
 import com.easyshop.bean.User;
+import com.easyshop.vo.ResultVo;
+
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
+import org.nutz.dao.Sqls;
 import org.nutz.dao.pager.Pager;
+import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.mvc.annotation.*;
@@ -104,6 +109,24 @@ public class UserModule {
 		this.result.put("rows", users);
 		return this.result;
 	}
+	
+	@At
+	public Object getUserByName(@Param("userName")String userName,@Param("currentPage")int currentPage,@Param("peerpageRows")int peerpageRows){
+		this.result=new HashMap<String,Object>();
+		Pager pager = dao.createPager(currentPage, peerpageRows);
+		Cnd condition = Cnd.where("1", "=", 1);
+		if(!StringUtils.isEmpty(userName)){
+			condition.and("name", "like", "%" + userName + "%");
+		}
+		result.put("total", dao.count(User.class,condition));
+		List<User> users = dao.query(User.class, condition, pager);
+		for(User usertemp : users){
+			usertemp.setRole(dao.fetch(Role.class, Cnd.where("roleId","=",usertemp.getRoleId())));
+		}
+		this.result.put("rows", users);
+		return this.result;
+	}
+	
 	@At
 	public Object addUser(@Param("username")String name,@Param("password")String pwd,
 			@Param("backup")String backup, @Param("status")String status,
@@ -169,6 +192,23 @@ public class UserModule {
 		}
 	}
 
+	/**
+	 * 将密码重置为123456
+	 * @param id
+	 * @return
+	 */
+	@At
+	public ResultVo resetPassword(@Param("userId") String userId) {
+		if (StringUtils.isEmpty(userId)) {
+			return new ResultVo(ResultVo.STATUS_FAIL, "参数错误");
+		}
+		Sql sql = Sqls
+				.create("update user set pwd='123456' where userId=@id");
+		sql.params().set("id", userId);
+		dao.execute(sql);
+		return new ResultVo("修改成功");
+	}
+	
 	@At
 	@Filters
 	public void logout(HttpSession session, HttpServletResponse httpServletResponse,

@@ -104,7 +104,7 @@ public class MainSetup implements Setup {
 							TimeUtils.FORMAT14);
 					int i = diffDate(date, qsDate);
 
-					if (i <= 2 || hh.equals(conf.getLotteryTime())) {// 相差2分钟以内的都运行
+					if ((i <= 2 && i >= 0) || hh.equals(conf.getLotteryTime())) {// 相差2分钟以内的都运行
 
 						logger.debug("抽取程序开始。。。");
 

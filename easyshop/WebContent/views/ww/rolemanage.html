@@ -36,11 +36,16 @@
         		$.ajax({
            			type:"post",
            			dataType:"json",
-           			url:"../../functions/getAllFunctions",
+           			url:DI.getAllFunctions,
            			data:{id:1},
            			success:function(data){
            				if(data.status != "fail"){
            					allFunctions = data.rows[0].subFunctions;
+           					
+           					$("#roletable").datagrid({
+           						url:DI.getRoleLists
+           					});
+           				 
            				}else{
            					alert(data.msg);
            				}
@@ -50,7 +55,6 @@
         	
         	function initDatagrid(){
         		rolegrid = $("#roletable").datagrid({
-			        url:"../../role/getRoleLists",
 			        columns:[[
 			            {field:"name",title:"角色",width:150},
 			            {field:"roleDetail",title:"权限",width:650,
@@ -61,6 +65,9 @@
 	            					if(allFunctions != null && allFunctions.length > 0){
 	            						for(var i=0;i<allFunctions.length;i++){
 	            							var isChecked = false;
+	            							if(functions==undefined||functions.length==0){
+	            								return "";
+	            							}
 	            							for(var j=0;j<functions.length;j++){
 	            								//如果当前角色拥有某个操作权限，则将这个操作权限选中
 	            								if(allFunctions[i].id == functions[j].id){
@@ -87,7 +94,7 @@
 					singleSelect : true,
 					onLoadSuccess : function(data) {
 						if(data.status != "fail"){
-							rolegrid.datagrid("loaded");
+							//rolegrid.datagrid("loaded");
 						}
 					}
 			    });

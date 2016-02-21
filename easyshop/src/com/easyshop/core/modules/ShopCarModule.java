@@ -18,12 +18,16 @@ import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.mvc.annotation.At;
+import org.nutz.mvc.annotation.By;
 import org.nutz.mvc.annotation.Fail;
+import org.nutz.mvc.annotation.Filters;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.Param;
 import org.nutz.trans.Atom;
 import org.nutz.trans.Trans;
 
+import com.easy.core.filters.CheckBackUserLoginFilter;
+import com.easy.core.filters.CheckFrontUserLoginFilter;
 import com.easyshop.bean.ActivityProduct;
 import com.easyshop.bean.Address;
 import com.easyshop.bean.ConnectorOP;
@@ -34,6 +38,7 @@ import com.easyshop.bean.Product;
 import com.easyshop.bean.ProductType;
 import com.easyshop.bean.Shoppingcart;
 import com.easyshop.bean.StoreCount;
+import com.easyshop.core.modules.admin.OrderConstant;
 import com.easyshop.vo.ProductVo;
 import com.pingplusplus.Pingpp;
 import com.pingplusplus.exception.APIConnectionException;
@@ -47,11 +52,12 @@ import com.pingplusplus.model.Charge;
 @At("/shopcar")
 @Ok("json")
 @Fail("http:500")
+@Filters(@By(type = CheckFrontUserLoginFilter.class))
 public class ShopCarModule {
 	@Inject
 	protected Dao dao;
 
-	public final static String FRONT_USER_ID = "frontUserId";// 前台用户sessionId
+	public final static String FRONT_USER_ID = OrderConstant.FRONT_USER_ID;// 前台用户sessionId
 
 	Logger logger = Logger.getLogger(ShopCarModule.class);
 
@@ -260,6 +266,7 @@ public class ShopCarModule {
 	 * @return
 	 */
 	@At
+	@Filters(@By(type = CheckBackUserLoginFilter.class))
 	public Object directAddToSelected(HttpSession session,
 			@Param("productId") int productId,
 			@Param("productTypeId") int productTypeId,
@@ -890,85 +897,109 @@ public class ShopCarModule {
 
 		// 在这里进行事务的操作
 		try {
-            Trans.exec(new Atom() {
-                @Override
-                public void run() {
-                    // 插入订单信息和中间表
-                    Order o = dao.insertWith(order, "connectorOPs");
+			Trans.exec(new Atom() {
+				@Override
+				public void run() {
+					// 插入订单信息和中间表
+					Order o = dao.insertWith(order, "connectorOPs");
 
-                    dao.update(Address.class, Chain.make("isOrder", 1),
-                            Cnd.where("addressId", "=", address.getAddressId()));// 更新地址在订单中已经使用
+					dao.update(Address.class, Chain.make("isOrder", 1),
+							Cnd.where("addressId", "=", address.getAddressId()));// 更新地址在订单中已经使用
 
-                    for (Shoppingcart item : scList) {
-                        Product pro = dao.fetch(Product.class, Cnd.where("productId", "=", item.getProductId()));
-                        ProductType pt = dao.fetch(ProductType.class,
-                                Cnd.where("productTypeId", "=", item.getProductTypeId()));
-                        // 是限时活动商品 且正在活动中
-                        if (pro.getActivityType() == 1 && pro.getLimitActivityStatus() == 1) {
+					for (Shoppingcart item : scList) {
+						Product pro = dao.fetch(Product.class, Cnd.where(
+								"productId", "=", item.getProductId()));
+						ProductType pt = dao.fetch(
+								ProductType.class,
+								Cnd.where("productTypeId", "=",
+										item.getProductTypeId()));
+						// 是限时活动商品 且正在活动中
+						if (pro.getActivityType() == 1
+								&& pro.getLimitActivityStatus() == 1) {
 
-                            ActivityProduct ap = dao.fetch(ActivityProduct.class,
-                                    Cnd.where("productId", "=", pro.getProductId()).and("status", "=", 1));
+							ActivityProduct ap = dao.fetch(
+									ActivityProduct.class,
+									Cnd.where("productId", "=",
+											pro.getProductId()).and("status",
+											"=", 1));
 
-                            // 库存不足
-                            if (ap.getLeftNum() < item.getNumber() || pt.getLimitActivityLeftCount() < item.getNumber()) {
-                                result.put("status", "redirct");
-                                result.put("msg", "很抱歉，您购买的限时活动商品：" + pro.getName() + " 已被疯抢一空，下次请早哦！");
-                                logger.info("结束调用addToOrder方法，生成订单失败，失败原因为商品已售完");
-                                throw new RuntimeException("很抱歉，您购买的限时活动商品：" + pro.getName() + " 已被疯抢一空，下次请早哦！");
-                            } else {
-                                // 在这里更新库存
-                                if (ap.getLeftNum() == item.getNumber()
-                                        || pt.getLimitActivityLeftCount() == item.getNumber()) {
-                                    // 更新活动状态
-                                    pro.setLimitActivityStatus(2);
-                                }
+							// 库存不足
+							if (ap.getLeftNum() < item.getNumber()
+									|| pt.getLimitActivityLeftCount() < item
+											.getNumber()) {
+								result.put("status", "redirct");
+								result.put("msg",
+										"很抱歉，您购买的限时活动商品：" + pro.getName()
+												+ " 已被疯抢一空，下次请早哦！");
+								logger.info("结束调用addToOrder方法，生成订单失败，失败原因为商品已售完");
+								throw new RuntimeException("很抱歉，您购买的限时活动商品："
+										+ pro.getName() + " 已被疯抢一空，下次请早哦！");
+							} else {
+								// 在这里更新库存
+								if (ap.getLeftNum() == item.getNumber()
+										|| pt.getLimitActivityLeftCount() == item
+												.getNumber()) {
+									// 更新活动状态
+									pro.setLimitActivityStatus(2);
+								}
 
-                                String sqlStr = "update activityproduct set leftNum = leftNum-@num "
-                                        + " where  leftNum-@num >0 and activityId =@activityId ";
-                                Sql sql = Sqls.create(sqlStr);
-                                sql.params().set("num", item.getNumber());
-                                sql.params().set("activityId", ap.getActivityId());
-                                sql.setCallback(Sqls.callback.maps());
-                                dao.execute(sql);
-                                int result = sql.getInt();// 获取影响行数
-                                if (result == 0) {
-                                    throw new RuntimeException("很抱歉，您购买的限时活动商品：" + pro.getName() + " 已被疯抢一空，下次请早哦！");
-                                }
+								String sqlStr = "update activityproduct set leftNum = leftNum-@num "
+										+ " where  leftNum-@num >0 and activityId =@activityId ";
+								Sql sql = Sqls.create(sqlStr);
+								sql.params().set("num", item.getNumber());
+								sql.params().set("activityId",
+										ap.getActivityId());
+								sql.setCallback(Sqls.callback.maps());
+								dao.execute(sql);
+								int result = sql.getInt();// 获取影响行数
+								if (result == 0) {
+									throw new RuntimeException(
+											"很抱歉，您购买的限时活动商品：" + pro.getName()
+													+ " 已被疯抢一空，下次请早哦！");
+								}
 
-                                // dao.update(ActivityProduct.class,
-                                // Chain.make(name, value));
-                                // pro.setLimitActivityTotalLeftCount(ap
-                                // .getLeftNum() - item.getNumber());
-                                pro.setSellCount(pro.getSellCount() + item.getNumber());
-                                pt.setLimitActivityLeftCount(pt.getLimitActivityLeftCount() - item.getNumber());
-                                dao.update(pro);
-                                dao.update(pt);
-                            }
-                            // 正常流程
-                        } else {
-                            if (pt.getStoreCount() < item.getNumber()) {
-                                result.put("status", "fail");
-                                result.put("msg", "很抱歉，您购买的商品：" + pro.getName() + " 已售完，请谅解！");
-                                logger.info("结束调用addToOrder方法，生成订单失败，失败原因为商品已售完");
-                                return;
-                            } else {
-                                // 在这里更新库存
-                                pt.setStoreCount(pt.getStoreCount() - item.getNumber());
-                                pt.setSellCount(pt.getSellCount() + item.getNumber());
-                                pro.setSellCount(pro.getSellCount() + item.getNumber());
-                                dao.update(pt);
-                            }
-                        }
-                    }
-                    order.setOrderId(o.getOrderId());
-                    op.setOrderId(o.getOrderId());
-                    dao.insert(op); // 插入订单进度表
-                    // 删除购物车中
-                    for (Shoppingcart shoppingcart : scList) {
-                        dao.delete(Shoppingcart.class, shoppingcart.getShoppingcartId());
-                    }
-                }
-            });
+								// dao.update(ActivityProduct.class,
+								// Chain.make(name, value));
+								// pro.setLimitActivityTotalLeftCount(ap
+								// .getLeftNum() - item.getNumber());
+								pro.setSellCount(pro.getSellCount()
+										+ item.getNumber());
+								pt.setLimitActivityLeftCount(pt
+										.getLimitActivityLeftCount()
+										- item.getNumber());
+								dao.update(pro);
+								dao.update(pt);
+							}
+							// 正常流程
+						} else {
+							if (pt.getStoreCount() < item.getNumber()) {
+								result.put("status", "fail");
+								result.put("msg", "很抱歉，您购买的商品：" + pro.getName()
+										+ " 已售完，请谅解！");
+								logger.info("结束调用addToOrder方法，生成订单失败，失败原因为商品已售完");
+								return;
+							} else {
+								// 在这里更新库存
+								pt.setStoreCount(pt.getStoreCount()
+										- item.getNumber());
+								pt.setSellCount(pt.getSellCount()
+										+ item.getNumber());
+								pro.setSellCount(pro.getSellCount()
+										+ item.getNumber());
+								dao.update(pt);
+							}
+						}
+					}
+					order.setOrderId(o.getOrderId());
+					op.setOrderId(o.getOrderId());
+					dao.insert(op); // 插入订单进度表
+					// 删除购物车中
+					for (Shoppingcart shoppingcart : scList) {
+						dao.delete(Shoppingcart.class,
+								shoppingcart.getShoppingcartId());
+					}
+				}
+			});
 			result.put("status", "success");
 			result.put("orderId", order.getOrderId());
 			logger.info("结束调用addToOrder方法，生成订单成功");

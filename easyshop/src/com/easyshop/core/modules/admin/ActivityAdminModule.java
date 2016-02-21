@@ -223,10 +223,10 @@ public class ActivityAdminModule {
 				+ " (SELECT t.name  FROM Supplier t  WHERE a.supplierId = t.id) supplierName,  "
 				+ " (SELECT t.catalogName  FROM catalog t  WHERE a.catalogId3 = t.catalogId) catalogName, "
 				+ " b.storeCount   "
-				+ " FROM   (select productId, sum(storeCount) storeCount from producttype group by productId)  b  right outer join product a "
-				+ " on a.productId = b.productId and a.status = 1 ";
+				+ " FROM   (select productId, sum(storeCount) storeCount from producttype group by productId)  b,product a "
+				+ " where a.productId = b.productId and a.status = 1 ";
 
-		Cnd cnd = Cnd.where("1", "=", "1");
+		Cnd cnd = Cnd.where("status", "=", 1);
 		List<String> paramsList = new ArrayList<String>();
 		Map<String, Object> valMap = new HashMap<String, Object>();
 		if (!StringUtils.isEmpty(productName)) {
@@ -284,20 +284,34 @@ public class ActivityAdminModule {
 	 */
 	@At
 	public Object saveActivity(HttpServletRequest request) {
-		// System.out.println(productIds);
+		String[] productIds = request.getParameterValues("productId[]");
+		String[] productTypeIds = request.getParameterValues("productTypeId[]");
+		String[] prices = request.getParameterValues("price[]");
+		String[] nums = request.getParameterValues("num[]");
+		String[] beginTimes = request.getParameterValues("beginTime[]");
+		String[] endTimes = request.getParameterValues("endTime[]");
 
-		// String[] productIds = request.getParameter("productId[]");
+		// opt.productId = limitCtrl.setting.producttypes[i].productId;
+		// opt.productTypeId = limitCtrl.setting.producttypes[i].productTypeId;
+		// opt.price = limitCtrl.setting.producttypes[i].price;
+		// opt.num = limitCtrl.setting.producttypes[i].num;
+		// opt.beginTime = limitCtrl.setting.beginTime;
+		// opt.endTime = limitCtrl.setting.endTime;
 
-		System.out.println(request.getParameter("productId[]"));
+		ActivityProduct[] aps = new ActivityProduct[productIds.length];
+		ActivityProduct ap = null;
+		for (int i = 0; i < productIds.length; i++) {
+			ap = new ActivityProduct();
+			ap.setProductId(Integer.parseInt(productIds[i]));
+			ap.setProductTypeId(Integer.parseInt(productTypeIds[i]));
+			ap.setPrice(Double.parseDouble(prices[i]));
+			ap.setNum(Integer.parseInt(nums[i]));
+			ap.setBeginTime(beginTimes[i]);
+			ap.setEndTime(endTimes[i]);
+			aps[i] = ap;
+		}
 
-		final ActivityProduct[] activityProducts = null;
-
-		// private int productId;// 商品id
-		// private int productTypeId;//商品规格ID
-		// private double price;// 抢购价格
-		// private int num;// 参加活动数量
-		// private String beginTime;// 开始时间
-		// private String endTime;// 结束时间
+		final ActivityProduct[] activityProducts = aps;
 
 		Map<String, Object> result = new HashMap<String, Object>();
 
