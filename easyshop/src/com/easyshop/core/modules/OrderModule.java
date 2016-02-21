@@ -24,6 +24,7 @@ import org.nutz.trans.Atom;
 import org.nutz.trans.Trans;
 
 import com.easyshop.bean.ConnectorOP;
+import com.easyshop.bean.Images;
 import com.easyshop.bean.Order;
 import com.easyshop.bean.OrderProgress;
 import com.easyshop.bean.Product;
@@ -49,7 +50,8 @@ public class OrderModule {
 			@Param("pageSize") int pageSize) {
 
 		Date startTime = new Date();
-		System.out.println("-----------------开始查询时间 ：" + startTime.getTime() + "--------------------");
+		System.out.println("-----------------开始查询时间 ：" + startTime.getTime()
+				+ "--------------------");
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		String userId = String.valueOf(session.getAttribute(FRONT_USER_ID));
 		logger.info("调用getOrders方法,获取用户id为" + userId + "的第" + pageNum + "页上的"
@@ -58,7 +60,8 @@ public class OrderModule {
 			Pager pager = dao.createPager(pageNum, pageSize);
 			List<Order> list = dao.query(Order.class,
 					Cnd.where("userId", "=", Integer.parseInt(userId)), pager);
-			 pager.setRecordCount(dao.count(Order.class,Cnd.where("userId", "=", Integer.parseInt(userId))));
+			pager.setRecordCount(dao.count(Order.class,
+					Cnd.where("userId", "=", Integer.parseInt(userId))));
 			for (Order order : list) {
 				order.setProducts(getRelativeProduct(order.getOrderId()));
 			}
@@ -73,39 +76,40 @@ public class OrderModule {
 			result.put("status", "fail");
 		}
 		Date endTime = new Date();
-		System.out.println("-----------------结束查询时间 ：" + endTime.getTime() + "--------------------");
-		System.out.println("花费时间为： " + (endTime.getTime()-startTime.getTime()));
+		System.out.println("-----------------结束查询时间 ：" + endTime.getTime()
+				+ "--------------------");
+		System.out.println("花费时间为： "
+				+ (endTime.getTime() - startTime.getTime()));
 		return result;
 	}
 
 	/**
 	 * 获取订单相关的商品信息
+	 * 
 	 * @param orderId
 	 * @return
 	 */
-	private List<Product> getRelativeProduct(int orderId){
-		
+	private List<Product> getRelativeProduct(int orderId) {
+
 		List<Product> proList = new ArrayList<Product>();
 		List<ConnectorOP> clist = dao.query(ConnectorOP.class,
 				Cnd.where("orderId", "=", orderId));
 		for (ConnectorOP connectorOP : clist) {
-			Product pt = dao.fetch(
-					Product.class,
-					Cnd.where("productId", "=",
-							connectorOP.getProductId()));
+			Product pt = dao.fetch(Product.class,
+					Cnd.where("productId", "=", connectorOP.getProductId()));
 			pt.setNumber(connectorOP.getNumber());
 			pt.setSize(connectorOP.getSize());
 			pt.setColor(connectorOP.getColor());
 			pt.setPrice(connectorOP.getPrice());
-			/*List<Images> images = dao.query(
-					Images.class,
-					Cnd.where("productId", "=",
-							connectorOP.getProductId()));
-			pt.setImgs(images);*/
+			List<Images> images = dao.query(Images.class,
+					Cnd.where("productId", "=", connectorOP.getProductId())
+							.and("isTopimg", "=", true));
+			pt.setImgs(images);
 			proList.add(pt);
 		}
 		return proList;
 	}
+
 	/**
 	 * 获取某种状态的订单
 	 * 
@@ -149,27 +153,31 @@ public class OrderModule {
 	 * @return
 	 */
 	@At
-	public Object getOrderByOrderId(@Param("orderId") int orderId){
+	public Object getOrderByOrderId(@Param("orderId") int orderId) {
 		Date startTime = new Date();
-		System.out.println("-----------------开始查询时间 ：" + startTime.getTime() + "--------------------");
+		System.out.println("-----------------开始查询时间 ：" + startTime.getTime()
+				+ "--------------------");
 		logger.info("开始调用getOrderByOrderId方法，获取订单id为：" + orderId + "的订单基本字段");
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		Order order = null;
 		try {
-			order = dao.fetch(Order.class,
-					Cnd.where("orderId", "=", orderId));
+			order = dao.fetch(Order.class, Cnd.where("orderId", "=", orderId));
 			result.put("data", order);
-			logger.info("成功调用getOrderByOrderId方法，获取订单id为：" + orderId + "的订单基本字段");
+			logger.info("成功调用getOrderByOrderId方法，获取订单id为：" + orderId
+					+ "的订单基本字段");
 		} catch (Exception e) {
 			result.put("status", "fail");
-			logger.error("调用getOrderByOrderId方法，获取订单id为：" + orderId + "的订单基本字段出错",e);
+			logger.error("调用getOrderByOrderId方法，获取订单id为：" + orderId
+					+ "的订单基本字段出错", e);
 		}
 		Date endTime = new Date();
-		System.out.println("-----------------结束查询时间 ：" + endTime.getTime() + "--------------------");
-		System.out.println("花费时间为： " + (endTime.getTime()-startTime.getTime()));
+		System.out.println("-----------------结束查询时间 ：" + endTime.getTime()
+				+ "--------------------");
+		System.out.println("花费时间为： "
+				+ (endTime.getTime() - startTime.getTime()));
 		return result;
 	}
-	
+
 	/**
 	 * 获取订单详情
 	 * 
@@ -183,7 +191,8 @@ public class OrderModule {
 
 		logger.info("调用getOrderDetail方法，获取订单id为：" + orderId + "的订单详情");
 		Date startTime = new Date();
-		System.out.println("-----------------开始查询时间 ：" + startTime.getTime() + "--------------------");
+		System.out.println("-----------------开始查询时间 ：" + startTime.getTime()
+				+ "--------------------");
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		try {
 			Order order = dao.fetch(Order.class,
@@ -200,8 +209,10 @@ public class OrderModule {
 			result.put("status", "fail");
 		}
 		Date endTime = new Date();
-		System.out.println("-----------------结束查询时间 ：" + endTime.getTime() + "--------------------");
-		System.out.println("花费时间为： " + (endTime.getTime()-startTime.getTime()));
+		System.out.println("-----------------结束查询时间 ：" + endTime.getTime()
+				+ "--------------------");
+		System.out.println("花费时间为： "
+				+ (endTime.getTime() - startTime.getTime()));
 		return result;
 	}
 
@@ -233,9 +244,10 @@ public class OrderModule {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * 获取每一种状态的订单数
+	 * 
 	 * @param session
 	 * @return [{status: 101,count:2}]
 	 */
@@ -246,10 +258,11 @@ public class OrderModule {
 		String userId = String.valueOf(session.getAttribute(FRONT_USER_ID));
 		logger.info("调用getAllCountByStatus方法，获取每一种状态的订单总数");
 		try {
-			Sql sql = Sqls.create("select status,count(*) as count from orders where userId =@userId group by status order by status asc");
-		    sql.params().set("userId", Integer.parseInt(userId));
-		    sql.setCallback(Sqls.callback.maps());
-            dao.execute(sql);
+			Sql sql = Sqls
+					.create("select status,count(*) as count from orders where userId =@userId group by status order by status asc");
+			sql.params().set("userId", Integer.parseInt(userId));
+			sql.setCallback(Sqls.callback.maps());
+			dao.execute(sql);
 			result.put("count", sql.getResult());
 			logger.info("调用getAllCountByStatus方法，获取每一种状态的订单总数成功");
 		} catch (Exception e) {
@@ -258,8 +271,6 @@ public class OrderModule {
 		}
 		return result;
 	}
-	
-	
 
 	/**
 	 * 设置订单的进度 提交订单201， 付款成功202，商品出库203， 等待收货 204，完成 205,取消200
@@ -277,7 +288,7 @@ public class OrderModule {
 				OrderProgress.class,
 				Cnd.where("orderId", "=", orderId).and("statusCode", "=",
 						statusCode));
-		if(op==null){
+		if (op == null) {
 			op = new OrderProgress();
 			op.setOrderId(orderId);
 			op.setStatusCode(statusCode);
@@ -287,28 +298,34 @@ public class OrderModule {
 		logger.info("结束调用setOrderProgress方法，设置订单的进度为：" + statusCode + ",订单id为："
 				+ orderId + "的订单总数");
 	}
-	
+
 	/**
-	 * 取消订单 
+	 * 取消订单
+	 * 
 	 * @param session
-	 * @param orderId 
+	 * @param orderId
 	 * @return
 	 */
 	@At
-	public Object cancelOrder(HttpSession session, @Param("orderId") final int orderId){
+	public Object cancelOrder(HttpSession session,
+			@Param("orderId") final int orderId) {
 
 		logger.info("开始调用cancelOrder方法，取消订单id为：" + orderId + "的订单");
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		String userId = String.valueOf(session.getAttribute(FRONT_USER_ID));
-        final Order  order = dao.fetch(Order.class,Cnd.where("orderId","=",orderId).and("userId","=",Integer.parseInt(userId)));
-		if(order.getStatus() == 101){
+		final Order order = dao.fetch(
+				Order.class,
+				Cnd.where("orderId", "=", orderId).and("userId", "=",
+						Integer.parseInt(userId)));
+		if (order.getStatus() == 101) {
 			// 在这里进行事务的操作
 			try {
 				Trans.exec(new Atom() {
+					@Override
 					public void run() {
 						order.setStatus(100);
 						dao.update(order);
-						setOrderProgress(orderId,200);
+						setOrderProgress(orderId, 200);
 					}
 				});
 				result.put("status", "success");
@@ -321,7 +338,7 @@ public class OrderModule {
 				logger.info("结束调用cancelOrder方法，取消订单失败");
 				return result;
 			}
-		}else{
+		} else {
 			result.put("status", "fail");
 			result.put("msg", "当前订单状态不允许取消");
 			logger.info("结束调用cancelOrder方法，当前订单状态不允许取消");
