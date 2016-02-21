@@ -418,11 +418,11 @@ public class PersonalModule {
 
 		if (!StringUtils.isEmpty(personal.getPhone())) {
 			safeLevel++;
-			personal.setBindEmail(1);
+			personal.setBindPhone(1);
 		}
 		if (!StringUtils.isEmpty(personal.getEmail())) {
 			safeLevel++;
-			personal.setBindPhone(1);
+			personal.setBindEmail(1);
 		}
 		if (safeLevel < 2) {
 			personal.setSafe("低");
