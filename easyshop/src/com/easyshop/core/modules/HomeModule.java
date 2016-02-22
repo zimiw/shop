@@ -282,8 +282,12 @@ public class HomeModule {
 	public Object getLimit() {
 		Map<String, Object> result = new HashMap<String, Object>();
 
-		String sqlStr = " select a.productId, a.originPrice, a.currentPrice, b.endTime external "
-				+ "  from product a, activityproduct b where a.productId = b.productId and b.status = 1"
+		//原价 originPrice       国内参考价  currentPrice   抢购价 price 
+		String sqlStr = " select a.country, a.name productName,  a.productId, t.productTypeId, t.originPrice, t.currentPrice, b.price, b.endTime external "
+                + "  from product a, producttype t, activityproduct b "
+                + " where a.productId = b.productId "
+                + " and a.productId = t.productId "
+                + " and b.status = 1"
 				+ " order by b.beginTime, b.endTime ";
 
 		Sql sql = Sqls.create(sqlStr);
@@ -298,9 +302,9 @@ public class HomeModule {
 							.orderBy("orderId", "DESC"));
 			map.put("imgs", imgs);
 
-			ProductType pt = dao.fetch(ProductType.class,
-					Cnd.where("productId", "=", map.get("productId")));
-			map.put("specialPrice", pt.getSpecialPrice());
+//			ProductType pt = dao.fetch(ProductType.class,
+//					Cnd.where("productId", "=", map.get("productId")));
+//			map.put("specialPrice", pt.getSpecialPrice());
 
 		}
 		result.put("limit", limitPs);
@@ -316,8 +320,11 @@ public class HomeModule {
 	public Object getHotSell() {
 		Map<String, Object> result = new HashMap<String, Object>();
 
-		String sqlStr = " select a.productId, a.originPrice, a.currentPrice  "
-				+ "  from product a, activtyheat b where a.productId = b.productId  and b.type = 1  ";
+		String sqlStr = " select a.name, a.productId, a.originPrice, a.currentPrice  "
+				+ "  from product a, producttype t, activtyheat b "
+				+ " where a.productId = b.productId  "
+				+ " and a.productId= t.productId "
+				+ "and b.type = 1  ";
 		Sql sql = Sqls.create(sqlStr);
 		sql.setCallback(Sqls.callback.maps());
 		dao.execute(sql);
@@ -341,6 +348,44 @@ public class HomeModule {
 		result.put("hot", hotPs);
 		return result;
 	}
+	
+	/**
+     * 热卖商品2
+     * 
+     * @return
+     */
+    @At
+    public Object getHotSellTwo() {
+        Map<String, Object> result = new HashMap<String, Object>();
+
+        String sqlStr = " select a.name, a.productId, t.originPrice, t.currentPrice  "
+                + "  from product a, producttype t, activtyheat b "
+                + " where a.productId = b.productId"
+                + " and a.productId = b.productId "
+                + "  and b.type = 2  ";
+        Sql sql = Sqls.create(sqlStr);
+        sql.setCallback(Sqls.callback.maps());
+        dao.execute(sql);
+        List<Map> hotPs = sql.getList(Map.class);
+        for (Map map : hotPs) {
+            List<Images> imgs = dao.query(
+                    Images.class,
+                    Cnd.where("productId", "=", map.get("productId"))
+                            .and("isTopimg", "=", true)
+                            .orderBy("orderId", "DESC"));
+            map.put("imgs", imgs);
+
+            ProductType pt = dao.fetch(ProductType.class,
+                    Cnd.where("productId", "=", map.get("productId")));
+            map.put("specialPrice", pt.getSpecialPrice());
+        }
+        ArrayList<HashMap<String, Object>> hots = new ArrayList<HashMap<String, Object>>();
+        HashMap<String, Object> temp = new HashMap<String, Object>();
+        temp.put("product", hotPs);
+        hots.add(temp);
+        result.put("hot", hotPs);
+        return result;
+    }
 
 	/**
 	 * 专场活动
