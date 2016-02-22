@@ -4,7 +4,10 @@ import com.easy.core.filters.CheckBackUserLoginFilter;
 import com.easy.core.filters.CheckFrontUserLoginFilter;
 import com.easyshop.bean.*;
 import com.easyshop.core.modules.admin.OrderConstant;
-import com.easyshop.utils.*;
+import com.easyshop.utils.MailUtils;
+import com.easyshop.utils.MessageUtils;
+import com.easyshop.utils.RandomUtils;
+import com.easyshop.utils.StringUtils;
 import com.easyshop.vo.ResultVo;
 import org.apache.log4j.Logger;
 import org.nutz.dao.Cnd;
@@ -19,6 +22,7 @@ import org.nutz.mvc.Mvcs;
 import org.nutz.mvc.annotation.*;
 import org.nutz.mvc.filter.CheckSession;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -294,9 +298,9 @@ public class PersonalModule {
 	@At
 	@Filters
 	public Object login(@Param("name") String name,
-			@Param("password") String password, HttpSession session,
-			HttpServletResponse httpServletResponse,
-			HttpServletRequest httpServletRequest) throws IOException {
+			@Param("password") String password,@Param("isAutoLogin") String isAutoLogin, HttpSession session,
+			HttpServletResponse response,
+			HttpServletRequest request) throws IOException {
 		if (StringUtils.isEmpty(name) || StringUtils.isEmpty(password)) {
 			return new ResultVo("fail", "用户名或密码为空");
 		}
@@ -314,6 +318,26 @@ public class PersonalModule {
 			session.setAttribute("frontUserId", person.getId());
 			// httpServletResponse.sendRedirect(httpServletRequest.getContextPath()
 			// + "/front/home.html");
+
+            if ("true".equals(isAutoLogin)) {
+                //String host = request.getServerName();
+                Cookie cookie = new Cookie("frontUserId", String.valueOf(person.getId())); // 保存用户名到Cookie
+                //Cookie cookie = new Cookie("SESSION_LOGIN_USERNAME", name); // 保存用户名到Cookie
+                cookie.setPath("/");
+                //cookie.setDomain(host);
+                //以秒为单位 目前是两周内有效.
+                cookie.setMaxAge(2 * 7 * 24 * 60 * 60);
+                response.addCookie(cookie);
+                /*if (ParamUtils.getBooleanParameter(request, "savePassword")) {
+                    // 保存密码到Cookie，注意需要加密一下
+                    cookie = new Cookie("SESSION_LOGIN_PASSWORD", MD5.encode(u.getPassword()));
+                    cookie.setPath("/");
+                    cookie.setDomain(host);
+                    cookie.setMaxAge(99999999);
+                    response.addCookie(cookie);
+                }*/
+            }
+
 			result.put("status", "success");
 			result.put("msg", "登陆成功");
 			result.put("target", "main.html");
@@ -432,6 +456,22 @@ public class PersonalModule {
 			personal.setSafe("中");
 		}
 		return personal;
+	}
+
+	@At
+    @Filters(@By(type = CheckFrontUserLoginFilter.class))
+	public String getPersonlName() {
+		Personal personal = dao.fetch(
+				Personal.class,
+				Integer.parseInt(Mvcs.getHttpSession(false)
+						.getAttribute(OrderConstant.FRONT_USER_ID).toString()));
+
+        //首先查看是否有名字,如果没有就返回手机号
+        if (!StringUtils.isEmpty(personal.getNickname())) {
+            return personal.getNickname();
+        }
+
+        return personal.getPhone();
 	}
 
 	/**
