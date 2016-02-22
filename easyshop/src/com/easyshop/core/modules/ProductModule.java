@@ -1,11 +1,11 @@
 package com.easyshop.core.modules;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.easyshop.bean.Images;
+import com.easyshop.bean.Product;
+import com.easyshop.bean.ProductType;
+import com.easyshop.utils.ExecuteStatus;
+import com.easyshop.utils.StringUtils;
+import com.easyshop.vo.ResultVo;
 import org.nutz.aop.interceptor.ioc.TransAop;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
@@ -23,12 +23,7 @@ import org.nutz.mvc.annotation.Param;
 import org.nutz.trans.Atom;
 import org.nutz.trans.Trans;
 
-import com.easyshop.bean.Images;
-import com.easyshop.bean.Product;
-import com.easyshop.bean.ProductType;
-import com.easyshop.utils.ExecuteStatus;
-import com.easyshop.utils.StringUtils;
-import com.easyshop.vo.ResultVo;
+import java.util.*;
 
 @IocBean
 @At("/product")
@@ -353,6 +348,8 @@ public class ProductModule {
 	}
 
 	/**
+     *
+     * http://localhost:8181/easyshop/product/getAllProductInfo4Update?productId=26
 	 * 获取商品的所有信息
 	 *
 	 * 返回: json字符串 { "originPrice": 0, "currentPrice": 0, "productId": 26,
