@@ -290,6 +290,7 @@ public class ShopCarModule {
 			// 插入新的临时数据
 			if (number > 0) {
 				Shoppingcart newSp = new Shoppingcart();
+				newSp.setProductTypeId(productTypeId);
 				newSp.setProductId(productId);
 				newSp.setUserId(Integer.parseInt(userId));
 				newSp.setIsSelected(1);
@@ -399,11 +400,15 @@ public class ShopCarModule {
 
 		List<Address> addresses = dao.query(Address.class,
 				Cnd.where("userId", "=", userId).and("status", "=", 1));
-		for(Address item : addresses){
-			Province province = dao.fetch(Province.class, Cnd.where("code","=",item.getProvince()));
-			City city = dao.fetch(City.class,Cnd.where("code","=",item.getCity()));
-			Area area = dao.fetch(Area.class,Cnd.where("code","=", item.getDistrict()));
-			item.setAddressStr(province.getName()+city.getName()+area.getName());
+		for (Address item : addresses) {
+			Province province = dao.fetch(Province.class,
+					Cnd.where("code", "=", item.getProvince()));
+			City city = dao.fetch(City.class,
+					Cnd.where("code", "=", item.getCity()));
+			Area area = dao.fetch(Area.class,
+					Cnd.where("code", "=", item.getDistrict()));
+			item.setAddressStr(province.getName() + city.getName()
+					+ area.getName());
 		}
 		result.put("data", addresses);
 		Date endTime = new Date();
