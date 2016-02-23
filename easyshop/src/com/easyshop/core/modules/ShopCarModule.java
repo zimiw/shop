@@ -30,12 +30,15 @@ import com.easy.core.filters.CheckBackUserLoginFilter;
 import com.easy.core.filters.CheckFrontUserLoginFilter;
 import com.easyshop.bean.ActivityProduct;
 import com.easyshop.bean.Address;
+import com.easyshop.bean.Area;
+import com.easyshop.bean.City;
 import com.easyshop.bean.ConnectorOP;
 import com.easyshop.bean.Images;
 import com.easyshop.bean.Order;
 import com.easyshop.bean.OrderProgress;
 import com.easyshop.bean.Product;
 import com.easyshop.bean.ProductType;
+import com.easyshop.bean.Province;
 import com.easyshop.bean.Shoppingcart;
 import com.easyshop.bean.StoreCount;
 import com.easyshop.core.modules.admin.OrderConstant;
@@ -397,6 +400,12 @@ public class ShopCarModule {
 
 		List<Address> addresses = dao.query(Address.class,
 				Cnd.where("userId", "=", userId).and("status", "=", 1));
+		for(Address item : addresses){
+			Province province = dao.fetch(Province.class, Cnd.where("code","=",item.getProvince()));
+			City city = dao.fetch(City.class,Cnd.where("code","=",item.getCity()));
+			Area area = dao.fetch(Area.class,Cnd.where("code","=", item.getDistrict()));
+			item.setAddressStr(province.getName()+city.getName()+area.getName());
+		}
 		result.put("data", addresses);
 		Date endTime = new Date();
 		System.out.println("-----------------结束查询时间 ：" + startTime.getTime()
