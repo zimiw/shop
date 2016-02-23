@@ -26,7 +26,6 @@ import org.nutz.mvc.annotation.Param;
 import org.nutz.trans.Atom;
 import org.nutz.trans.Trans;
 
-import com.easy.core.filters.CheckBackUserLoginFilter;
 import com.easy.core.filters.CheckFrontUserLoginFilter;
 import com.easyshop.bean.ActivityProduct;
 import com.easyshop.bean.Address;
@@ -135,6 +134,7 @@ public class ShopCarModule {
 			dao.update(sc);
 			result.put("number", sc.getNumber());
 		}
+		result.put("status", "sucess");
 		return result;
 	}
 
@@ -269,7 +269,6 @@ public class ShopCarModule {
 	 * @return
 	 */
 	@At
-	@Filters(@By(type = CheckBackUserLoginFilter.class))
 	public Object directAddToSelected(HttpSession session,
 			@Param("productId") int productId,
 			@Param("productTypeId") int productTypeId,

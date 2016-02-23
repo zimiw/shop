@@ -320,10 +320,9 @@ public class HomeModule {
 	public Object getHotSell() {
 		Map<String, Object> result = new HashMap<String, Object>();
 
-		String sqlStr = " select a.name, a.productId, a.originPrice, a.currentPrice  "
-				+ "  from product a, producttype t, activtyheat b "
+		String sqlStr = " select a.name, a.productId, a.country  "
+				+ "  from product a, activtyheat b "
 				+ " where a.productId = b.productId  "
-				+ " and a.productId= t.productId "
 				+ "and b.type = 1  ";
 		Sql sql = Sqls.create(sqlStr);
 		sql.setCallback(Sqls.callback.maps());
@@ -338,8 +337,9 @@ public class HomeModule {
 			map.put("imgs", imgs);
 
 			ProductType pt = dao.fetch(ProductType.class,
-					Cnd.where("productId", "=", map.get("productId")));
-			map.put("specialPrice", pt.getSpecialPrice());
+                    Cnd.where("productId", "=", map.get("productId")));
+            map.put("originPrice", pt.getOriginPrice());
+            map.put("currentPrice", pt.getCurrentPrice());
 		}
 		ArrayList<HashMap<String, Object>> hots = new ArrayList<HashMap<String, Object>>();
 		HashMap<String, Object> temp = new HashMap<String, Object>();
@@ -358,10 +358,9 @@ public class HomeModule {
     public Object getHotSellTwo() {
         Map<String, Object> result = new HashMap<String, Object>();
 
-        String sqlStr = " select a.name, a.productId, t.originPrice, t.currentPrice  "
-                + "  from product a, producttype t, activtyheat b "
+        String sqlStr = " select a.name, a.productId, a.country  "
+                + "  from product a,  activtyheat b "
                 + " where a.productId = b.productId"
-                + " and a.productId = b.productId "
                 + "  and b.type = 2  ";
         Sql sql = Sqls.create(sqlStr);
         sql.setCallback(Sqls.callback.maps());
@@ -374,10 +373,11 @@ public class HomeModule {
                             .and("isTopimg", "=", true)
                             .orderBy("orderId", "DESC"));
             map.put("imgs", imgs);
-
+            
             ProductType pt = dao.fetch(ProductType.class,
                     Cnd.where("productId", "=", map.get("productId")));
-            map.put("specialPrice", pt.getSpecialPrice());
+            map.put("originPrice", pt.getOriginPrice());
+            map.put("currentPrice", pt.getCurrentPrice());
         }
         ArrayList<HashMap<String, Object>> hots = new ArrayList<HashMap<String, Object>>();
         HashMap<String, Object> temp = new HashMap<String, Object>();
