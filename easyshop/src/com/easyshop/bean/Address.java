@@ -35,6 +35,8 @@ public class Address {
     private int status;// 是否有效，1有效，0无效， 用户删除地址先判断订单中有没有使用，如何使用就不删除只是修改状态为0
     @Column
     private int isOrder;// 1是，0未使用 支付完成订单中是否已经使用
+    
+    private String addressStr; //包含省市区的地址字符串
 
     // 手机号码处理
     public String getCellPhoneNew() {
@@ -147,6 +149,13 @@ public class Address {
 
     public void setIsOrder(int isOrder) {
         this.isOrder = isOrder;
+    }
+
+    public void setAddressStr(String addressStr){
+        this.addressStr = addressStr;
+    }
+    public String getAddressStr(){
+        return addressStr;
     }
 
     @Override
