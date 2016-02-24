@@ -793,6 +793,7 @@ public class PersonalModule {
 	 * @return
 	 */
 	@At
+	@Filters
 	public ResultVo checkIsUnusedEmail(@Param("email") String email) {
 		if (StringUtils.isEmpty(email)) {
 			return new ResultVo(ResultVo.STATUS_FAIL, "参数错误");
