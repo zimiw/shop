@@ -80,6 +80,7 @@
     margin: 10px 0 19px;
     font-size: 14px;
     color: #404040;
+    overflow: hidden;
 }
 .list-item .info-box {
     padding: 0 3px;

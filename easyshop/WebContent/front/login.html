@@ -235,7 +235,29 @@
                             dataType: "json",
                             success: function(data){
                             	if(data.status == "success"){
-                            		window.location.href = "home.html";
+                            		$.ajax({
+                                        type: "post",
+                                        url: DI.login,
+                                        data: {
+                                            "name": loginCtrl.registName,
+                                            "password": loginCtrl.registPwd
+                                        },
+                                        dataType: "json",
+                                        success: function(data){
+                                            if(data.status=="success"){
+                                                if(loginCtrl.autoFlag){
+                                                    localStorage.setItem("loginDate", new Date())
+                                                }
+                                                window.location.href = "home.html";
+                                            }else{
+                                                alert(data.msg);
+                                            }
+                                            
+                                        },
+                                        error: function(err){
+                                            console.log(err);
+                                        }
+                                    });
                             	}else{
                             		alert("注册失败，请您重新注册");
                             	}

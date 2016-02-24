@@ -50,22 +50,20 @@
                                     <div class="column">
                                         <div class="cell">
                                             <label>商品编码：</label>
-                                            <input class="u-ipt" ms-duplex="param.code">
+                                            <input class="u-ipt" ms-duplex="param.productId">
                                         </div>
-                                    </div>
-                                    <div class="column">
                                         <div class="cell">
                                             <label>商品名称：</label>
-                                            <input class="u-ipt" ms-duplex="param.name">
+                                            <input class="u-ipt" ms-duplex="param.productName">
                                         </div>
                                     </div>
                                     <div class="column">
                                         <div class="cell">
                                             <label>商品状态：</label>
                                             <select ms-duplex="param.status" data-duplex-changed="statusChange">
-                                                <option value="0">全部</option>
-                                                <option value="1">已参加</option>
-                                                <option value="2">未参加</option>
+                                                <option value="1">全部</option>
+                                                <option value="2">已参加</option>
+                                                <option value="3">未参加</option>
                                             </select>
                                         </div>
                                     </div>
@@ -123,11 +121,15 @@
             var hotCtrl = avalon.define({
                 $id: "hot",
                 param: {
-                    code: "",
-                    name: "",
-                    status: "0",
+                    productId: "",
+                    productName: "",
+                    status: "1",
                     search: function(){
-                        
+                        $("#dg-product").datagrid("load", {
+                            productId: hotCtrl.param.productId,
+                            productName: hotCtrl.param.productName,
+                            productName: hotCtrl.param.status                               
+                        });
                     }
                 },
                 statusChange: function(val){
@@ -163,6 +165,7 @@
                                 if(data.status == "success"){
                                     $("#dg").datagrid("load");
                                 }
+                                PLATFORM.headTip(data.msg);
                             },
                             error: function(err){
                                 console.log(err);
@@ -181,6 +184,7 @@
                                     hotCtrl.popup.product = false;
                                     $("#dg").datagrid("load");
                                 }
+                                PLATFORM.headTip(data.msg);
                             },
                             error: function(err){
                                 console.log(err);

@@ -110,8 +110,11 @@
                         },
                         dataType: "json",
                         success: function(data){
-                            el.speId = data.speId;
-                            el.new = false;
+                            if(data.status == "success"){
+                                el.speId = data.speId;
+                                el.new = false;
+                            }
+                            PLATFORM.headTip(data.msg);
                         }
                     });
                 },
@@ -127,6 +130,7 @@
                             if(data.status == "success"){
                                 activityCtrl.activities.remove(el);
                             }
+                            PLATFORM.headTip(data.msg);
                         }
                     });
                 }
@@ -145,12 +149,19 @@
                                 data[i].new = false;
                                 activityCtrl.activities.push(data[i]);
                             }
+                            var timer = setTimeout(function(){
+                                for(var j=0; j<activityCtrl.activities.length; j++){
+                                    PLATFORM.timepickerRange("#timepickerStart"+j, "#timepickerEnd"+j);
+                                }
+                                clearTimeout(timer);
+                                timer = null;
+                            }, 0);
+                        }else{
+                            PLATFORM.imgUpload("uplpad0", "btn0", "btn-upload0", true);
+                            PLATFORM.timepickerRange("#timepickerStart0", "#timepickerEnd0");
                         }
                     }
                 });
-                
-                PLATFORM.imgUpload("uplpad0", "btn0", "btn-upload0", true);
-                PLATFORM.timepickerRange("#timepickerStart0", "#timepickerEnd0");
             });
         </script>
 	</body>

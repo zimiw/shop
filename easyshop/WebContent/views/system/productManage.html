@@ -72,7 +72,7 @@
                             return rowData.status ? '上架' : '下架';
                         }">状态</th>
                         <th data-options="field:'totalleftcount', width:100, align:'center'">库存</th>
-                        <th data-options="field:'specialprice', width:100, align:'center'">售价</th>
+                        <th data-options="field:'minprice', width:100, align:'center'">售价</th>
                         <th data-options="field:'operate', width:100, align:'center', formatter: function(value,rowData,index){
                             if(rowData.status){
                                 return '&lt;a href=&quot;javascript:;&quot; class=&quot;btn-operate view&quot;&gt;查看&lt;a&gt;&lt;a href=&quot;javascript:;&quot; class=&quot;btn-operate updown&quot;&gt;下架&lt;a&gt;';
@@ -171,7 +171,14 @@
                     <label>主图：</label>
                     <div class="cnt-box">
                         <div class="u-uploadImg" id="uplpad-main">
-                            <div class="img-box"></div>
+                            <div class="img-box">
+                                <div class="img-opt" ms-repeat="topImgs">
+                                    <div class="img-container">
+                                        <a class="del" ms-visible="odata.edit">×</a>
+                                        <img ms-attr-src="el.imgsource" />
+                                    </div>
+                                </div>
+                            </div>
                             <div class="info-box">
                                 <p class="name"></p>
                                 <p class="process"></p>
@@ -187,7 +194,14 @@
                     <label>商品详情：</label>
                     <div class="cnt-box">
                         <div class="u-uploadImg" id="uplpad-detail">
-                            <div class="img-box"></div>
+                            <div class="img-box">
+                                <div class="img-opt" ms-repeat="detailImgs">
+                                    <div class="img-container">
+                                        <a class="del" ms-visible="odata.edit">×</a>
+                                        <img ms-attr-src="el.imgsource" />
+                                    </div>
+                                </div>
+                            </div>
                             <div class="info-box">
                                 <p class="name"></p>
                                 <p class="process"></p>
@@ -203,7 +217,7 @@
                     <label></label>
                     <div class="btn-box">
                         <button class="u-btn" type="button" ms-click="operate.save">保存</button>
-                        <button class="u-btn orange" type="button">上架</button>
+                        <!--<button class="u-btn orange" type="button">上架</button>-->
                     </div>
                 </div>
             </div>
@@ -242,25 +256,12 @@
                         var param = {
                                 productId: productCtrl.param.productId,
                                 name: productCtrl.param.name,
-                                catalogId3: productCtrl.param.catalogId3,
-                                page: 1,
-                                rows: 10
+                                catalogId3: productCtrl.param.catalogId3
                             };
                         if(productCtrl.param.status != ""){
                             param.status = productCtrl.param.status;
                         }
-                        $.ajax({
-                            type: "post",
-                            url: DI.queryAllProducts,
-                            data: param,
-                            dataType: "json",
-                            success: function(data){
-                                $("#dg").datagrid("loadData", data.rows);
-                            },
-                            error: function(err){
-                                console.log(err);
-                            }
-                        });
+                        $("#dg").datagrid("load", param);
                     }
                 },
                 catalogChange: function(val){
@@ -462,6 +463,8 @@
                         }
                     }
                 },
+                topImgs: [],
+                detailImgs: [],
                 operate: {
                     add: function(){
                         productCtrl.edit = true;
@@ -483,6 +486,8 @@
                             currentPrice: "",
                             storeCount: ""
                         }];
+                        productCtrl.topImgs = [];
+                        productCtrl.detailImgs = [];
                     },
                     edit: function(el){
                         productCtrl.edit = true;
@@ -497,6 +502,22 @@
                         productCtrl.odata.name = el.name;
                         productCtrl.odata.unit = el.unit;
                         productCtrl.odata.attributes = el.producttypes;
+                        $.ajax({
+                            type: "post",
+                            url: DI.getAllProductInfo4Update,
+                            data: {
+                                productId: el.productid
+                            },
+                            dataType: "json",
+                            success: function(data){
+                                productCtrl.topImgs = data.topImgs;
+                                productCtrl.detailImgs = data.detailImgs;
+                            },
+                            error: function(err){
+                                console.log(err);
+                            }
+                        });
+                        
                     },
                     save: function(){
                         var size = [],
@@ -563,7 +584,7 @@
                             
                             url = DI.updateProductByAll;
                         }else{
-                            url = DI.updateProductByAll;
+                            url = DI.addProductByAll;
                         }
                         
                         $.ajax({
@@ -575,9 +596,9 @@
                                 if(data.status = "success"){
                                     productCtrl.edit = false;
                                     $("#dg").datagrid("load");
-                                    PLATFORM.headTip("添加商品成功");
+                                    PLATFORM.headTip("保存成功");
                                 }else{
-                                    PLATFORM.headTip("添加商品失败");
+                                    PLATFORM.headTip("保存失败");
                                 }
                             },
                             error: function(err){
@@ -597,9 +618,9 @@
                             success: function(data){
                                 if(data.status = "success"){
                                     $("#dg").datagrid("load");
-                                    PLATFORM.headTip("变更成功");
+                                    PLATFORM.headTip("操作成功");
                                 }else{
-                                    PLATFORM.headTip("变更失败");
+                                    PLATFORM.headTip("操作失败");
                                 }
                             },
                             error: function(err){
@@ -617,6 +638,7 @@
             $(function(){
                 PLATFORM.imgUpload("uplpad-main", "btn-main", "btn-uploadMain");
                 PLATFORM.imgUpload("uplpad-detail", "btn-detail", "btn-uploadDetail");
+                PLATFORM.delImg();
                 
                 $.ajax({
                     type: "post",

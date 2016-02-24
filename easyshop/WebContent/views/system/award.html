@@ -115,8 +115,10 @@
                             },
                             dataType: "json",
                             success: function(data){
-                                PLATFORM.headTip(data.message);
-                                $("#dg").datagrid("load");
+                                if(data.status == "success"){
+                                    $("#dg").datagrid("load");
+                                }
+                                PLATFORM.headTip(data.msg);
                             }
                         });
                     },
@@ -130,7 +132,9 @@
                             },
                             dataType: "json",
                             success: function(data){
-                                awardCtrl.popup.setting = false;
+                                if(data.status == "success"){
+                                    awardCtrl.popup.setting = false;
+                                }
                                 PLATFORM.headTip(data.msg);
                             }
                         });

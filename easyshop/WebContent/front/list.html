@@ -53,11 +53,11 @@
                                     <p class="name">{{el.name}}</p>
                                     <div class="info-box">
                                         <div class="yl-area">
-                                            <img ms-attr-src="el.flag" />
-                                            <span>{{el.area}}</span>
+                                            <em ms-class="{{el.country}}"></em>
+                                            <span>{{el.country | area}}</span>
                                         </div>
                                         <span class="price">¥{{el.price}}</span>
-                                        <del class="reference">¥{{el.reference}}</del>
+                                        <del class="reference">¥{{el.originPrice}}</del>
                                     </div>
                                 </a>
                             </td>
@@ -119,7 +119,7 @@
                         type: "post",
                         url: DI.queryBrandByCatalogId,
                         data: {
-                            catalogId: catalogId
+                            catalogId: param.catalogId
                         },
                         dataType: "json",
                         success: function(data){

@@ -17,3 +17,5 @@ DI.salesreport = DI.baseURL +"/admin/report/salesreport";
 DI.luckstatistic = DI.baseURL +"/admin/report/luckstatistic";
 DI.transportstatistic = DI.baseURL +"/admin/report/transportstatistic";
 
+DI.getRoleLists = DI.baseURL +"/role/getRoleLists"; 
+DI.getAllFunctions = DI.baseURL +"/functions/getAllFunctions";  

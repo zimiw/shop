@@ -16,6 +16,7 @@ DI.getLimit = DI.baseURL+"/home/getLimit";
 DI.getSpecial = DI.baseURL+"/home/getSpecial";
 DI.getAdviser = DI.baseURL+"/home/getAdviser";
 DI.getHotSell = DI.baseURL+"/home/getHotSell";
+DI.getHotSellTwo = DI.baseURL+"/home/getHotSellTwo";
 DI.getWin = DI.baseURL+"/home/getWin";
 DI.getLogedUser = DI.baseURL+"/home/getCurrentUser";
 DI.logout = DI.baseURL+"/personal/logout";
@@ -81,6 +82,9 @@ DI.getReturnDetail = DI.baseURL+"/personalorder/getReturnDetail";
 
 // 获取热词
 DI.getHotdictByStatus = DI.baseURL+"/hotdict/getHotdictByStatus";
+// 获取省市区
+DI.getCitys = DI.baseURL + "/address/getCitys";
+DI.getAreas = DI.baseURL + "/address/getAreas";
 
 
 

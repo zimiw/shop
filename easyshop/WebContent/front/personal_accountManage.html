@@ -6,6 +6,7 @@
         <title>洋流网</title>
 
         <link rel="stylesheet" href="../css/front/reset.css" />
+        <link rel="stylesheet" href="../js/ui/jquery-ui.min.css" />
         <link rel="stylesheet" href="../css/front/personal-account.css" />
     </head>
     <body ms-controller="common">
@@ -46,7 +47,7 @@
         				</div>
         				<div class="cnts">
         					<div class="cnt userinfo" ms-visible="cnt == 1">
-        						<form class="yl-form five" id="form_userinfo" enctype="multipart/form-data">
+        						<div class="yl-form five">
 	        						<div class="item">
 		        						<label>用户名：</label>
 		        						<p class="form-ctt" name="id">{{userinfo.id}}</p>
@@ -54,20 +55,28 @@
 		        					<div class="item">
 		        						<label>头像：</label>
 		        						<div class="form-cnt">
-		        						    <div class="yl-uploadimg">
-                                                <img src="../img/defaultHead.jpg">
-                                                <p class="as-btn">点击上传</p>
-                                                <input type="file" name="img">
+                                            <div class="u-uploadImg" id="uplpad1">
+                                                <div class="img-box">
+                                                    <img ms-attr-src="userinfo.img" />
+                                                </div>
+                                                <div class="info-box">
+                                                    <p class="name"></p>
+                                                    <p class="process"></p>
+                                                </div>
+                                                <div class="btn-box">
+                                                    <button class="u-btn small gray" id="btn1">选择文件</button>
+                                                    <button class="u-btn small orange" id="btn-upload1">上传</button>
+                                                </div>
                                             </div>
 		        						</div>
 		        					</div>
 		        					<div class="item">
 		        						<label>真实姓名：</label>
-		        						<input class="ipt-form" ms-attr-value="userinfo.name" name="name" />
+		        						<input class="ipt-form" ms-duplex="userinfo.name" name="name" />
 		        					</div>
 		        					<div class="item">
 		        						<label>昵称：</label>
-		        						<input class="ipt-form" ms-attr-value="userinfo.nickname" name="nickname" />
+		        						<input class="ipt-form" ms-duplex="userinfo.nickName" name="nickname" />
 		        					</div>
 		        					<div class="item">
 		        						<label>性别：</label>
@@ -89,22 +98,26 @@
 		        					</div>
 		        					<div class="item">
 		        						<label>出生日期：</label>
-		        						<input class="ipt-form" ms-attr-value="userinfo.birth" name="birth" />
+		        						<input class="ipt-form" ms-duplex="userinfo.birth" name="birth" id="birth" />
 		        					</div>
 		        					<div class="item">
 		        						<label>居住地址：</label>
 		        						<div class="form-cnt">
-    		        						<input class="ipt-form area" placeholder="省/直辖市" ms-duplex="addrInfo.province" name="province" />
-                                            <input class="ipt-form area" placeholder="城市/地区" ms-duplex="addrInfo.city" name="city" />
-                                            <input class="ipt-form area" placeholder="区/县" ms-duplex="addrInfo.district" name="district" />
+		        						    <select class="ipt-form area" ms-duplex="userinfo.province" data-duplex-changed="provinceChange">
+                                                <option ms-repeat="address.province" ms-attr-value="el.provinceCode">{{el.name}}</option>
+                                            </select>
+		        						    <select class="ipt-form area" ms-duplex="userinfo.city" data-duplex-changed="cityChange">
+                                                <option ms-repeat="address.city" ms-attr-value="el.code">{{el.name}}</option>
+                                            </select>
+                                            <select class="ipt-form area" ms-duplex="userinfo.district" data-duplex-changed="districtChange">
+                                                <option ms-repeat="address.district" ms-attr-value="el.code">{{el.name}}</option>
+                                            </select>
 		        						</div>
 		        					</div>
 		        					<div class="item">
 		        						<label></label>
-		        						<input class="ipt-form long" placeholder="请输入详细地址" name="street" />
+		        						<input class="ipt-form long" placeholder="请输入详细地址" ms-duplex="userinfo.street" name="street" />
 		        					</div>
-	        					</form>
-	        					<div class="yl-form five">
 		        					<div class="item forBtn">
 		        						<label></label>
 		        						<button class="yl-btn middle" ms-click="submitUserinfo">保存</button>
@@ -113,17 +126,17 @@
         					</div>
         					<div class="cnt" ms-visible="cnt == 2">
         						<div class="safe-info">
-        							<div class="level" ms-class="level{{safe.level}}"></div>
+        							<div class="level" ms-class="level level{{userinfo.safe | safe}}"></div>
         							<div class="tips">
         								<p>建议您启用全部安全设置，以保障账户安全</p>
-        								<p class="last-login"><span>上次登录：</span>{{safe.city}}&nbsp;&nbsp;{{safe.lastdate}}</p>
-        								<p class="modify">非本人登录？<a href="javascript:;">修改密码</a></p>
+        								<!--<p class="last-login"><span>上次登录：</span>{{safe.city}}&nbsp;&nbsp;{{safe.lastdate}}</p>-->
+        								<!--<p class="modify">非本人登录？<a href="javascript:;">修改密码</a></p>-->
         							</div>
         							<button class="yl-btn" ms-click="reload">重新评测</button>
         						</div>
         						<div class="safe-way">
         							<div class="item">
-        								<p class="icon pwd">{{safe.passwordLevel}}</p>
+        								<p class="icon" ms-class="ok: userinfo.passwordLevel == '高'">{{userinfo.passwordLevel}}</p>
         								<p class="name">登录密码</p>
         								<p class="intro">安全性高的密码可以使账户更安全，建议您定期更换密码</p>
         								<div class="operate-box">
@@ -131,19 +144,19 @@
         								</div>
         							</div>
         							<div class="item">
-        								<p class="icon" ms-class="ok: safe.bindEmail == 1">{{safe.bindEmail | bind}}</p>
+        								<p class="icon" ms-class="ok: userinfo.bindEmail == 1">{{userinfo.bindEmail | bind}}</p>
         								<p class="name">绑定邮箱</p>
         								<p class="intro">验证后可用于邮箱找回密码、接受订单提醒等，保障您的账户更加安全</p>
-        								<div class="operate-box" ms-visible="safe.bindEmail == 0">
+        								<div class="operate-box" ms-visible="userinfo.bindEmail == 0">
         									<button class="yl-btn-normal" ms-click="bEmailFunc(1)">立即设置</button>
         								</div>
-        								<div class="operate-box" ms-visible="safe.bindEmail == 1">
+        								<div class="operate-box" ms-visible="userinfo.bindEmail == 1">
                                             <a class="link-normal" href="javascript:;" ms-click="bEmailFunc(2)">绑定解除</a>
                                             <a class="link-normal" href="javascript:;" ms-click="mEmailFunc">修改</a>
                                         </div>
         							</div>
         							<div class="item">
-        								<p class="icon ok">{{safe.bindPhone | bind}}</p>
+        								<p class="icon ok">{{userinfo.bindPhone | bind}}</p>
         								<p class="name">绑定手机</p>
         								<p class="intro">绑定后可用于手机找回密码、接收手机动态验证码等，是您的账户更加安全</p>
         								<div class="operate-box">
@@ -187,7 +200,7 @@
                                 <label>手机号码：</label>
                                 <div class="form-cnt">
                                     <input class="ipt short" ms-duplex="mPhoneNew" />
-                                    <button class="btn-code" ms-click="sendPhoneMessage(mPhoneNew)">获取短信验证码</button>
+                                    <button class="btn-code" ms-click="sendPhoneMessage">获取短信验证码</button>
                                 </div>
                             </div>
                             <div class="item">
@@ -213,7 +226,7 @@
                             <div class="item">
                                 <label>邮箱：</label>
                                 <div class="form-cnt">
-                                    <span>{{userinfo.email}}</span>
+                                    <span class="email">{{userinfo.email}}</span>
                                     <button class="btn-code" ms-click="sendEmailMessage">获取邮箱校验码</button>
                                 </div>
                             </div>
@@ -233,7 +246,7 @@
                                 <label>新邮箱：</label>
                                 <div class="form-cnt">
                                     <input class="ipt short" ms-duplex="mEmailNew" />
-                                    <button class="btn-code" ms-click="sendEmailMessage(mPhoneNew)">获取邮箱校验码</button>
+                                    <button class="btn-code" ms-click="sendEmailMessage">获取邮箱校验码</button>
                                 </div>
                             </div>
                             <div class="item">
@@ -252,14 +265,15 @@
             <div class="popup" ms-visible="bEmail">
                 <div class="popup-bg"></div>
                 <div class="popup-cnt">
-                    <p class="title">修改邮箱</p>
+                    <p class="title" ms-visible="bEmailStatus == 1">绑定邮箱</p>
+                    <p class="title" ms-visible="bEmailStatus == 2">解绑邮箱</p>
                     <a class="close" href="javascript:;" ms-click="popupClose"></a>
                     <div class="cnt">
                         <div class="yl-form six">
                             <div class="item">
                                 <label>邮箱：</label>
                                 <div class="form-cnt">
-                                    <span ms-visible="bEmailStatus == 2">{{userinfo.email}}</span>
+                                    <span class="email" ms-visible="bEmailStatus == 2">{{userinfo.email}}</span>
                                     <input class="ipt short" ms-duplex="mEmailNew" ms-visible="bEmailStatus == 1"></input>
                                     <button class="btn-code" ms-click="sendEmailMessage">获取邮箱校验码</button>
                                 </div>
@@ -305,7 +319,7 @@
                         <div class="yl-form five">
                             <div class="item">
                                 <label>登录名：</label>
-                                <p class="form-ctt">{{userinfo.id}}</p>
+                                <p class="form-ctt">{{userinfo.phone}}</p>
                             </div>
                             <div class="item">
                                 <label>新密码：</label>
@@ -341,9 +355,16 @@
 
         <script src="../js/avalon.shim.sn.js"></script>
         <script src="../js/jquery.min.js"></script>
-        <script src="../js/jquery.form.js"></script>
+        <script src="../js/ui/jquery-ui.min.js"></script>
+        <script src="../js/ui/jquery-ui-timepicker-addon.js"></script>
         <script src="../js/main.js"></script>
         <script src="../js/data-interface.js"></script>
+        <script src="../views/system/js/vendor/crypto/crypto/crypto.js"></script>
+        <script src="../views/system/js/vendor/crypto/hmac/hmac.js"></script>
+        <script src="../views/system/js/vendor/crypto/sha1/sha1.js"></script>
+        <script src="../views/system/js/vendor/base64.js"></script>
+        <script src="../views/system/js/vendor/plupload/plupload.full.min.js"></script>
+        <script src="../views/system/js/vendor/plupload/zh_CN.js"></script>
         <script>
             $(function(){
                 var accountCtrl = avalon.define({
@@ -358,21 +379,52 @@
                     	phone: "",
                     	email: "",
                     	birth: "",
-                    	province: "",
-                    	address: ""
-                    },
-                    safe: {
-                        level: "",
-                        passwordLevel: "低",
-                    	city: "",
-                    	lastdate: "",
-                    	bindEmail: 0,
-                    	bindPhone: 0
-                    },
-                    addrInfo: {
                         province: "",
                         city: "",
-                        district: ""
+                        district: "",
+                        street: ""
+                    },
+                    address: {
+                        province: Buylll.province,
+                        city: [],
+                        district: []
+                    },
+                    provinceChange: function(val){
+                        accountCtrl.userinfo.province = val;
+                        $.ajax({
+                            type: "post",
+                            url: DI.getCitys,
+                            data: {
+                                provinceCode: val
+                            },
+                            dataType: "json",
+                            success: function(data){
+                                accountCtrl.address.city = data;
+                            },
+                            error: function(err){
+                                console.log(err);
+                            }
+                        });
+                    },
+                    cityChange: function(val){
+                        accountCtrl.userinfo.city = val;
+                        $.ajax({
+                            type: "post",
+                            url: DI.getAreas,
+                            data: {
+                                cityCode: val
+                            },
+                            dataType: "json",
+                            success: function(data){
+                                accountCtrl.address.district = data;
+                            },
+                            error: function(err){
+                                console.log(err);
+                            }
+                        });
+                    },
+                    districtChange: function(val){
+                        accountCtrl.userinfo.district = val;
                     },
                     tab: function(idx){
                     	accountCtrl.cnt = idx;
@@ -381,11 +433,31 @@
                         getFullPersonlInfoById();
                     },
                     submitUserinfo: function(){
-                        $("#form_userinfo").ajaxSubmit({
+                        var img = $(".img-box img").attr("src"),
+                            data = {
+                                id: accountCtrl.userinfo.id,
+                                img: img,
+                                name: accountCtrl.userinfo.name,
+                                nickName: accountCtrl.userinfo.nickName,
+                                sex: accountCtrl.userinfo.sex,
+                                birth: accountCtrl.userinfo.birth,
+                                province: accountCtrl.userinfo.province,
+                                city: accountCtrl.userinfo.city,
+                                district: accountCtrl.userinfo.district,
+                                street: accountCtrl.userinfo.street
+                            }
+                        $.ajax({
                             type: "post",
                             url: DI.saveFullPersonlInfoById,
+                            data: data,
+                            dataType: "json",
                             success: function(data){
-                                alert(data.status);
+                                if(data.status == "success"){
+                                    accountCtrl.reload();
+                                    alert(data.msg);
+                                }else{
+                                    alert(data.msg);
+                                }
                             },
                             error: function(err){
                                 console.log(err);
@@ -400,14 +472,14 @@
                         accountCtrl.mPhone = true;
                     },
                     sendPhoneMessage: function(val){
-                        var phoneNum = val | accountCtrl.userinfo.phone;
+                        var phoneNum = accountCtrl.mPhoneNew != "" ? accountCtrl.mPhoneNew : accountCtrl.userinfo.phone;
                         $.ajax({
                             type: "post",
                             url: DI.sendPhoneMessage,
                             data: {phone: phoneNum},
                             dataType: "json",
                             success: function(data){
-                                alert(data.status);
+                                alert(data.msg);
                             }
                         });
                     },
@@ -422,9 +494,10 @@
                             dataType: "json",
                             success: function(data){
                                 if(data.status == "success"){
-                                    accountCtrl.mPhoneStep == 2;
+                                    accountCtrl.mPhoneStep = 2;
+                                    accountCtrl.mPhoneCode = "";
                                 }else{
-                                    alert(data.status);
+                                    alert(data.msg);
                                 }
                             }
                         });
@@ -434,7 +507,7 @@
                             type: "post",
                             url: DI.validateSendPhoneMessage,
                             data: {
-                                phone: accountCtrl.userinfo.phone,
+                                phone: accountCtrl.mPhoneNew,
                                 randomNumStr: accountCtrl.mPhoneCode
                             },
                             dataType: "json",
@@ -448,13 +521,18 @@
                                         },
                                         dataType: "json",
                                         success: function(data){
-                                            accountCtrl.popupTitle = "修改手机号";
-                                            accountCtrl.popupSuccess = true;
-                                            accountCtrl.popupSuccessStatus = data.status == "success";
+                                            if(data.status == "success"){
+                                                accountCtrl.mPhone = false;
+                                                accountCtrl.mPhoneCode = "";
+                                                accountCtrl.popupTitle = "修改手机号";
+                                                accountCtrl.popupSuccess = true;
+                                                accountCtrl.popupSuccessStatus = data.status == "success";
+                                                accountCtrl.reload();
+                                            }
                                         }
                                     });
                                 }else{
-                                    alert(data.status);
+                                    alert(data.msg);
                                 }
                             }
                         });
@@ -466,15 +544,15 @@
                     mEmailFunc: function(){
                         accountCtrl.mEmail = true;
                     },
-                    sendEmailMessage: function(val){
-                        var phoneNum = val | accountCtrl.userinfo.email;
+                    sendEmailMessage: function(){
+                        var email = accountCtrl.mEmailNew != "" ? accountCtrl.mEmailNew : accountCtrl.userinfo.email;
                         $.ajax({
                             type: "post",
                             url: DI.sendEmailMessage,
-                            data: {email: phoneNum},
+                            data: {email: email},
                             dataType: "json",
                             success: function(data){
-                                alert(data.status);
+                                alert(data.msg);
                             }
                         });
                     },
@@ -489,7 +567,8 @@
                             dataType: "json",
                             success: function(data){
                                 if(data.status == "success"){
-                                    accountCtrl.mEmailStep == 2;
+                                    accountCtrl.mEmailStep = 2;
+                                    accountCtrl.mEmailCode = "";
                                 }else{
                                     alert(data.status);
                                 }
@@ -501,7 +580,7 @@
                             type: "post",
                             url: DI.validateSendEmailMessage,
                             data: {
-                                email: accountCtrl.userinfo.email,
+                                email: accountCtrl.mEmailNew,
                                 randomNumStr: accountCtrl.mEmailCode
                             },
                             dataType: "json",
@@ -515,9 +594,14 @@
                                         },
                                         dataType: "json",
                                         success: function(data){
-                                            accountCtrl.popupTitle = "修改邮箱";
-                                            accountCtrl.popupSuccess = true;
-                                            accountCtrl.popupSuccessStatus = data.status == "success";
+                                            if(data.status == "success"){
+                                                accountCtrl.mEmail = false;
+                                                accountCtrl.popupTitle = "修改邮箱";
+                                                accountCtrl.popupSuccess = true;
+                                                accountCtrl.popupSuccessStatus = data.status == "success";
+                                                accountCtrl.reload();
+                                            }
+                                            
                                         }
                                     });
                                 }else{
@@ -543,9 +627,13 @@
                                 },
                                 dataType: "json",
                                 success: function(data){
-                                    accountCtrl.popupTitle = "修改邮箱";
-                                    accountCtrl.popupSuccess = true;
-                                    accountCtrl.popupSuccessStatus = data.status == "success";
+                                    if(data.status == "success"){
+                                        accountCtrl.mPwd = false;
+                                        accountCtrl.mPhoneCode = "";
+                                        accountCtrl.popupTitle = "修改密码";
+                                        accountCtrl.popupSuccess = true;
+                                        accountCtrl.popupSuccessStatus = data.status == "success";
+                                    }
                                 }
                             });
                         }else{
@@ -560,7 +648,7 @@
                     },
                     bEmail: false,
                     bEmailFunc: function(type){
-                        accountCtrl.bEmailStatus == type;
+                        accountCtrl.bEmailStatus = type;
                         accountCtrl.bEmail = true;
                     },
                     bEmailStatus: 1,
@@ -568,15 +656,36 @@
                         if(accountCtrl.bEmailStatus == 1){
                             $.ajax({
                                 type: "post",
-                                url: DI.updateEmail,
+                                url: DI.validateSendEmailMessage,
                                 data: {
-                                    neweEmail: accountCtrl.mEmailNew
+                                    email: accountCtrl.mEmailNew,
+                                    randomNumStr: accountCtrl.mEmailCode
                                 },
                                 dataType: "json",
                                 success: function(data){
-                                    accountCtrl.popupTitle = "修改邮箱";
-                                    accountCtrl.popupSuccess = true;
-                                    accountCtrl.popupSuccessStatus = data.status == "success";
+                                    if(data.status == "success"){
+                                        $.ajax({
+                                            type: "post",
+                                            url: DI.updateEmail,
+                                            data: {
+                                                neweEmail: accountCtrl.mEmailNew
+                                            },
+                                            dataType: "json",
+                                            success: function(data){
+                                                if(data.status == "success"){
+                                                    accountCtrl.bEmail = false;
+                                                    accountCtrl.popupTitle = "绑定邮箱";
+                                                    accountCtrl.popupSuccess = true;
+                                                    accountCtrl.popupSuccessStatus = data.status == "success";
+                                                    accountCtrl.reload();
+                                                }else{
+                                                    alert(data.msg);
+                                                }
+                                            }
+                                        });
+                                    }else{
+                                        alert(data.msg);
+                                    }
                                 }
                             });
                         }else{
@@ -589,9 +698,15 @@
                                 },
                                 dataType: "json",
                                 success: function(data){
-                                    accountCtrl.popupTitle = "修改邮箱";
-                                    accountCtrl.popupSuccess = true;
-                                    accountCtrl.popupSuccessStatus = data.status == "success";
+                                    if(data.status == "success"){
+                                        accountCtrl.bEmail = false;
+                                        accountCtrl.popupTitle = "解绑邮箱";
+                                        accountCtrl.popupSuccess = true;
+                                        accountCtrl.popupSuccessStatus = data.status == "success";
+                                        accountCtrl.reload();
+                                    }else{
+                                        alert(data.msg);
+                                    }
                                 }
                             });
                         }
@@ -608,27 +723,20 @@
                         url: DI.getFullPersonlInfoById,
                         dataType: "json",
                         success: function(data){
-                            accountCtrl.userinfo.id = data.id;
-                            accountCtrl.userinfo.name = data.name;
-                            accountCtrl.userinfo.sex = ((data.sex===0)?1:data.sex);//默认为男
-                            accountCtrl.userinfo.phone = data.phone;
-                            accountCtrl.userinfo.email = data.email;
-                            
-                            if(data.safe == "低"){
-                                accountCtrl.safe.level = 1;
-                            }else if(data.safe == "中"){
-                                accountCtrl.safe.level = 2;
-                            }else if(data.safe == "高"){
-                                accountCtrl.safe.level = 3;
+                            if(!data.img){
+                                data.img = "../img/defaultHead.jpg";
                             }
-                            accountCtrl.safe.passwordLevel = data.passwordLevel;
-                            accountCtrl.safe.bindEmail = data.bindEmail;
-                            accountCtrl.safe.bindPhone = data.bindPhone;
+                            
+                            accountCtrl.userinfo = data;
                         }
                     });
                 }
                 
-                Buylll.uploadPreview();
+                Buylll.imgUpload("uplpad1", "btn1", "btn-upload1", true);
+                $("#birth").datepicker({
+                    changeYear: true,
+                    minDate: "-60y"
+                });
             });
         </script>
     </body>

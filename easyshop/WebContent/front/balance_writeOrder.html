@@ -17,10 +17,10 @@
 	        		<p class="title"><span>选择收货地址</span></p>
 	        		<div class="cnt">
 	        			<div class="yl-addrbox">
-	        				<div class="addr" ms-class="default: el.isDefault" ms-class-1="noMgr: ($index+1)%4 == 0" ms-repeat="addr">
+	        				<div class="addr" ms-class="sel: el.isDefault" ms-class-1="noMgr: ($index+1)%4 == 0" ms-repeat="addr" ms-click="chooseAddr(el)">
                                 <p class="recipients">{{el.name}}<span>收</span></p>
                                 <div class="info">
-                                    <p>{{el.province}}{{el.city}}{{el.district}}</p>
+                                    <p>{{el.addressStr}}</p>
                                     <p>{{el.street}}</p>
                                     <p>{{el.phone}}</p>
                                 </div>
@@ -53,12 +53,12 @@
 	        				<tbody>
 	        					<tr ms-repeat="goods">
 	        						<td class="col1">
-	        							<img ms-attr-src="el.imgs[0].imgsource" />
+	        							<img ms-attr-src="el.imgUrl" />
 	        						</td>
 	        						<td class="col2">{{el.name}}</td>
-	        						<td class="col3">{{el.currentPrice | currency(" ")}}&nbsp;</td>
+	        						<td class="col3">{{el.price | currency(" ")}}&nbsp;</td>
 	        						<td class="col4">{{el.num}}</td>
-	        						<td class="col5">{{el.currentPrice * el.num | currency(" ")}}&nbsp;</td>
+	        						<td class="col5">{{el.price * el.num | currency(" ")}}&nbsp;</td>
 	        					</tr>
 	        				</tbody>
 	        			</table>
@@ -89,9 +89,15 @@
                                 <div class="item">
                                     <label><span>*</span>所在地区</label>
                                     <div class="form-cnt">
-                                        <input class="ipt-form area" placeholder="省/直辖市" ms-duplex="addrInfo.province" />
-                                        <input class="ipt-form area" placeholder="城市/地区" ms-duplex="addrInfo.city" />
-                                        <input class="ipt-form area" placeholder="区/县" ms-duplex="addrInfo.district" />
+                                        <select class="ipt-form area" ms-duplex="addrInfo.province" data-duplex-changed="provinceChange">
+                                            <option ms-repeat="address.province" ms-attr-value="el.provinceCode">{{el.name}}</option>
+                                        </select>
+                                        <select class="ipt-form area" ms-duplex="addrInfo.city" data-duplex-changed="cityChange">
+                                            <option ms-repeat="address.city" ms-attr-value="el.code">{{el.name}}</option>
+                                        </select>
+                                        <select class="ipt-form area" ms-duplex="addrInfo.district" data-duplex-changed="districtChange">
+                                            <option ms-repeat="address.district" ms-attr-value="el.code">{{el.name}}</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="item">
@@ -125,19 +131,68 @@
         <script src="../js/data-interface.js"></script>
         <script>
             $(function(){
+                var param = Buylll.getUrlArgs();
+                
                 var orderCtrl = avalon.define({
                     $id: "order",
                     addAddr: false,
                     addr:[],
                     addressId: "",
                     addrInfo: {
-                        "addressId": "",
-                        "name": "",
-                        "phone": "",
-                        "province": "",
-                        "city": "",
-                        "district": "",
-                        "street": ""
+                        addressId: "",
+                        name: "",
+                        phone: "",
+                        province: "",
+                        city: "",
+                        district: "",
+                        street: ""
+                    },
+                    address: {
+                        province: Buylll.province,
+                        city: [],
+                        district: []
+                    },
+                    chooseAddr: function(el){
+                        orderCtrl.addressId = el.addressId;
+                        $(".yl-addrbox .addr").removeClass("sel");
+                        $(this).addClass("sel");
+                    },
+                    provinceChange: function(val){
+                        orderCtrl.addrInfo.province = val;
+                        $.ajax({
+                            type: "post",
+                            url: DI.getCitys,
+                            data: {
+                                provinceCode: val
+                            },
+                            dataType: "json",
+                            success: function(data){
+                                orderCtrl.address.city = data;
+                            },
+                            error: function(err){
+                                console.log(err);
+                            }
+                        });
+                    },
+                    cityChange: function(val){
+                        orderCtrl.addrInfo.city = val;
+                        $.ajax({
+                            type: "post",
+                            url: DI.getAreas,
+                            data: {
+                                cityCode: val
+                            },
+                            dataType: "json",
+                            success: function(data){
+                                orderCtrl.address.district = data;
+                            },
+                            error: function(err){
+                                console.log(err);
+                            }
+                        });
+                    },
+                    districtChange: function(val){
+                        orderCtrl.addrInfo.district = val;
                     },
                     modify: function(el){
                         if(el){
@@ -252,8 +307,6 @@
                 getAddress();
                 checkSelected();
                 
-                var param = Buylll.getUrlArgs();
-                
                 function getAddress(){
                     $.ajax({
                         type: "post",
@@ -293,11 +346,11 @@
                                 orderInfo = [];
                             for(var i = 0; i < data.length; i++){
                                 idArr.push(data[i].shoppingcartId);
-                                orderCtrl.total += Number(data[i].product.currentPrice) * Number(data[i].number);
-                                item = data[i].product;
+                                orderCtrl.total += Number(data[i].productVo.price) * Number(data[i].number);
+                                item = data[i].productVo;
                                 item.num = data[i].number;
                                 orderCtrl.goods.push(item);
-                                orderInfo.push(data[i].shoppingcartId + "##" + data[i].color + "##" + data[i].size);
+                                orderInfo.push(data[i].shoppingcartId + "##" + data[i].productVo.color + "##" + data[i].productVo.size);
                             }
                             orderCtrl.shoppingcartIds = idArr.join("@@");
                             orderCtrl.orderInfo = orderInfo.join("@@");

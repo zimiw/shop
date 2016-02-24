@@ -40,26 +40,26 @@
                 <div class="flash-sale">
                     <p class="home-title flash"></p>
                     <div class="container">
-                        <div class="cell" ms-class="no-mgl: $index == 2 || $index == 4" ms-repeat="limit">
+                        <div class="cell" ms-class="no-mgl: $index % 2 == 0" ms-repeat="limit">
                             <img class="product" ms-attr-src="el.imgs[0].imgsource" />
                             <div class="info-box">
                                 <div class="yl-area">
                                     <em ms-class="{{el.country}}"></em>
                                     <span>{{el.country | area}}</span>
                                 </div>
-                                <p class="title">{{el.name}}</p>
-                                <p class="price">¥<span>{{el.specialPrice}}</span></p>
-                                <p class="contrast">洋流原价：¥{{el.currentPrice}}&nbsp;&nbsp;&nbsp;&nbsp;国内参考价：{{el.originPrice}}</p>
+                                <p class="title">{{el.productName}}</p>
+                                <p class="price">¥<span>{{el.price}}</span></p>
+                                <p class="contrast">洋流原价：¥{{el.originPrice}}&nbsp;&nbsp;&nbsp;&nbsp;国内参考价：{{el.currentPrice}}</p>
                             </div>
                             <div class="is-countdown normal-countdown" ms-class="countdown-sale{{$index}}"></div>
-                            <a class="addDetail" ms-attr-href="'detail.html?productId=' + el.productId">立即购买</a>
+                            <a class="addDetail" target="_blank" ms-attr-href="'detail.html?productId=' + el.productId">立即购买</a>
                         </div>
                     </div>
                 </div>
                 <div class="activity">
                     <p class="home-title activity"></p>
                     <div class="container">
-                        <a class="cell" ms-href="el.url" ms-repeat="activity">
+                        <a class="cell" ms-href="el.url" target="_blank" ms-repeat="activity">
                             <img ms-attr-src="el.imgSource" />
                             <div class="is-countdown normal-countdown" ms-class="countdown-activity{{$index}}"></div>
                         </a>
@@ -69,11 +69,11 @@
                     <p class="home-title hot"></p>
                     <div class="container">
                         <div class="cell">
-                            <a class="hot-small" ms-attr-href="adviser.url">
-                                <img ms-attr-src="adviser.imgSource" />
+                            <a class="hot-small" href="javascript:;">
+                                <img src="../img/demo_8.png" />
                             </a>
                             <div class="item-box">
-                                <a class="item" ms-attr-href="'detail.html?productId=' + hot1.productId">
+                                <a class="item" target="_blank" ms-attr-href="'detail.html?productId=' + hot1.productId">
                                     <img class="product" ms-attr-src="hot1.imgs[0].imgsource" />
                                     <div class="info-box">
                                         <div class="yl-area">
@@ -84,7 +84,7 @@
                                         <p class="price">¥{{hot1.currentPrice}}</p>
                                     </div>
                                 </a>
-                                <a class="item" ms-attr-href="'detail.html?productId=' + hot2.productId">
+                                <a class="item" target="_blank" ms-attr-href="'detail.html?productId=' + hot2.productId">
                                     <img class="product" ms-attr-src="hot2.imgs[0].imgsource" />
                                     <div class="info-box">
                                         <div class="yl-area">
@@ -96,7 +96,7 @@
                                     </div>
                                 </a>
                             </div>
-                            <a class="hot-big" ms-attr-href="'detail.html?productId=' + hot3.productId">
+                            <a class="hot-big" target="_blank" ms-attr-href="'detail.html?productId=' + hot3.productId">
                                 <img ms-attr-src="hot3.imgs[0].imgsource" />
                                 <div class="yl-area">
                                     <em ms-class="{{hot3.country}}"></em>
@@ -109,7 +109,7 @@
                                 </div>
                             </a>
                             <div class="item-box">
-                                <a class="item" ms-attr-href="'detail.html?productId=' + hot4.productId">
+                                <a class="item" target="_blank" ms-attr-href="'detail.html?productId=' + hot4.productId">
                                     <img class="product" ms-attr-src="hot4.imgs[0].imgsource" />
                                     <div class="info-box">
                                         <div class="yl-area">
@@ -120,7 +120,7 @@
                                         <p class="price">¥{{hot4.currentPrice}}</p>
                                     </div>
                                 </a>
-                                <a class="item" ms-attr-href="'detail.html?productId=' + hot5.productId">
+                                <a class="item" target="_blank" ms-attr-href="'detail.html?productId=' + hot5.productId">
                                     <img class="product" ms-attr-src="hot5.imgs[0].imgsource" />
                                     <div class="info-box">
                                         <div class="yl-area">
@@ -133,6 +133,20 @@
                                 </a>
                             </div>
                         </div>
+                    </div>
+                    <div class="list">
+                        <a class="product-box" target="_blank" ms-attr-href="'detail.html?productId=' + el.productId" ms-class="first: $index%4 == 0" ms-repeat="hots">
+                            <img class="product" ms-attr-src="el.imgs[0].imgsource" />
+                            <p class="title">{{el.name}}</p>
+                            <div class="info-box">
+                                <div class="yl-area">
+                                    <em ms-class="{{el.country}}"></em>
+                                    <span>{{el.country | area}}</span>
+                                </div>
+                                <del>{{el.originPrice | currency}}</del>
+                                <span class="price">{{el.currentPrice | currency}}</span>
+                            </div>
+                        </a>
                     </div>
                 </div>
                 <div class="toolbar-box">
@@ -170,8 +184,7 @@
                     hot3: [],
                     hot4: [],
                     hot5: [],
-                    hot6: [],
-                    adviser: [],
+                    hots: [],
                     productNum: "0",
                     rule: false,
                     freeRule: function(){
@@ -239,7 +252,14 @@
                         homeCtrl.hot3 = data.hot[2];
                         homeCtrl.hot4 = data.hot[3];
                         homeCtrl.hot5 = data.hot[4];
-                        homeCtrl.hot6 = data.hot[5];
+                    }
+                });
+				$.ajax({
+                	type: "post",
+                    url: DI.getHotSellTwo,
+                    dataType: "json",
+                    success:function(data){
+                    	homeCtrl.hots = data.hot;
                     }
                 });
 				//special
@@ -279,15 +299,6 @@
 						}
 					}
 				});
-				//adviser
-				$.ajax({
-					type:"post",
-					dataType:"json",
-					url:DI.getAdviser,
-					success:function(data){
-						homeCtrl.adviser = data.adviser[0];
-					}
-				});
 				
 				function getFree(){
                     var now = new Date(),
@@ -315,7 +326,7 @@
                     }
                 });
                 
-                $(".toolbar-box").pin();
+                $("#right-bar").pin();
             });
         </script>
     </body>
