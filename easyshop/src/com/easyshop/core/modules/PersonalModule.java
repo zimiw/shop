@@ -552,7 +552,7 @@ public class PersonalModule {
 			condition.and("phone", "like", "%"+phone+"%");
 		}
 		if (!StringUtils.isEmpty(name)) {
-			condition.and("name", "like", "%"+name+"%");
+			condition.and("name", "like", "%" + name + "%");
 		}
 		result.put("total", dao.count(Personal.class,condition));
 		List<Personal> list = dao.query(Personal.class, condition,pager);
@@ -843,6 +843,32 @@ public class PersonalModule {
 				.create("update personal set password=@newPassword where phone=@phone");
 		sql.params().set("newPassword", newPassword);
 		sql.params().set("phone", phone);
+		dao.execute(sql);
+		return new ResultVo("修改成功");
+	}
+
+	/**
+	 * 忘记密码,通过邮箱验证修改密码
+	 * http://localhost:8181/easyshop/personal/updatePasswordByEmail
+	 * ?newPassword=1&email=1 {"status":"success","msg":"修改成功"}
+	 * {"status":"fail","msg":"参数错误"}
+	 *
+	 * @param newPassword
+	 * @param email
+	 * @return
+	 */
+	@At
+	@Filters
+	public ResultVo updatePasswordByEmail(
+			@Param("newPassword") String newPassword,
+			@Param("email") String email) {
+		if (StringUtils.isEmpty(newPassword, email)) {
+			return new ResultVo(ResultVo.STATUS_FAIL, "参数错误");
+		}
+		Sql sql = Sqls
+				.create("update personal set password=@newPassword where email=@email");
+		sql.params().set("newPassword", newPassword);
+		sql.params().set("email", email);
 		dao.execute(sql);
 		return new ResultVo("修改成功");
 	}
