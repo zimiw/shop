@@ -66,7 +66,7 @@ public class UserModule {
         User user = dao.fetch(User.class, Cnd.where("name", "=", name).and("pwd", "=", password));
         if (user == null) {
         	this.result.put("status", "fail");
-        	this.result.put("msg", "该用户不存在");
+        	this.result.put("msg", "用户名或者密码不正确");
             return this.result;
         } else {
             session.setAttribute("me", user.getName());
