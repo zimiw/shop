@@ -4,10 +4,7 @@ import com.easy.core.filters.CheckBackUserLoginFilter;
 import com.easy.core.filters.CheckFrontUserLoginFilter;
 import com.easyshop.bean.*;
 import com.easyshop.core.modules.admin.OrderConstant;
-import com.easyshop.utils.MailUtils;
-import com.easyshop.utils.MessageUtils;
-import com.easyshop.utils.RandomUtils;
-import com.easyshop.utils.StringUtils;
+import com.easyshop.utils.*;
 import com.easyshop.vo.ResultVo;
 import org.apache.log4j.Logger;
 import org.nutz.dao.Cnd;
@@ -336,7 +333,9 @@ public class PersonalModule {
                     cookie.setMaxAge(99999999);
                     response.addCookie(cookie);
                 }*/
-            }
+            }else{
+				CookieUtil.remove(request,response,"frontUserId");
+			}
 
 			result.put("status", "success");
 			result.put("msg", "登陆成功");
@@ -403,6 +402,7 @@ public class PersonalModule {
 			HttpServletResponse httpServletResponse,
 			HttpServletRequest httpServletRequest) throws IOException {
 		session.invalidate();
+		CookieUtil.clear(httpServletRequest,httpServletResponse);
 		httpServletResponse.sendRedirect(httpServletRequest.getContextPath()
 				+ "/front/login.html");
 	}
@@ -646,6 +646,7 @@ public class PersonalModule {
 	 * @return
 	 */
 	@At
+	@Filters
 	public ResultVo sendEmailMessage(@Param("email") String email) {
 		if (StringUtils.isEmpty(email)) {
 			return new ResultVo(ResultVo.STATUS_FAIL, "参数错误");
@@ -719,6 +720,7 @@ public class PersonalModule {
 	 * @return
 	 */
 	@At
+	@Filters
 	public ResultVo validateSendEmailMessage(@Param("email") String email,
 			@Param("randomNumStr") String randomNumStr) {
 
