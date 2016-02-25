@@ -324,13 +324,18 @@ public class ShopCarModule {
 	 * @return
 	 */
 	@At
-	public Object modifySelected(
+	public Object modifySelected(HttpSession session,
 			@Param("shoppingcartIds") String shoppingcartIds,
 			@Param("operate") int operate) {
 
+		String userId = String.valueOf(session.getAttribute(FRONT_USER_ID));
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		String[] shoppingcartIdList = shoppingcartIds.split("@@");
 		try {
+
+			dao.update(Shoppingcart.class, Chain.make("isSelected", 0),
+					Cnd.where("userId", "=", userId));
+
 			for (String item : shoppingcartIdList) {
 				Shoppingcart sc = dao.fetch(Shoppingcart.class,
 						Integer.parseInt(item));
