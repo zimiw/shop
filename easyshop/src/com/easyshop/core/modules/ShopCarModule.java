@@ -701,9 +701,9 @@ public class ShopCarModule {
 										shoppingCartStrArr[i].split("##")[1])
 								.and("productId", "=",
 										shoppingcart.getProductId()));
-				StoreCount sc = dao.fetch(StoreCount.class,
-						Cnd.where("productTypeId", "=", pt.getProductTypeId()));
-				if (sc.getStoreCount() < shoppingcart.getNumber()) {
+				// StoreCount sc = dao.fetch(StoreCount.class,
+				// Cnd.where("productTypeId", "=", pt.getProductTypeId()));
+				if (pt.getStoreCount() < shoppingcart.getNumber()) {
 					result.put("status", "fail");
 					result.put("msg", "很抱歉，您购买的商品：" + pro.getName()
 							+ " 已售完，请谅解！");
