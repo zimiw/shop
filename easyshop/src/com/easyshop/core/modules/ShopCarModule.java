@@ -85,6 +85,7 @@ public class ShopCarModule {
 		result.setProductTypeId(productTypeId);
 		result.setName(pd.getName());
 		result.setSize(pt.getSize());
+		result.setColor(pt.getColor());
 		result.setImgUrl(image.getImgsource());
 		// 如果是限时活动商品 且活动正在进行中，设置价格为活动价
 		if (pd.getActivityType() == 1 && pd.getLimitActivityStatus() == 1) {
@@ -279,11 +280,10 @@ public class ShopCarModule {
 		String userId = String.valueOf(session.getAttribute(FRONT_USER_ID));
 		try {
 			// 删除之前的临时数据
-			List<Shoppingcart> list = dao.query(
-					Shoppingcart.class,
+			List<Shoppingcart> list = dao.query(Shoppingcart.class,
 					Cnd.where("userId", "=", userId)
-							.and("selectedType", "=", 2)
-							.and("productTypeId", "=", productTypeId));
+							.and("selectedType", "=", 2));
+			// .and("productTypeId", "=", productTypeId));
 			for (Shoppingcart item : list) {
 				dao.delete(item);
 			}
