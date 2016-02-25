@@ -149,7 +149,7 @@ public class ActivityAdminModule {
 		if (!StringUtils.isEmpty(productName)) {
 			sqlWhere += " and a.name like @productName ";
 			paramsList.add("productName");
-			valMap.put("productName", "%"+productName+"%");
+			valMap.put("productName", "%" + productName + "%");
 		}
 
 		if (!StringUtils.isEmpty(productId)) {
@@ -233,7 +233,7 @@ public class ActivityAdminModule {
 			cnd.and("name", "like", "%" + productName + "%");
 			sqlStr += " and a.name like @productName ";
 			paramsList.add("productName");
-			valMap.put("productName", "%"+productName+"%");
+			valMap.put("productName", "%" + productName + "%");
 		}
 
 		if (!StringUtils.isEmpty(productId)) {
@@ -355,11 +355,8 @@ public class ActivityAdminModule {
 				}
 
 				// 根据商品中对应的状态
-				dao.update(
-						Product.class,
-						Chain.make("activityType", 1),
-						Cnd.where("productId", "=",
-						        productId));
+				dao.update(Product.class, Chain.make("activityType", 1),
+						Cnd.where("productId", "=", productId));
 			}
 		});
 
