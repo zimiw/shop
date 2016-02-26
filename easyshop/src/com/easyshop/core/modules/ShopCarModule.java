@@ -820,7 +820,9 @@ public class ShopCarModule {
 					ProductType.class,
 					Cnd.where("productTypeId", "=",
 							shoppingcart.getProductTypeId()));
-
+			ActivityProduct ap = dao.fetch(ActivityProduct.class,
+					Cnd.where("productId", "=", pro.getProductId())
+							.and("status", "=", 1));
 			if (!pro.getStatus()) {
 				result.put("status", "fail");
 				result.put("msg", "很抱歉，您购买的商品：" + pro.getName() + " 已下架，请谅解！");
@@ -830,11 +832,6 @@ public class ShopCarModule {
 				// 是限时活动商品 且正在活动中
 				if (pro.getActivityType() == 1
 						&& pro.getLimitActivityStatus() == 1) {
-
-					ActivityProduct ap = dao.fetch(ActivityProduct.class,
-							Cnd.where("productId", "=", pro.getProductId())
-									.and("status", "=", 1));
-
 					// 库存不足
 					if (ap.getLeftNum() < shoppingcart.getNumber()
 							|| pt.getLimitActivityLeftCount() < shoppingcart

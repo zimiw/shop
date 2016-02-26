@@ -300,6 +300,24 @@ public class OrderModule {
 	}
 
 	/**
+	 * 修改商品库存
+	 * @author wangzhiming
+	 * @date 2016.2.26
+	 * @return
+	 */
+	public boolean updateStore(int orderId){
+		
+		List<ConnectorOP> list = new ArrayList<ConnectorOP>();
+		list = dao.query(ConnectorOP.class, Cnd.where("orderId","=", orderId));
+		for(ConnectorOP item : list){
+			if(item.isLimitActivity()){
+				
+			}
+		}
+		return true;
+	}
+	
+	/**
 	 * 取消订单
 	 * 
 	 * @param session
