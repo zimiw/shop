@@ -143,7 +143,7 @@ public class ActivityAdminModule {
 				+ " where  a.productId = b.productId and b.status = 1 ";
 
 		String sqlWhere = "";
-		Cnd cnd = Cnd.NEW();
+//		Cnd cnd = Cnd.NEW();
 		List<String> paramsList = new ArrayList<String>();
 		Map<String, Object> valMap = new HashMap<String, Object>();
 		if (!StringUtils.isEmpty(productName)) {
@@ -343,6 +343,24 @@ public class ActivityAdminModule {
 		// result.put("msg", "该商品在该时间段内已经存在限时活动!");
 		// return result;
 		// }
+		
+		//查询库存必须要大于参加活动数
+		for (ActivityProduct apt : aps) {
+		    if(apt.getNum()<=0){
+		        result.put("status", ResultVo.STATUS_FAIL);
+                result.put("msg", "参考活动数量必须大于0!");
+                return result;
+		    }
+		    
+		    ProductType productType = dao.fetch(ProductType.class, Cnd.where("productTypeId", "=", 
+		            apt.getProductTypeId()).and("storeCount", ">=", apt.getNum()));
+		    if(productType==null){
+		        result.put("status", ResultVo.STATUS_FAIL);
+	            result.put("msg", "该商品类型库存不足!");
+	            return result;
+		    }
+        }
+		
 
 		Trans.exec(new Atom() {
 			@Override
@@ -352,6 +370,12 @@ public class ActivityAdminModule {
 					ap.setStatus(1);
 					ap.setLeftNum(ap.getNum());// 剩余数量和活动数量相关
 					dao.insert(ap);
+					
+					int res = dao.update(Cnd.wrap(" update producttype set storeCount  = storeCount- "+ap.getNum()
+					        +" where  productTypeId = "+ap.getProductTypeId() +" and storeCount- "+ap.getNum()+">0 "));
+					if(res!=1){
+					    throw new RuntimeException("该商品库存不足!");
+					}
 				}
 
 				// 根据商品中对应的状态
