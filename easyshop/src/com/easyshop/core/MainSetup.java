@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
 import org.nutz.dao.Sqls;
@@ -13,10 +14,14 @@ import org.nutz.dao.util.Daos;
 import org.nutz.ioc.Ioc;
 import org.nutz.mvc.NutConfig;
 import org.nutz.mvc.Setup;
+import org.nutz.trans.Atom;
+import org.nutz.trans.Trans;
 
 import com.easyshop.bean.ActivityLottery;
 import com.easyshop.bean.ActivityLotteryConf;
 import com.easyshop.bean.Catalogs;
+import com.easyshop.bean.ConnectorOP;
+import com.easyshop.bean.Order;
 import com.easyshop.bean.Personal;
 import com.easyshop.bean.Role;
 import com.easyshop.bean.User;
@@ -85,10 +90,74 @@ public class MainSetup implements Setup {
 			return (int) ((jzDate.getTime() - qsDate.getTime()) / (60 * 1000));
 		}
 
+		/**
+		 * 每隔30分钟就把未支付订单取消
+		 */
+		private void runOrder() {
+			List<Order> listOrder = dao.query(
+					Order.class,
+					Cnd.where("status", "=", 101)
+							.and("TIMESTAMPDIFF(MINUTE,createTime, now())",
+									">=", 30));
+
+			if (listOrder != null && listOrder.size() > 0) {
+				for (final Order order : listOrder) {
+
+					logger.debug("runOrder 后台定时取消订单开始");
+
+					Trans.exec(new Atom() {
+						@Override
+						public void run() {
+							List<ConnectorOP> listOp = dao.query(
+									ConnectorOP.class,
+									Cnd.where("orderId", "=",
+											order.getOrderId()));
+
+							// 设置为取消
+							dao.update(
+									Order.class,
+									Chain.make("status", 107),
+									Cnd.where("orderId", "=",
+											order.getOrderId()));
+
+							Sql sql = null;
+							for (ConnectorOP op : listOp) {
+								if (op.isLimitActivity()) {
+									sql = Sqls
+											.create("update activityproduct "
+													+ " set leftNum = leftNum +@num  where productTypeId =@productTypeId ");
+								} else {
+									sql = Sqls
+											.create("update producttype "
+													+ " set storeCount = storeCount +@num  where productTypeId =@productTypeId ");
+								}
+
+								sql.params()
+										.set("num", op.getNumber())
+										.set("productTypeId",
+												op.getProductTypeId());
+								dao.execute(sql);
+							}
+
+						}
+					});
+
+				}
+			}
+
+		}
+
 		@Override
 		public void run() {
 
 			while (true) {
+
+				try {
+					runOrder();
+				} catch (Exception e) {
+					logger.error("后台定时取消订单", e);
+				}
+
 				logger.debug("抽取程序后台监听中。。。");
 
 				ActivityLotteryConf conf = dao.fetch(ActivityLotteryConf.class);

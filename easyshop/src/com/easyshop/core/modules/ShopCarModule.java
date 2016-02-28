@@ -41,6 +41,7 @@ import com.easyshop.bean.Province;
 import com.easyshop.bean.Shoppingcart;
 import com.easyshop.bean.StoreCount;
 import com.easyshop.core.modules.admin.OrderConstant;
+import com.easyshop.utils.TimeUtils;
 import com.easyshop.vo.ProductVo;
 import com.pingplusplus.Pingpp;
 import com.pingplusplus.exception.APIConnectionException;
@@ -87,9 +88,15 @@ public class ShopCarModule {
 		result.setSize(pt.getSize());
 		result.setColor(pt.getColor());
 		result.setImgUrl(image.getImgsource());
+
+		String day = TimeUtils.dateToStr(new Date(), TimeUtils.FORMAT14);
+		ActivityProduct acp = dao.fetch(ActivityProduct.class,
+				Cnd.where("beginTime", "<=", day).and("endTime", ">=", day)
+						.and("productTypeId", "=", pt.getProductTypeId()));
+
 		// 如果是限时活动商品 且活动正在进行中，设置价格为活动价
-		if (pd.getActivityType() == 1 && pd.getLimitActivityStatus() == 1) {
-			result.setPrice(pt.getSpecialPrice());
+		if (acp != null && acp.getLeftNum() > 0) {
+			result.setPrice(acp.getPrice());
 		} else {
 			result.setPrice(pt.getCurrentPrice());
 		}
@@ -678,6 +685,7 @@ public class ShopCarModule {
 		final String[] shoppingCartStrArr = shoppingCartStr.split("@@");
 		final List<Shoppingcart> scList = new ArrayList<Shoppingcart>();
 		float amount = 0;
+		float currentPrice = 0; // 商品价格
 		for (int i = 0; i < shoppingCartStrArr.length; i++) {
 
 			Shoppingcart shoppingcart = dao.fetch(Shoppingcart.class, Cnd
@@ -691,6 +699,7 @@ public class ShopCarModule {
 				logger.info("结束调用addToOrder方法，生成订单失败，失败原因为商品已下架");
 				return result;
 			} else {
+
 				// 根据尺码，颜色来获取当前商品的库存量
 				// 首先获取商品规格对象
 				ProductType pt = dao.fetch(
@@ -701,16 +710,44 @@ public class ShopCarModule {
 										shoppingCartStrArr[i].split("##")[1])
 								.and("productId", "=",
 										shoppingcart.getProductId()));
-				// StoreCount sc = dao.fetch(StoreCount.class,
-				// Cnd.where("productTypeId", "=", pt.getProductTypeId()));
-				if (pt.getStoreCount() < shoppingcart.getNumber()) {
+
+				String day = TimeUtils
+						.dateToStr(new Date(), TimeUtils.FORMAT14);
+				// 首先查询商品是不是限时活动
+				ActivityProduct acp = dao.fetch(
+						ActivityProduct.class,
+						Cnd.where("beginTime", "<=", day)
+								.and("endTime", ">=", day)
+								.and("productTypeId", "=",
+										pt.getProductTypeId()));
+
+				if (acp != null && acp.getLeftNum() > 0
+						&& acp.getLeftNum() < shoppingcart.getNumber()) {
+					// 参加的限时活动商品数量超过限时活动库存
 					result.put("status", "fail");
 					result.put("msg", "很抱歉，您购买的商品：" + pro.getName()
-							+ " 已售完，请谅解！");
-					logger.info("结束调用addToOrder方法，生成订单失败，失败原因为商品已售完");
+							+ " 限时活动库存不足！");
 					return result;
+				} else if (acp != null
+						&& acp.getLeftNum() >= shoppingcart.getNumber()) {// 参加限时活动
+					shoppingcart.setLimitActivity(true);
+					currentPrice = Float.parseFloat(String.valueOf(acp
+							.getPrice()));
+				} else {// 非限时活动
+					if (pt.getStoreCount() < shoppingcart.getNumber()) {
+						result.put("status", "fail");
+						result.put("msg", "很抱歉，您购买的商品：" + pro.getName()
+								+ " 已售完，请谅解！");
+						logger.info("结束调用addToOrder方法，生成订单失败，失败原因为商品已售完");
+						return result;
+					}
+					shoppingcart.setLimitActivity(false);
+					currentPrice = pt.getCurrentPrice();
 				}
-				amount += shoppingcart.getNumber() * pro.getCurrentPrice();
+
+				shoppingcart.setProductTypeId(pt.getProductTypeId());
+				shoppingcart.setPrice(currentPrice);
+				amount += shoppingcart.getNumber() * currentPrice;// 算订单价格
 				shoppingcart.setProduct(pro);
 				scList.add(i, shoppingcart);
 			}
@@ -725,14 +762,8 @@ public class ShopCarModule {
 			return result;
 		}
 		order.setAddressId(address.getAddressId()); // 收货地址
-		// order.setConsignee(address.getName()); // 收货人
-		// order.setCellphone(address.getCellphone()); // 电话
-
 		order.setUserId(Integer.parseInt(userId));
-
-		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// 设置日期格式
-		order.setCreateTime(df.format(new Date()));
-
+		order.setCreateTime(TimeUtils.dateToStr(new Date(), TimeUtils.FORMAT14));// 设置日期格式
 		order.setStatus(101);// 状态为待付款
 
 		// 设置中间表信息
@@ -745,7 +776,9 @@ public class ShopCarModule {
 					.split("##")[1]);
 			connect.setSize(shoppingCartStrArr[scList.indexOf(item)]
 					.split("##")[2]);
-			connect.setPrice(item.getProduct().getCurrentPrice());
+			connect.setProductTypeId(item.getProductTypeId());
+			connect.setPrice(item.getPrice());
+			connect.setLimitActivity(item.isLimitActivity());
 			connects.add(connect);
 		}
 		order.setConnectorOPs(connects);
@@ -754,13 +787,31 @@ public class ShopCarModule {
 		// 订单进度表
 		final OrderProgress op = new OrderProgress();
 		op.setStatusCode(201); // 提交订单
-		op.setTime(df.format(new Date()));
+		op.setTime(TimeUtils.dateToStr(new Date(), TimeUtils.FORMAT14));
 
 		// 在这里进行事务的操作
 		try {
 			Trans.exec(new Atom() {
 				@Override
 				public void run() {
+					// 更新库存信息
+					Sql sql = null;
+					for (ConnectorOP cop : order.getConnectorOPs()) {// 减库存
+						if (cop.isLimitActivity()) {
+							sql = Sqls
+									.create("update activityproduct "
+											+ " set leftNum = leftNum -@num  where productTypeId =@productTypeId ");
+						} else {
+							sql = Sqls
+									.create("update producttype "
+											+ " set storeCount = storeCount -@num  where productTypeId =@productTypeId ");
+						}
+
+						sql.params().set("num", cop.getNumber())
+								.set("productTypeId", cop.getProductTypeId());
+						dao.execute(sql);
+					}
+
 					// 插入订单信息
 					Order o = dao.insertWith(order, "connectorOPs");
 					order.setOrderId(o.getOrderId());
@@ -774,7 +825,6 @@ public class ShopCarModule {
 
 					dao.update(Address.class, Chain.make("isOrder", 1),
 							Cnd.where("addressId", "=", address.getAddressId()));// 更新地址在订单中已经使用
-
 				}
 			});
 			result.put("status", "success");
@@ -820,9 +870,10 @@ public class ShopCarModule {
 					ProductType.class,
 					Cnd.where("productTypeId", "=",
 							shoppingcart.getProductTypeId()));
-			ActivityProduct ap = dao.fetch(ActivityProduct.class,
-					Cnd.where("productId", "=", pro.getProductId())
-							.and("status", "=", 1));
+			ActivityProduct ap = dao.fetch(
+					ActivityProduct.class,
+					Cnd.where("productId", "=", pro.getProductId()).and(
+							"status", "=", 1));
 			if (!pro.getStatus()) {
 				result.put("status", "fail");
 				result.put("msg", "很抱歉，您购买的商品：" + pro.getName() + " 已下架，请谅解！");
@@ -833,18 +884,17 @@ public class ShopCarModule {
 				if (pro.getActivityType() == 1
 						&& pro.getLimitActivityStatus() == 1) {
 					// 库存不足
-					if (ap.getLeftNum() < shoppingcart.getNumber()
-							|| pt.getLimitActivityLeftCount() < shoppingcart
-									.getNumber()) {
+					if (ap.getLeftNum() < shoppingcart.getNumber()) {
 						result.put("status", "redirct");
 						result.put("msg", "很抱歉，您购买的限时活动商品：" + pro.getName()
 								+ " 已被疯抢一空，下次请早哦！");
 						logger.info("结束调用addToOrder方法，生成订单失败，失败原因为商品已售完");
 						return result;
 					} else {
-						amount += shoppingcart.getNumber()
-								* pt.getSpecialPrice();
-						shoppingcart.setPrice(pt.getSpecialPrice());
+						amount += shoppingcart.getNumber() * ap.getPrice();
+						// * pt.getSpecialPrice();
+						shoppingcart.setPrice(Float.parseFloat(String
+								.valueOf(ap.getPrice())));
 						shoppingcart.setLimitActivity(true);
 					}
 					// 正常流程
@@ -939,9 +989,7 @@ public class ShopCarModule {
 											"=", 1));
 
 							// 库存不足
-							if (ap.getLeftNum() < item.getNumber()
-									|| pt.getLimitActivityLeftCount() < item
-											.getNumber()) {
+							if (ap.getLeftNum() < item.getNumber()) {
 								result.put("status", "redirct");
 								result.put("msg",
 										"很抱歉，您购买的限时活动商品：" + pro.getName()
@@ -951,9 +999,7 @@ public class ShopCarModule {
 										+ pro.getName() + " 已被疯抢一空，下次请早哦！");
 							} else {
 								// 在这里更新库存
-								if (ap.getLeftNum() == item.getNumber()
-										|| pt.getLimitActivityLeftCount() == item
-												.getNumber()) {
+								if (ap.getLeftNum() == item.getNumber()) {
 									// 更新活动状态
 									pro.setLimitActivityStatus(2);
 								}
@@ -979,9 +1025,9 @@ public class ShopCarModule {
 								// .getLeftNum() - item.getNumber());
 								pro.setSellCount(pro.getSellCount()
 										+ item.getNumber());
-								pt.setLimitActivityLeftCount(pt
-										.getLimitActivityLeftCount()
-										- item.getNumber());
+								// pt.setLimitActivityLeftCount(pt
+								// .getLimitActivityLeftCount()
+								// - item.getNumber());
 								dao.update(pro);
 								dao.update(pt);
 							}
@@ -1143,5 +1189,35 @@ public class ShopCarModule {
 			return result;
 		}
 
+	}
+
+	/**
+	 * 订单支付完成后支付 库存和销售信息
+	 * 
+	 * @return
+	 */
+	public int updateOrderProduct(int orderId) {
+
+		List<ConnectorOP> listOp = dao
+				.query(ConnectorOP.class,
+						Cnd.wrap(" and exists (selec 1 from orders t "
+								+ "	where t.orderId=connectorOP.orderId and t.status= 106 and t.orderId = "
+								+ orderId + " ) and orderId = " + orderId
+								+ "  "));
+		if (listOp != null && listOp.size() > 0) {
+
+			Sql sql = null;
+			sql = Sqls
+					.create("update producttype "
+							+ " set sellCount = sellCount +@num  where productTypeId =@productTypeId ");
+			for (ConnectorOP op : listOp) {
+				sql.params().set("num", op.getNumber())
+						.set("productTypeId", op.getProductTypeId());
+				sql.addBatch();
+			}
+
+			dao.execute(sql);
+		}
+		return 0;
 	}
 }

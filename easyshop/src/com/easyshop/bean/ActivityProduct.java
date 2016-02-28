@@ -19,10 +19,10 @@ public class ActivityProduct {
 	@Column
 	private int productId;// 商品id
 	@Column
-	private int productTypeId;//商品规格ID
+	private int productTypeId;// 商品规格ID
 
 	@Column
-	private double price;// 抢购价格
+	private float price;// 抢购价格
 
 	@Column
 	private int num;// 参加活动数量
@@ -39,16 +39,15 @@ public class ActivityProduct {
 	@Column
 	private int status;// 状态 1有限， 0无效
 
-	
 	public int getProductTypeId() {
-        return productTypeId;
-    }
+		return productTypeId;
+	}
 
-    public void setProductTypeId(int productTypeId) {
-        this.productTypeId = productTypeId;
-    }
+	public void setProductTypeId(int productTypeId) {
+		this.productTypeId = productTypeId;
+	}
 
-    public int getLeftNum() {
+	public int getLeftNum() {
 		return leftNum;
 	}
 
@@ -80,11 +79,11 @@ public class ActivityProduct {
 		this.productId = productId;
 	}
 
-	public double getPrice() {
+	public float getPrice() {
 		return price;
 	}
 
-	public void setPrice(double price) {
+	public void setPrice(float price) {
 		this.price = price;
 	}
 
@@ -113,28 +112,28 @@ public class ActivityProduct {
 	}
 
 	@Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("ActivityProduct [activityId=");
-        builder.append(activityId);
-        builder.append(", productId=");
-        builder.append(productId);
-        builder.append(", productTypeId=");
-        builder.append(productTypeId);
-        builder.append(", price=");
-        builder.append(price);
-        builder.append(", num=");
-        builder.append(num);
-        builder.append(", leftNum=");
-        builder.append(leftNum);
-        builder.append(", beginTime=");
-        builder.append(beginTime);
-        builder.append(", endTime=");
-        builder.append(endTime);
-        builder.append(", status=");
-        builder.append(status);
-        builder.append("]");
-        return builder.toString();
-    }
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("ActivityProduct [activityId=");
+		builder.append(activityId);
+		builder.append(", productId=");
+		builder.append(productId);
+		builder.append(", productTypeId=");
+		builder.append(productTypeId);
+		builder.append(", price=");
+		builder.append(price);
+		builder.append(", num=");
+		builder.append(num);
+		builder.append(", leftNum=");
+		builder.append(leftNum);
+		builder.append(", beginTime=");
+		builder.append(beginTime);
+		builder.append(", endTime=");
+		builder.append(endTime);
+		builder.append(", status=");
+		builder.append(status);
+		builder.append("]");
+		return builder.toString();
+	}
 
 }
