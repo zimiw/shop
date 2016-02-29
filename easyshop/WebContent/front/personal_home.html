@@ -43,12 +43,12 @@
 	        				<div class="info-box">
 	        					<p class="name" ms-class="level{{level}}">{{name}}</p>
 	        					<p class="signature">{{signature}}</p>
-	        					<a href="javascript:;">修改个人资料&gt;</a>
+	        					<a href="personal_accountManage.html">修改个人资料&gt;</a>
 	        				</div>
 	        				<div class="safe-box">
 	        					<p>安全等级：{{safe}}</p>
-	        					<p>绑定手机：<a href="javascript:;">修改手机</a></p>
-	        					<p>绑定邮箱：<a href="javascript:;">修改邮箱</a></p>
+	        					<p>绑定手机：<a href="personal_accountManage.html">修改手机</a></p>
+	        					<p>绑定邮箱：<a href="personal_accountManage.html">修改邮箱</a></p>
 	        				</div>
         				</div>
         				<div class="order-box">
@@ -72,7 +72,7 @@
 		        							<p class="name">{{el.name}}</p>
 		        							<div class="buy-box">
 		        								<p>¥<span>{{el.price}}</span></p>
-		        								<button class="yl-btn small">立即购买</button>
+		        								<a class="yl-btn small" ms-attr-href="'detail.html?productId=' + el.productId">立即购买</a>
 		        							</div>
 		        						</div>
 		        					</div>
@@ -136,7 +136,7 @@
                     name: "",
                     level: "0",
                     signature: "",
-                    safe: "中",
+                    safe: "低",
                     pnopay: "0",
                     pwait: "0",
                     pevaluate: "0",
@@ -173,16 +173,21 @@
                 	url: DI.getUserInfo,
                 	success:function(data){
                 		if(data.status == "fail"){
-                			window.location.href=result.target;
+                			window.location.href = result.target;
                 		}else{
 	                		var result = data.personal;
-	                		homeCtrl.name = result.name;
+	                		homeCtrl.name = result.name || result.phone;
 	                		homeCtrl.level = result.level;
 	                		homeCtrl.signature = result.signature;
-	                		homeCtrl.safe = result.safe;
 	                		homeCtrl.pnopay = result.pnopay;
 	                		homeCtrl.pwait = result.pwait;
 	                		homeCtrl.pevaluate = result.pevaluate;
+	                		if(result.bindEmail || result.bindPhone){
+    	                		homeCtrl.safe = "中";
+	                		}
+	                		if(result.bindEmail && result.bindPhone){
+    	                		homeCtrl.safe = "高";
+	                		}
                 		}
                 	},
                 	error:function(a,b,c){

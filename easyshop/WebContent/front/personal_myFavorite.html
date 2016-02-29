@@ -82,6 +82,9 @@
                                 },
                                 url: DI.deleteFavorite,
                                 success: function(data){
+                                    if(data.status == "success"){
+                                        getFavoriteAll();
+                                    }
                                     alert(data.msg);
                                 },
                                 error: function(err){

@@ -37,13 +37,13 @@
 	                            <div class="yl-chkbox" ms-click="check(el)" ms-data-shoppingcartid="el.shoppingcartId">
 	                                <em></em>
 	                            </div>
-	                            <img class="img" ms-attr-src="el.product.imgs[0].imgsource" />
+	                            <img class="img" ms-attr-src="el.productVo.imgUrl" />
 	                        </td>
 	                        <td class="col2">
-	                            <p>{{el.product.name}}</p>
+	                            <p>{{el.productVo.name}}</p>
 	                        </td>
 	                        <td class="col3">
-	                            <p>{{el.product.currentPrice | currency(" ")}}&nbsp;</p>
+	                            <p>{{el.productVo.price | currency(" ")}}&nbsp;</p>
 	                        </td>
 	                        <td class="col4">
 	                            <div class="yl-num">
@@ -53,7 +53,7 @@
 	                            </div>
 	                        </td>
 	                        <td class="col5">
-	                            <p class="total">{{el.product.currentPrice * el.number | currency(" ")}}&nbsp;</p>
+	                            <p class="total">{{el.productVo.price * el.number | currency(" ")}}&nbsp;</p>
 	                        </td>
 	                        <td class="operate">
 	                            <a href="javascript:;" ms-click="del(el)">删除</a>
@@ -136,7 +136,6 @@
                                 number: el.number
                             },
                             success: function(data){
-                                alert(data.status);
                                 if(data.status == "success"){
                                     total();
                                 }else{
@@ -217,26 +216,6 @@
                         dataType: "json",
                         success: function(data){
                             cartCtrl.items = data.data;
-//                          cartCtrl.items = [
-//                              {
-//                                  product: {
-//                                      "imgsource": "img/demo_1.png",
-//                                      "name": "TAKEO KIKUCHI/菊池武夫 2015AW 男士牛皮鳄鱼纹公",
-//                                      "currentPrice": 120
-//                                  },
-//                                  shoppingcartId: 5,
-//                                  number: 5
-//                              },
-//                              {
-//                                  product: {
-//                                      "imgsource": "img/demo_1.png",
-//                                      "name": "TAKEO KIKUCHI/菊池武夫 2015AW 男士牛皮鳄鱼纹公",
-//                                      "currentPrice": 60
-//                                  },
-//                                  shoppingcartId: 6,
-//                                  number: 3
-//                              }
-//                          ];
                         },
                         error: function(err){
                             console.log(err);
@@ -248,7 +227,8 @@
                     var items = $(".tb-cart.tbody .yl-chkbox.chked"),
                         total = 0;
                     for(var i = 0; i < items.length; i++){
-                        total += Number(items.eq(i).parents("tr").find(".total").text());
+//                      total += Number(items.eq(i).parents("tr").find(".total").text().replace(/^\s\s*/, '').replace(/\s\s*$/, ''));
+                        total += Number(items.eq(i).parents("tr").find(".total").text().replace(",", ''));
                     }
                     cartCtrl.total = total;
                 }

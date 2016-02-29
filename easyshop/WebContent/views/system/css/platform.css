@@ -547,6 +547,17 @@ select.district {
     background-color: #E6E6E6;
 }
 
+.u-uploadImg .img-box .img-container {
+    position: relative;
+    display: inline-block;
+}
+.u-uploadImg .img-box .img-container .del {
+    position: absolute;
+    font-size: 20px;
+    right: 0;
+    top: 0;
+    color: #FF6262;
+}
 .u-uploadImg .img-box img {
     display: block;
     width: auto;

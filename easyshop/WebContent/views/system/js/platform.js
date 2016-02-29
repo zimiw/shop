@@ -241,7 +241,9 @@ PLATFORM.fileUploaded = function(uploader, file, result){
     if(result.status == 200){
         var img = new Image();
         img.src = PLATFORM.remote.host + "/" + PLATFORM.imgName;
-        $uploader.find(".img-box").append(img);
+        
+        var imgBox = $("<div class='img-opt'><div class='img-container'><a class='del'>×</a></div></div>").append(img)
+        $uploader.find(".img-box").append(imgBox);
         $uploader.find(".info-box").hide();
     }else{
         alert("上传失败");
@@ -257,6 +259,11 @@ PLATFORM.fileUploadedSingle = function(uploader, file, result){
     }else{
         alert("上传失败");
     }
+};
+PLATFORM.delImg = function(){
+    $("body").on("click", ".u-uploadImg .img-container .del", function(){
+        $(this).parents(".img-opt").remove();
+    });
 };
 
 PLATFORM.getUrlArgs = function(){

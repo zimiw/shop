@@ -143,13 +143,13 @@ public class ActivityAdminModule {
 				+ " where  a.productId = b.productId and b.status = 1 ";
 
 		String sqlWhere = "";
-		Cnd cnd = Cnd.NEW();
+		// Cnd cnd = Cnd.NEW();
 		List<String> paramsList = new ArrayList<String>();
 		Map<String, Object> valMap = new HashMap<String, Object>();
 		if (!StringUtils.isEmpty(productName)) {
-			sqlWhere += " and a.productName like '%'+@productName+'%' ";
+			sqlWhere += " and a.name like @productName ";
 			paramsList.add("productName");
-			valMap.put("productName", productName);
+			valMap.put("productName", "%" + productName + "%");
 		}
 
 		if (!StringUtils.isEmpty(productId)) {
@@ -230,10 +230,10 @@ public class ActivityAdminModule {
 		List<String> paramsList = new ArrayList<String>();
 		Map<String, Object> valMap = new HashMap<String, Object>();
 		if (!StringUtils.isEmpty(productName)) {
-			cnd.and("productName", "like", "%" + productName + "%");
-			sqlStr += " and a.productName like '%'+@productName+'%' ";
+			cnd.and("name", "like", "%" + productName + "%");
+			sqlStr += " and a.name like @productName ";
 			paramsList.add("productName");
-			valMap.put("productName", productName);
+			valMap.put("productName", "%" + productName + "%");
 		}
 
 		if (!StringUtils.isEmpty(productId)) {
@@ -284,12 +284,12 @@ public class ActivityAdminModule {
 	 */
 	@At
 	public Object saveActivity(HttpServletRequest request) {
-		String[] productIds = request.getParameterValues("productId[]");
+		final String productId = request.getParameter("productId");
 		String[] productTypeIds = request.getParameterValues("productTypeId[]");
 		String[] prices = request.getParameterValues("price[]");
 		String[] nums = request.getParameterValues("num[]");
-		String[] beginTimes = request.getParameterValues("beginTime[]");
-		String[] endTimes = request.getParameterValues("endTime[]");
+		String beginTime = request.getParameter("beginTime");
+		String endTime = request.getParameter("endTime");
 
 		// opt.productId = limitCtrl.setting.producttypes[i].productId;
 		// opt.productTypeId = limitCtrl.setting.producttypes[i].productTypeId;
@@ -298,16 +298,16 @@ public class ActivityAdminModule {
 		// opt.beginTime = limitCtrl.setting.beginTime;
 		// opt.endTime = limitCtrl.setting.endTime;
 
-		ActivityProduct[] aps = new ActivityProduct[productIds.length];
+		ActivityProduct[] aps = new ActivityProduct[productTypeIds.length];
 		ActivityProduct ap = null;
-		for (int i = 0; i < productIds.length; i++) {
+		for (int i = 0; i < productTypeIds.length; i++) {
 			ap = new ActivityProduct();
-			ap.setProductId(Integer.parseInt(productIds[i]));
+			ap.setProductId(Integer.parseInt(productId));
 			ap.setProductTypeId(Integer.parseInt(productTypeIds[i]));
-			ap.setPrice(Double.parseDouble(prices[i]));
+			ap.setPrice(Float.parseFloat(prices[i]));
 			ap.setNum(Integer.parseInt(nums[i]));
-			ap.setBeginTime(beginTimes[i]);
-			ap.setEndTime(endTimes[i]);
+			ap.setBeginTime(beginTime);
+			ap.setEndTime(endTime);
 			aps[i] = ap;
 		}
 
@@ -344,6 +344,24 @@ public class ActivityAdminModule {
 		// return result;
 		// }
 
+		// 查询库存必须要大于参加活动数
+		for (ActivityProduct apt : aps) {
+			if (apt.getNum() <= 0) {
+				result.put("status", ResultVo.STATUS_FAIL);
+				result.put("msg", "参考活动数量必须大于0!");
+				return result;
+			}
+
+			ProductType productType = dao.fetch(ProductType.class,
+					Cnd.where("productTypeId", "=", apt.getProductTypeId())
+							.and("storeCount", ">=", apt.getNum()));
+			if (productType == null) {
+				result.put("status", ResultVo.STATUS_FAIL);
+				result.put("msg", "该商品类型库存不足!");
+				return result;
+			}
+		}
+
 		Trans.exec(new Atom() {
 			@Override
 			public void run() {
@@ -352,14 +370,21 @@ public class ActivityAdminModule {
 					ap.setStatus(1);
 					ap.setLeftNum(ap.getNum());// 剩余数量和活动数量相关
 					dao.insert(ap);
+
+					int res = dao.update(Cnd
+							.wrap(" update producttype set storeCount  = storeCount- "
+									+ ap.getNum()
+									+ " where  productTypeId = "
+									+ ap.getProductTypeId()
+									+ " and storeCount- " + ap.getNum() + ">0 "));
+					if (res != 1) {
+						throw new RuntimeException("该商品库存不足!");
+					}
 				}
 
 				// 根据商品中对应的状态
-				dao.update(
-						Product.class,
-						Chain.make("activityType", 1),
-						Cnd.where("productId", "=",
-								activityProducts[0].getProductId()));
+				dao.update(Product.class, Chain.make("activityType", 1),
+						Cnd.where("productId", "=", productId));
 			}
 		});
 

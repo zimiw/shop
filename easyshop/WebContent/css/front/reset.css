@@ -155,6 +155,7 @@ body {
     position: relative;
     height: 44px;
     background-color: #000;
+    overflow: hidden;
 }
 .nav li {
     float: left;

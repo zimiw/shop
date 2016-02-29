@@ -4,10 +4,7 @@ import com.easy.core.filters.CheckBackUserLoginFilter;
 import com.easy.core.filters.CheckFrontUserLoginFilter;
 import com.easyshop.bean.*;
 import com.easyshop.core.modules.admin.OrderConstant;
-import com.easyshop.utils.MailUtils;
-import com.easyshop.utils.MessageUtils;
-import com.easyshop.utils.RandomUtils;
-import com.easyshop.utils.StringUtils;
+import com.easyshop.utils.*;
 import com.easyshop.vo.ResultVo;
 import org.apache.log4j.Logger;
 import org.nutz.dao.Cnd;
@@ -336,7 +333,9 @@ public class PersonalModule {
                     cookie.setMaxAge(99999999);
                     response.addCookie(cookie);
                 }*/
-            }
+            }else{
+				CookieUtil.remove(request,response,"frontUserId");
+			}
 
 			result.put("status", "success");
 			result.put("msg", "登陆成功");
@@ -403,6 +402,7 @@ public class PersonalModule {
 			HttpServletResponse httpServletResponse,
 			HttpServletRequest httpServletRequest) throws IOException {
 		session.invalidate();
+		CookieUtil.clear(httpServletRequest,httpServletResponse);
 		httpServletResponse.sendRedirect(httpServletRequest.getContextPath()
 				+ "/front/login.html");
 	}
@@ -552,7 +552,7 @@ public class PersonalModule {
 			condition.and("phone", "like", "%"+phone+"%");
 		}
 		if (!StringUtils.isEmpty(name)) {
-			condition.and("name", "like", "%"+name+"%");
+			condition.and("name", "like", "%" + name + "%");
 		}
 		result.put("total", dao.count(Personal.class,condition));
 		List<Personal> list = dao.query(Personal.class, condition,pager);
@@ -646,6 +646,7 @@ public class PersonalModule {
 	 * @return
 	 */
 	@At
+	@Filters
 	public ResultVo sendEmailMessage(@Param("email") String email) {
 		if (StringUtils.isEmpty(email)) {
 			return new ResultVo(ResultVo.STATUS_FAIL, "参数错误");
@@ -719,6 +720,7 @@ public class PersonalModule {
 	 * @return
 	 */
 	@At
+	@Filters
 	public ResultVo validateSendEmailMessage(@Param("email") String email,
 			@Param("randomNumStr") String randomNumStr) {
 
@@ -793,6 +795,7 @@ public class PersonalModule {
 	 * @return
 	 */
 	@At
+	@Filters
 	public ResultVo checkIsUnusedEmail(@Param("email") String email) {
 		if (StringUtils.isEmpty(email)) {
 			return new ResultVo(ResultVo.STATUS_FAIL, "参数错误");
@@ -843,6 +846,32 @@ public class PersonalModule {
 				.create("update personal set password=@newPassword where phone=@phone");
 		sql.params().set("newPassword", newPassword);
 		sql.params().set("phone", phone);
+		dao.execute(sql);
+		return new ResultVo("修改成功");
+	}
+
+	/**
+	 * 忘记密码,通过邮箱验证修改密码
+	 * http://localhost:8181/easyshop/personal/updatePasswordByEmail
+	 * ?newPassword=1&email=1 {"status":"success","msg":"修改成功"}
+	 * {"status":"fail","msg":"参数错误"}
+	 *
+	 * @param newPassword
+	 * @param email
+	 * @return
+	 */
+	@At
+	@Filters
+	public ResultVo updatePasswordByEmail(
+			@Param("newPassword") String newPassword,
+			@Param("email") String email) {
+		if (StringUtils.isEmpty(newPassword, email)) {
+			return new ResultVo(ResultVo.STATUS_FAIL, "参数错误");
+		}
+		Sql sql = Sqls
+				.create("update personal set password=@newPassword where email=@email");
+		sql.params().set("newPassword", newPassword);
+		sql.params().set("email", email);
 		dao.execute(sql);
 		return new ResultVo("修改成功");
 	}

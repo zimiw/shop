@@ -42,7 +42,7 @@
         					    <div class="addr" ms-class="default: el.isDefault" ms-class-1="noMgr: ($index+1)%3 == 0" ms-repeat="addr">
                                     <p class="recipients">{{el.name}}<span>收</span></p>
                                     <div class="info">
-                                        <p>{{el.province}}{{el.city}}{{el.district}}</p>
+                                        <p>{{el.addressStr}}</p>
                                         <p>{{el.street}}</p>
                                         <p>{{el.phone}}</p>
                                     </div>
@@ -57,24 +57,22 @@
         				</div>
         			</div>
         			<div class="yl-dialog" ms-visible="addAddr">
-        				<p class="title">新增收货地址</p>
+        				<p class="title" ms-visible="addrInfo.addressId == ''">新增收货地址</p>
+        				<p class="title" ms-visible="addrInfo.addressId != ''">修改收货地址</p>
         				<div class="dialog-cnt">
 		        			<div class="yl-form six">
 	    						<div class="item">
 	        						<label><span>*</span>所在地区</label>
 	        						<div class="form-cnt">
-		        						<!--<select class="yl-select area">
-		        							<option>省/直辖市</option>
-		        						</select>
-		        						<select class="yl-select area">
-		        							<option>城市/地区</option>
-		        						</select>
-		        						<select class="yl-select area">
-		        							<option>区/县</option>
-		        						</select>-->
-    	        						<input class="ipt-form area" placeholder="省/直辖市" ms-duplex="addrInfo.province" />
-    	        						<input class="ipt-form area" placeholder="城市/地区" ms-duplex="addrInfo.city" />
-    	        						<input class="ipt-form area" placeholder="区/县" ms-duplex="addrInfo.district" />
+	        						    <select class="yl-select area" ms-duplex="addrInfo.province" data-duplex-changed="provinceChange">
+                                            <option ms-repeat="address.province" ms-attr-value="el.provinceCode">{{el.name}}</option>
+                                        </select>
+                                        <select class="yl-select area" ms-duplex="addrInfo.city" data-duplex-changed="cityChange">
+                                            <option ms-repeat="address.city" ms-attr-value="el.code">{{el.name}}</option>
+                                        </select>
+                                        <select class="yl-select area" ms-duplex="addrInfo.district" data-duplex-changed="districtChange">
+                                            <option ms-repeat="address.district" ms-attr-value="el.code">{{el.name}}</option>
+                                        </select>
 	        						</div>
 	        					</div>
 	        					<div class="item">
@@ -99,7 +97,7 @@
 	        					</div>-->
 	        					<div class="item forBtn">
 	        						<label></label>
-	        						<button class="yl-btn middle" ms-click="save">+&nbsp;保存新地址</button>
+	        						<button class="yl-btn middle" ms-click="save">+&nbsp;保存</button>
 	        						<button class="yl-btn middle" ms-click="back">返回</button>
 	        					</div>
 	    					</div>
@@ -121,13 +119,55 @@
                     addAddr: false,
                     addr:[],
                     addrInfo: {
-                        "addressId": "",
-                        "name": "",
-                        "phone": "",
-                        "province": "",
-                        "city": "",
-                        "district": "",
-                        "street": ""
+                        addressId: "",
+                        name: "",
+                        phone: "",
+                        province: "",
+                        city: "",
+                        district: "",
+                        street: "",
+                    },
+                    address: {
+                        province: Buylll.province,
+                        city: [],
+                        district: []
+                    },
+                    provinceChange: function(val){
+                        addrCtrl.addrInfo.province = val;
+                        $.ajax({
+                            type: "post",
+                            url: DI.getCitys,
+                            data: {
+                                provinceCode: val
+                            },
+                            dataType: "json",
+                            success: function(data){
+                                addrCtrl.address.city = data;
+                            },
+                            error: function(err){
+                                console.log(err);
+                            }
+                        });
+                    },
+                    cityChange: function(val){
+                        addrCtrl.addrInfo.city = val;
+                        $.ajax({
+                            type: "post",
+                            url: DI.getAreas,
+                            data: {
+                                cityCode: val
+                            },
+                            dataType: "json",
+                            success: function(data){
+                                addrCtrl.address.district = data;
+                            },
+                            error: function(err){
+                                console.log(err);
+                            }
+                        });
+                    },
+                    districtChange: function(val){
+                        addrCtrl.addrInfo.district = val;
                     },
                     modify: function(el){
                         if(el){

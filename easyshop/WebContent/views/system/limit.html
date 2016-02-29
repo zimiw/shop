@@ -27,7 +27,7 @@
             <div class="column">
                 <div class="cell">
                     <label>商品状态：</label>
-                    <select class="u-select" ms-duplex="param.statusDesc" data-duplex-changed="statusChange"> 
+                    <select class="u-select" ms-duplex="param.status" data-duplex-changed="statusChange"> 
                         <option value="0">全部状态</option> 
                         <option value="1">已开始</option> 
                         <option value="2">已结束</option> 
@@ -64,8 +64,8 @@
                     <th data-options="field:'minPrice', width:80, align:'center'">洋流价</th>
                     <th data-options="field:'price', width:100, align:'center'">抢购价</th>
                     <th data-options="field:'time', width:100, align:'center'">抢购时间</th>
-                    <th data-options="field:'storeCount', width:100, align:'center'">状态</th>
-                    <th data-options="field:'statusDesc', width:100, align:'center'">库存</th>
+                    <th data-options="field:'statusDesc', width:100, align:'center'">状态</th>
+                    <th data-options="field:'storeCount', width:100, align:'center'">库存</th>
                     <th data-options="field:'operate', width:100, align:'center', formatter: function(value,rowData,index){
                         return '&lt;a href=&quot;javascript:;&quot; class=&quot;btn-operate del&quot;&gt;删除&lt;a&gt;';
                     }">操作</th>
@@ -78,7 +78,7 @@
             <div class="asTable-box">
                 <div class="asTable">
                     <div class="asTableCell">
-                        <div class="asCell dialog">
+                        <div class="asCell dialog goods">
                             <a href="javascript:;" class="close" ms-click="popup.close">×</a>
                             <p class="title">添加商品</p>
                             <div class="container">
@@ -86,11 +86,11 @@
                                     <div class="column">
                                         <div class="cell">
                                             <label>商品编码：</label>
-                                            <input class="u-ipt" ms-duplex="param.code2">
+                                            <input class="u-ipt" ms-duplex="param.productId2">
                                         </div>
                                         <div class="cell">
                                             <label>商品名称：</label>
-                                            <input class="u-ipt" ms-duplex="param.name2">
+                                            <input class="u-ipt" ms-duplex="param.productName2">
                                         </div>
                                     </div>
                                     <div class="column btn-box">
@@ -209,18 +209,25 @@
                 param: {
                     productId: "",
                     productName: "",
-                    statusDesc: "",
+                    status: "0",
+                    productId2: "",
+                    productName2: "",
                     search: function(){
-                        $("#dg").datagrid({
-                            queryParams: {
-                                productId: limitCtrl.param.limitCtrl,
-                                productName: limitCtrl.param.productName                                
-                            }
+                        $("#dg").datagrid("load", {
+                            productId: limitCtrl.param.productId,
+                            productName: limitCtrl.param.productName,
+                            status: limitCtrl.param.status
+                        });
+                    },
+                    search2: function(){
+                        $("#dg-product").datagrid("load", {
+                            productId: limitCtrl.param.productId2,
+                            productName: limitCtrl.param.productName2                               
                         });
                     }
                 },
                 statusChange: function(val){
-                    limitCtrl.param.statusDesc = val;
+                    limitCtrl.param.status = val;
                 },
                 operate: {
                     add: function(){
@@ -241,6 +248,10 @@
                             },
                             dataType: "json",
                             success: function(data){
+                                if(data.status == "success"){
+                                    $("#dg").datagrid("load");
+                                }
+                                PLATFORM.headTip(data.msg);
                             }
                         });
                     },
@@ -263,29 +274,33 @@
                         });
                     },
                     save: function(){
-                        var vdata = [],
-                            opt = {};
+                        var productTypeId = [],
+                            price = [],
+                            num = [];
                         for(var i = 0; i<limitCtrl.setting.producttypes.length; i++){
-                            opt.productId = limitCtrl.setting.producttypes[i].productId;
-                            opt.productTypeId = limitCtrl.setting.producttypes[i].productTypeId;
-                            opt.price = limitCtrl.setting.producttypes[i].price;
-                            opt.num = limitCtrl.setting.producttypes[i].num;
-                            opt.beginTime = limitCtrl.setting.beginTime;
-                            opt.endTime = limitCtrl.setting.endTime;
-                            
-                            vdata.push(opt);
-                            opt = {};
+                            productTypeId.push(limitCtrl.setting.producttypes[i].productTypeId);
+                            price.push(limitCtrl.setting.producttypes[i].price);
+                            num.push(limitCtrl.setting.producttypes[i].num);
                         }
                         $.ajax({
                             type: "post",
                             url: DI.saveActivity,
                             dataType: "json",
                             data: {
-                            	productId:[111,2],
-                            	activityproducts:vdata
+                            	productId: limitCtrl.setting.producttypes[0].productId,
+                            	beginTime: limitCtrl.setting.beginTime,
+                            	endTime: limitCtrl.setting.endTime,
+                            	productTypeId: productTypeId,
+                            	price: price,
+                            	num: num
                             },
+                            dataType: "json",
                             success: function(data){
-                                console.log(data)
+                                if(data.status == "success"){
+                                    limitCtrl.popup.setting = false;
+                                    $("#dg").datagrid("load");
+                                }
+                                PLATFORM.headTip(data.msg);
                             }
                         });
                     }

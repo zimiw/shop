@@ -11,5 +11,9 @@
 }
 
 .u-popup .asTableCell .dialog.goods {
-    width: 900px;
+    width: 910px;
+}
+
+.u-form .stripe {
+    background-color: #EBECED;
 }

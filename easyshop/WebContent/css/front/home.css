@@ -386,6 +386,7 @@
     color: #ee087e;
 }
 .hot .list {
+    margin-top: 20px;
     border-top: 1px solid #ccc;
     font-size: 0;
 }
@@ -395,12 +396,13 @@
     width: 297px;
     height: 370px;
     margin-left: 1px;
+    margin-bottom: 10px;
     padding: 0 20px;
     font-size: 14px;
     color: #404040;
     background-color: #fff;
 }
-.hot .list .product-box:first-child {
+.hot .list .product-box.first {
     width: 296px;
     margin-left: 0;
 }
@@ -413,6 +415,9 @@
 .hot .product-box .title {
     line-height: 1.5;
     margin-bottom: 20px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .hot .product-box .info-box .area {
     float: left;

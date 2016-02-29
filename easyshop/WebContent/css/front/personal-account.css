@@ -173,8 +173,26 @@
 	line-height: 25px;
 }
 
+.u-uploadImg .img-box {
+    width: 80px;
+    height: 80px;
+}
+.u-uploadImg .img-box img {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.u-uploadImg .info-box {
+    font-size: 12px;
+    padding: 5px 0;
+}
+.u-uploadImg .btn-box button {
+    margin: 0 5px;
+}
 
-
+.popup-cnt .form-cnt span.email {
+    width: auto;
+}
 
 
 

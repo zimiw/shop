@@ -1,11 +1,11 @@
 package com.easyshop.core.modules;
 
-import com.easyshop.bean.Images;
-import com.easyshop.bean.Product;
-import com.easyshop.bean.ProductType;
-import com.easyshop.utils.ExecuteStatus;
-import com.easyshop.utils.StringUtils;
-import com.easyshop.vo.ResultVo;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.nutz.aop.interceptor.ioc.TransAop;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
@@ -23,7 +23,13 @@ import org.nutz.mvc.annotation.Param;
 import org.nutz.trans.Atom;
 import org.nutz.trans.Trans;
 
-import java.util.*;
+import com.easyshop.bean.ActivityProduct;
+import com.easyshop.bean.Images;
+import com.easyshop.bean.Product;
+import com.easyshop.bean.ProductType;
+import com.easyshop.utils.ExecuteStatus;
+import com.easyshop.utils.StringUtils;
+import com.easyshop.vo.ResultVo;
 
 @IocBean
 @At("/product")
@@ -184,21 +190,25 @@ public class ProductModule {
 	 * http://localhost:8181/easyshop/product/updateProductByAll?productId=22
 	 * &productTypeId
 	 * =166@0&sellCount=0@0&limitActivityLeftCount=0@0&specialPrice=0.01
-	 * @0.02%20&name
-	 * =2222&originPrice=10@20&currentPrice=8@12&supplyPrice=3@4&storeCount
-	 * =30@40&
-	 * SupplierId=2&catalogId1=11&catalogId2=22&catalogId3=33&country=america
-	 * &color
-	 * =red@blue&catalogId1=35&brandId=6&size=XL@XXL&topImg=1113@1123&detailImg
-	 * =1110@11110@11111
+	 * 
+	 * @0.02%20&name 
+	 *               =2222&originPrice=10@20&currentPrice=8@12&supplyPrice=3@4&storeCount
+	 *               =30@40&
+	 *               SupplierId=2&catalogId1=11&catalogId2=22&catalogId3=
+	 *               33&country=america &color
+	 *               =red@blue&catalogId1=35&brandId=6&
+	 *               size=XL@XXL&topImg=1113@1123&detailImg =1110@11110@11111
 	 *
 	 *
-	 * 正常返回:{"status":"success"} 如果错误返回:{"status":"fail","msg", "编辑商品错误"}
+	 *               正常返回:{"status":"success"} 如果错误返回:{"status":"fail","msg",
+	 *               "编辑商品错误"}
 	 *
-	 * 有几个字段是用@分割的:colors sizes storeCounts supplyPrices currentPrices
-	 * originPrices 因为这是这是一种商品的几种型号. 注意编辑比新增多了几个字段
-	 * productTypeIds sellCounts limitActivityLeftCount specialPrices 依然都是用@分割的
-	 * 还要注意,如果某一个型号是新增的,那么这个型号的productTypeId 设置为0 .如果是修改的,保持原 productTypeId 不变.
+	 *               有几个字段是用@分割的:colors sizes storeCounts supplyPrices
+	 *               currentPrices originPrices 因为这是这是一种商品的几种型号. 注意编辑比新增多了几个字段
+	 *               productTypeIds sellCounts limitActivityLeftCount
+	 *               specialPrices 依然都是用@分割的
+	 *               还要注意,如果某一个型号是新增的,那么这个型号的productTypeId 设置为0 .如果是修改的,保持原
+	 *               productTypeId 不变.
 	 */
 	@At
 	public Object updateProductByAll(@Param("productId") int productId,
@@ -348,9 +358,9 @@ public class ProductModule {
 	}
 
 	/**
-     *
-     * http://localhost:8181/easyshop/product/getAllProductInfo4Update?productId=26
-	 * 获取商品的所有信息
+	 *
+	 * http://localhost:8181/easyshop/product/getAllProductInfo4Update?productId
+	 * =26 获取商品的所有信息
 	 *
 	 * 返回: json字符串 { "originPrice": 0, "currentPrice": 0, "productId": 26,
 	 * "name": "2222", "minPrice": 8, "activityType": 0, "limitActivityStatus":
@@ -893,5 +903,19 @@ public class ProductModule {
 			}
 		}
 		return this.result;
+	}
+
+	/**
+	 * 获取限时活动库存数量
+	 * 
+	 * @author luocz
+	 * @return
+	 */
+	@At
+	public Object getProductActivtyNum(@Param("productTypeId") int productTypeId) {
+		ActivityProduct ap = dao.fetch(ActivityProduct.class,
+				Cnd.where("productTypeId", "=", productTypeId));
+		int leftNum = ap.getLeftNum();
+		return leftNum < 0 ? 0 : leftNum;
 	}
 }
