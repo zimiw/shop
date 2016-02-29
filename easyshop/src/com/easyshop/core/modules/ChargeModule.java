@@ -349,7 +349,9 @@ public class ChargeModule {
         sql.params().set("chargeId", charge.getId());
         sql.params().set("chargePaidTime", TimeUtils.timestamp2Date(charge.getTimePaid()));
         dao.execute(sql);
+        //调用的是志明的,订单状态改变接口
         orderModule.setOrderProgress(Integer.parseInt(charge.getOrderNo()),102);
+        //todo 下面要调用志明的接口 在coding 主要是更新product 和producttype表的 sellcount 字段
     }
 
 }
