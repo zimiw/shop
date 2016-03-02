@@ -1,11 +1,18 @@
 package com.easyshop.core.modules;
 
-import com.easy.core.filters.CheckBackUserLoginFilter;
-import com.easy.core.filters.CheckFrontUserLoginFilter;
-import com.easyshop.bean.*;
-import com.easyshop.core.modules.admin.OrderConstant;
-import com.easyshop.utils.*;
-import com.easyshop.vo.ResultVo;
+import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.apache.log4j.Logger;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
@@ -16,15 +23,29 @@ import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.util.NutMap;
 import org.nutz.mvc.Mvcs;
-import org.nutz.mvc.annotation.*;
+import org.nutz.mvc.annotation.At;
+import org.nutz.mvc.annotation.By;
+import org.nutz.mvc.annotation.Fail;
+import org.nutz.mvc.annotation.Filters;
+import org.nutz.mvc.annotation.Ok;
+import org.nutz.mvc.annotation.Param;
 import org.nutz.mvc.filter.CheckSession;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.IOException;
-import java.util.*;
+import com.easy.core.filters.CheckBackUserLoginFilter;
+import com.easy.core.filters.CheckFrontUserLoginFilter;
+import com.easyshop.bean.Favorite;
+import com.easyshop.bean.Images;
+import com.easyshop.bean.MessageRtnInfo;
+import com.easyshop.bean.Personal;
+import com.easyshop.bean.Product;
+import com.easyshop.bean.Shoppingcart;
+import com.easyshop.core.modules.admin.OrderConstant;
+import com.easyshop.utils.CookieUtil;
+import com.easyshop.utils.MailUtils;
+import com.easyshop.utils.MessageUtils;
+import com.easyshop.utils.RandomUtils;
+import com.easyshop.utils.StringUtils;
+import com.easyshop.vo.ResultVo;
 
 /**
  * 个人中心
@@ -215,7 +236,7 @@ public class PersonalModule {
 				favMap.put("area", product.getProvider());// 供货商
 				favMap.put("flag", "");// TODO: 收藏夹页面 flag: "img/demo_9.png",
 										// 没法取
-				favMap.put("price", product.getCurrentPrice());
+				favMap.put("price", product.getMinPrice());
 				favList.add(favMap);
 			}
 		}

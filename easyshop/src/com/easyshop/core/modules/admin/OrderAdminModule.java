@@ -91,7 +91,7 @@ public class OrderAdminModule {
         List<Order> orderList = dao.query(Order.class, cnd.desc("orderId"), pager);
         List<Map<String, Object>> resList = new ArrayList<Map<String, Object>>();
 
-        String sqlOp = "SELECT a.number num, b.*" + " FROM connectorop a, product b  "
+        String sqlOp = "SELECT a.number num, b.*  FROM connectorop a, product b  "
                 + " WHERE a.productId = b.productId and a.orderId = @orderId ";
 
         for (Order order : orderList) {
