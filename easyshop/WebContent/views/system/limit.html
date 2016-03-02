@@ -144,8 +144,16 @@
                             <a href="javascript:;" class="close" ms-click="popup.settingClose">×</a>
                             <p class="title">设置</p>
                             <div class="container">
-                                <div class="u-form">
+                                <div class="u-form limit">
                                     <div class="stripe" ms-repeat="setting.producttypes">
+                                        <div class="column">
+                                            <label>颜色：</label>
+                                            <p class="cnt-box word">{{el.color}}</p>
+                                        </div>
+                                        <div class="column">
+                                            <label>尺码：</label>
+                                            <p class="cnt-box word">{{el.size}}</p>
+                                        </div>
                                         <div class="column">
                                             <label>原洋流价：</label>
                                             <p class="cnt-box word">{{el.originPrice}}</p>
@@ -257,6 +265,8 @@
                     },
                     join: function(el){
                         limitCtrl.popup.setting = true;
+                        limitCtrl.setting.beginTime = "";
+                        limitCtrl.setting.endTime = "";
                         $.ajax({
                             type: "post",
                             url: DI.queryActivityProductType,

@@ -176,7 +176,24 @@
             avalon.scan();
             
             $(function(){
-                $("#dg").datagrid({url: DI.queyActivtyHeatOneList});
+                $("#dg").datagrid({
+                    url: DI.queyActivtyHeatOneList,
+                    loadFilter: function(data){
+                        if(data.total < 6){
+                            var i = 6 - data.total;
+                            for(var j=0; j<i; j++){
+                                data.rows.push({
+                                    productId: "",
+                                    name: "",
+                                    minPrice: "",
+                                    storeCount: ""
+                                });
+                            }
+                            data.total = 6;
+                        }
+                        return data;
+                    }
+                });
             });
             
             $("body").on("click", ".btn-operate.replace", function(){

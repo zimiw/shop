@@ -40,7 +40,10 @@ Buylll.addShoppingcart = function(id,typeId,number){
         },
         success: function(data){
             if(data.status == "sucess"){
-                avalon.vmodels.common.header.productNum = data.number;
+                Buylll.checkShoppingcartSize();
+                alert("加入购物车成功");
+            }else{
+                location.href = "login.html";
             }
         },
         error: function(err){
@@ -348,6 +351,48 @@ Buylll.fileUploadedSingle = function(uploader, file, result){
         alert("上传失败");
     }
 };
+Buylll.checkShoppingcartSize = function(){
+    $.ajax({
+        type:"post",
+        dataType:"json",
+        url:DI.checkShoppingcartSize,
+        success:function(data){
+            try{
+                JSON.parse(data);
+            }catch(e){
+                avalon.vmodels.common.header.productNum = data.size;
+            }
+        }
+    });
+};
+Buylll.sendEmailMessage = function(email){
+    $.ajax({
+        type: "post",
+        url: DI.sendEmailMessage,
+        data: {email: email},
+        dataType: "json",
+        success: function(data){
+            alert(data.msg);
+        },
+        error: function(err){
+            console.log(err);
+        }
+    });
+};
+Buylll.sendPhoneMessage = function(phone){
+    $.ajax({
+        type: "post",
+        url: DI.sendPhoneMessage,
+        data: {phone: phone},
+        dataType: "json",
+        success: function(data){
+            alert(data.msg);
+        },
+        error: function(err){
+            console.log(err);
+        }
+    });
+};
 
 $(function(){
     Buylll.upTop();
@@ -391,25 +436,18 @@ $(function(){
             $.ajax({
           	    type:"post",
         	    dataType:"json",
-        	    url:DI.getLogedUser,
+        	    url:DI.getPersonlName,
         	    success:function(data){
-        		    if(data.status=="success"){
-                      	commonCtrl.header.logged = true;
-                        commonCtrl.header.uname = data.name; 
-        		    }
-        	    }
+        	        if(data != '{"status":"fail","target":"login.html"}'){
+                        commonCtrl.header.logged = true;
+                        commonCtrl.header.uname = data; 
+        	        }
+        	    },
+                error: function(err){
+                    console.log(err);
+                }
             });
-//          $.ajax({
-//        	    type:"post",
-//      	    dataType:"json",
-//      	    url:DI.getLogedUser,
-//      	    success:function(data){
-//      		    if(data.status=="success"){
-//                    	commonCtrl.header.logged = true;
-//                      commonCtrl.header.uname = data.name; 
-//      		    }
-//      	    }
-//          });
+            Buylll.checkShoppingcartSize();
         },
         initNav: function(){
             $.ajax({

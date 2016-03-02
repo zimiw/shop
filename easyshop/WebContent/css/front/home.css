@@ -208,6 +208,8 @@
 .flash-sale .cell .title {
     height: 40px;
     margin: 25px 0;
+    padding-right: 10px;
+    word-break: break-all;
 }
 .flash-sale .cell .price {
     color: #ee087e;
@@ -309,6 +311,10 @@
     float: left;
     color: #f3f3f3;
     font-size: 14px;
+    max-width: 280px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .hot .cell .hot-big .info-bar .price {
     float: right;
@@ -379,6 +385,9 @@
 .hot .cell .item .info-box .title {
     margin: 15px 0;
     padding-right: 10px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 .hot .cell .item .info-box .price {
     font-size: 24px;
@@ -449,6 +458,10 @@
     margin-left: 12px;
     font-size: 12px;
     color: #999;
+}
+.hot .product-box .yl-area {
+    float: left;
+    margin-top: 4px;
 }
 
 

@@ -80,7 +80,6 @@
 
         <script src="../js/avalon.shim.sn.js"></script>
         <script src="../js/jquery.min.js"></script>
-        <script src="../js/jquery.plugin.min.js"></script>
         <script src="../js/jquery.countdown.min.js"></script>
         <script src="../js/main.js"></script>
         <script src="../js/data-interface.js"></script>
@@ -103,7 +102,7 @@
                     goPay: function(){
                         if(payCtrl.channel == "upacp_pc") {
                             window.open("pay_upacp.html?orderId=" + param.orderId + "&channel=" + payCtrl.channel, "_blank");
-                        }else if ($("#chargeChannel").val() == "wx_pub_qr") {
+                        }else if (payCtrl.channel == "wx_pub_qr") {
                             window.open("pay_qr.html?orderId=" + param.orderId + "&channel=" + payCtrl.channel, "_blank");
                         }
                         listeningIsHasPaid();
@@ -119,10 +118,18 @@
 
                 avalon.scan();
                 
-//              $(".time-countdown").countdown({
-//                  until: +1800,
-//                  layout: "{hnn}小时 {mn}分 {sn}秒"
-//              });
+                var now = new Date(),
+                    nowtime = now.getTime();
+                now.setTime(nowtime + 1000*60*30);
+                $(".time-countdown").countdown({
+                    date: now,
+                    render: function(data) {
+                        $(this.el).html(this.leadingZeros(data.min, 2) + "分" + this.leadingZeros(data.sec, 2) + "秒");
+                    },
+                    onEnd: function(){
+                        alert("过期了");
+                    }
+                });
 
                 function listeningIsHasPaid() {
                     window.timer = window.setInterval(checkIsHasPaid,1000);

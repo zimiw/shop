@@ -52,12 +52,12 @@
 	        				</div>
         				</div>
         				<div class="order-box">
-        					<p>代付款：<a href="javascript:;">{{pnopay}}</a></p>
-        					<p class="no-receive">代收货：<a href="javascript:;">{{pwait}}</a></p>
-        					<p>代评价：<a href="javascript:;">{{pevaluate}}</a></p>
+        					<p>待付款：<a href="javascript:;">{{pnopay}}</a></p>
+        					<p class="no-receive">待收货：<a href="javascript:;">{{pwait}}</a></p>
+        					<p>待评价：<a href="javascript:;">{{pevaluate}}</a></p>
         				</div>
         			</div>
-        			<div ms-visible="recently.length != 0">
+        			<div ms-visible="recently.length != 0 || favorite.length != 0 || cart.length != 0">
 	        			<div class="footprint recently">
 	        				<p class="title">最近订单</p>
 	        				<div class="recently-box">
@@ -115,7 +115,7 @@
 	        				</div>
 	        			</div>
         			</div>
-        			<div ms-visible="recently.length == 0">
+        			<div ms-visible="recently.length == 0 && favorite.length == 0 && cart.length == 0">
         				<p class="no-footprint">
         					您还没有留下足迹哦，快去<a href="home.html">逛逛吧&gt;</a>
         				</p>

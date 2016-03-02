@@ -342,7 +342,7 @@
                     productCtrl.suppliers.SupplierId = val;
                 },
                 countries: {
-                    country: "",
+                    country: "hk",
                     all: [
                         {
                             code: "hk",
@@ -467,6 +467,8 @@
                 detailImgs: [],
                 operate: {
                     add: function(){
+                        $(".img-box .img-opt").siblings().remove();
+                        
                         productCtrl.edit = true;
                         
                         productCtrl.odata.productId = "";
@@ -490,6 +492,8 @@
                         productCtrl.detailImgs = [];
                     },
                     edit: function(el){
+                        $(".img-box .img-opt").siblings().remove();
+                        
                         productCtrl.edit = true;
                         
                         productCtrl.odata.productId = el.productid;

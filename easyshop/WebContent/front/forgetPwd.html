@@ -35,24 +35,29 @@
                 </div>
                 <div class="step2" ms-visible="step == 2">
                     <div class="item">
-                        <label>请选择验证身份方式：</label>
-                        <select class="yl-select">
+                        <label>已选择验证身份方式：</label>
+                        <!--<select class="yl-select">
                             <option>已验证手机</option>
                             <option>邮箱</option>
-                        </select>
+                        </select>-->
+                        <p class="yl-select valitip" ms-visible="validateType == 1">已验证手机</p>
+                        <p class="yl-select valitip" ms-visible="validateType == 2">已验证邮箱</p>
                     </div>
-                    <div class="item">
+                    <!--<div class="item">
                         <label>昵称：</label>
                         <p class="ctt"></p>
+                    </div>-->
+                    <div class="item">
+                        <label ms-visible="validateType == 1">手机号码：</label>
+                        <label ms-visible="validateType == 2">邮箱：</label>
+                        <p class="ctt">{{name}}</p>
                     </div>
                     <div class="item">
-                        <label>手机号码：</label>
-                        <p class="ctt"></p>
-                    </div>
-                    <div class="item">
-                        <label>请填写手机校验码：</label>
-                        <input class="yl-ipt code" type="text" />
-                        <button class="btn-phone">获取短信验证码</button>
+                        <label ms-visible="validateType == 1">请填写手机校验码：</label>
+                        <label ms-visible="validateType == 2">请填写邮箱校验码：</label>
+                        <input class="yl-ipt code" type="text" ms-duplex="validateCode" />
+                        <button class="btn-phone" ms-visible="validateType == 1" ms-click="sendPhoneMessage">获取手机验证码</button>
+                        <button class="btn-phone" ms-visible="validateType == 2" ms-click="sendEmailMessage">获取邮箱验证码</button>
                     </div>
                     <div class="item">
                         <label></label>
@@ -62,11 +67,11 @@
                 <div class="step3" ms-visible="step == 3">
                     <div class="item">
                         <label>输入新密码：</label>
-                        <input class="yl-ipt" type="text" />
+                        <input class="yl-ipt" type="text" ms-duplex="newPwd" />
                     </div>
                     <div class="item">
                         <label>重复新密码：</label>
-                        <input class="yl-ipt" type="text" />
+                        <input class="yl-ipt" type="text" ms-duplex="newPwdAgain" />
                     </div>
                     <div class="item">
                         <label></label>
@@ -90,21 +95,118 @@
             $(function(){
                 var forgetCtrl = avalon.define({
                     $id: "forget",
-                    step: 2,
+                    step: 1,
                     name: "",
                     errCode: false,
+                    validateType: 1,
+                    validateCode: "",
                     modifyFlag: true,
+                    newPwd: "",
+                    newPwdAgain: "",
                     next: function(step){
                         if(step == 2){
                             if(forgetCtrl.name != ""){
+                                var url = "",
+                                    param = {};
                                 if($.idcode.validateCode()){
+                                    if(forgetCtrl.name.indexOf("@") >= 0){
+                                        url = DI.checkIsUnusedEmail;
+                                        param.email = forgetCtrl.name;
+                                        forgetCtrl.validateType = 2;
+                                    }else{
+                                        url = DI.checkIsUnusedPhone;
+                                        param.phone = forgetCtrl.name;
+                                        forgetCtrl.validateType = 1;
+                                    }
                                     forgetCtrl.errCode = false;
-                                    forgetCtrl.step = step;
+                                    $.ajax({
+                                        type: "post",
+                                        url: url,
+                                        data: param,
+                                        dataType: "json",
+                                        success: function(data){
+                                            if(data.status == "success" && data.msg == "false"){
+                                                forgetCtrl.step = 2;
+                                            }else{
+                                                alert("获取信息失败");
+                                            }
+                                        },
+                                        error: function(err){
+                                            console.log(err);
+                                        }
+                                    });
                                 }else{
                                     forgetCtrl.errCode = true;
                                 }
                             }
+                        }else if(step == 3){
+                            var vurl = "",
+                                vparam = {
+                                    randomNumStr: forgetCtrl.validateCode
+                                };
+                            if(forgetCtrl.validateType == 1){
+                                vurl = DI.validateSendPhoneMessage;
+                                vparam.phone = forgetCtrl.name;
+                            }else{
+                                vurl = DI.validateSendEmailMessage;
+                                vparam.email = forgetCtrl.name;
+                            }
+                            $.ajax({
+                                type: "post",
+                                url: vurl,
+                                data: vparam,
+                                dataType: "json",
+                                success: function(data){
+                                    if(data.status == "success"){
+                                        forgetCtrl.step = 3;
+                                    }else{
+                                        alert(data.status);
+                                    }
+                                },
+                                error: function(err){
+                                    console.log(err);
+                                }
+                            });
+                        }else if(step == 4){
+                            if(forgetCtrl.newPwd == forgetCtrl.newPwdAgain){
+                                var curl = "",
+                                    cparam = {
+                                        newPassword: forgetCtrl.newPwd
+                                    };
+                                if(forgetCtrl.validateType == 1){
+                                    curl = DI.updatePasswordByPhone;
+                                    cparam.phone = forgetCtrl.name;
+                                }else{
+                                    curl = DI.updatePasswordByEmail;
+                                    cparam.email = forgetCtrl.name;
+                                }
+                                $.ajax({
+                                    type: "post",
+                                    url: curl,
+                                    data: cparam,
+                                    dataType: "json",
+                                    success: function(data){
+                                        forgetCtrl.step = 4;
+                                        if(data.status == "success"){
+                                            forgetCtrl.modifyFlag = true;
+                                        }else{
+                                            forgetCtrl.modifyFlag = false;
+                                        }
+                                    },
+                                    error: function(err){
+                                        console.log(err);
+                                    }
+                                });
+                            }else{
+                                alert("两次密码不一致");
+                            }
                         }
+                    },
+                    sendEmailMessage: function(){
+                        Buylll.sendEmailMessage(forgetCtrl.name);
+                    },
+                    sendPhoneMessage: function(){
+                        Buylll.sendPhoneMessage(forgetCtrl.name);
                     }
                 });
 

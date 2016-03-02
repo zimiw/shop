@@ -40,12 +40,15 @@
 }
 .rank-box .rank {
     margin-right: 40px;
+    background: url("images/rank.png") no-repeat;
 }
-.rank-box .rank.up {
+.rank-box .rank.down {
     padding-right: 17px;
+    background-position: right -14px;
 }
 .rank-box .rank.updown {
     padding-right: 23px;
+    background-position: right 0;
 }
 
 .list-box {
@@ -85,19 +88,19 @@
 .list-item .info-box {
     padding: 0 3px;
 }
-.list-item .info-box .yl-area,
-.list-item .info-box .price {
+.list-item .info-box .yl-area {
     float: left;
 }
 .list-item .info-box .price {
-    margin-left: 12px;
+    float: right;
     font-size: 24px;
     line-height: 1;
     color: #ee087e;
 }
 .list-item .info-box .reference {
     float: right;
-    margin-top: 12px;
+    margin-left: 12px;
+    margin-top: 8px;
     font-size: 12px;
     line-height: 1;
     color: #999;
@@ -148,7 +151,20 @@
     padding: 20px 0;
 }
 
-
+.search-empty {
+    display: none;
+    padding: 120px 0 130px;
+    line-height: 1;
+    font-size: 18px;
+    text-align: center;
+}
+.search-empty p:first-child {
+    margin-bottom: 20px;
+    font-size: 30px;
+}
+.search-empty p span {
+    color: #ee087e;
+}
 
 
 

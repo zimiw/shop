@@ -404,9 +404,6 @@ public class ShopCarModule {
 	 */
 	@At
 	public Object getAddress(HttpSession session) {
-		Date startTime = new Date();
-		System.out.println("-----------------开始查询时间 ：" + startTime.getTime()
-				+ "--------------------");
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		String userId = String.valueOf(session.getAttribute(FRONT_USER_ID));
 
@@ -419,15 +416,12 @@ public class ShopCarModule {
 					Cnd.where("code", "=", item.getCity()));
 			Area area = dao.fetch(Area.class,
 					Cnd.where("code", "=", item.getDistrict()));
-			item.setAddressStr(province.getName() + city.getName()
-					+ area.getName());
+			if(province!=null&&city!=null&&area!=null){
+			    item.setAddressStr(province.getName() + city.getName()
+	                    + area.getName());
+			}
 		}
 		result.put("data", addresses);
-		Date endTime = new Date();
-		System.out.println("-----------------结束查询时间 ：" + startTime.getTime()
-				+ "--------------------");
-		System.out.println("花费时间为： "
-				+ (endTime.getTime() - startTime.getTime()));
 		return result;
 	}
 
@@ -1198,26 +1192,46 @@ public class ShopCarModule {
 	 */
 	public int updateOrderProduct(int orderId) {
 
-		List<ConnectorOP> listOp = dao
+		final List<ConnectorOP> listOp = dao
 				.query(ConnectorOP.class,
 						Cnd.wrap(" and exists (selec 1 from orders t "
 								+ "	where t.orderId=connectorOP.orderId and t.status= 106 and t.orderId = "
 								+ orderId + " ) and orderId = " + orderId
 								+ "  "));
-		if (listOp != null && listOp.size() > 0) {
-
-			Sql sql = null;
-			sql = Sqls
-					.create("update producttype "
-							+ " set sellCount = sellCount +@num  where productTypeId =@productTypeId ");
-			for (ConnectorOP op : listOp) {
-				sql.params().set("num", op.getNumber())
-						.set("productTypeId", op.getProductTypeId());
-				sql.addBatch();
-			}
-
-			dao.execute(sql);
-		}
+		
+		Trans.exec(new Atom() {
+            @Override
+            public void run() {
+                int numAll = 0;
+                int productId = 0;
+                if (listOp != null && listOp.size() > 0) {
+                    Sql sql = null;
+                    //更新对应类型库存
+                    sql = Sqls
+                            .create("update producttype "
+                                    + " set sellCount = sellCount +@num  where productTypeId =@productTypeId ");
+                    for (ConnectorOP op : listOp) {
+                        numAll = +op.getNumber();
+                        sql.params().set("num", op.getNumber())
+                                .set("productTypeId", op.getProductTypeId());
+                        sql.addBatch();
+                        
+                        productId = op.getProductId();
+                    }
+                    dao.execute(sql);
+                    
+                    //更新对应商品库存
+                    sql = Sqls
+                            .create("update product "
+                                    + " set sellCount = sellCount +@num  where productId =@productId ");
+                    sql.params().set("num",numAll)
+                    .set("productTypeId", productId);
+                    dao.execute(sql);
+                }
+            }
+        });
+		
+		
 		return 0;
 	}
 }

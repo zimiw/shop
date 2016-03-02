@@ -127,7 +127,12 @@
     background-position: 0 -80px;
 }
 
-
+.valitip {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 14px;
+    line-height: 32px;
+}
 
 
 

@@ -143,8 +143,8 @@
                                     <em ms-class="{{el.country}}"></em>
                                     <span>{{el.country | area}}</span>
                                 </div>
-                                <del>{{el.originPrice | currency}}</del>
-                                <span class="price">{{el.currentPrice | currency}}</span>
+                                <del>¥{{el.originPrice}}</del>
+                                <span class="price">¥{{el.currentPrice}}</span>
                             </div>
                         </a>
                     </div>
@@ -222,7 +222,7 @@
                                 $(".countdown-sale" + i).countdown({
                                     date: new Date(data.limit[i].external),
                                     render: function(data) {
-                                        $(this.el).html(this.leadingZeros(data.hours, 2) + "小时 " + this.leadingZeros(data.min, 2) + "分 " + this.leadingZeros(data.sec, 2) + "秒");
+                                        $(this.el).html(this.leadingZeros(data.days * 24 + data.hours, 2) + "小时 " + this.leadingZeros(data.min, 2) + "分 " + this.leadingZeros(data.sec, 2) + "秒");
                                         if(data.sec % 5 == 0){
                                             // 查询是否还有库存
                                             
@@ -274,7 +274,7 @@
                                 $(".countdown-activity" + i).countdown({
                                     date: new Date(data.activity[i].endTime),
                                     render: function(data) {
-                                        $(this.el).html(this.leadingZeros(data.hours, 2) + "小时 " + this.leadingZeros(data.min, 2) + "分 " + this.leadingZeros(data.sec, 2) + "秒");
+                                        $(this.el).html(this.leadingZeros(data.days * 24 + data.hours, 2) + "小时 " + this.leadingZeros(data.min, 2) + "分 " + this.leadingZeros(data.sec, 2) + "秒");
                                     },
                                     onEnd: function(){
                                         $(this.el).parents(".cell").remove();

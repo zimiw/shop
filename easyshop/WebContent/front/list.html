@@ -13,16 +13,20 @@
         <div ms-include-src="'../template/header.html'" data-include-replace="true" data-include-loaded="initHeader"></div>
         <div ms-include-src="'../template/nav.html'" data-include-replace="true" data-include-loaded="initNav"></div>
         <div class="list wrap" ms-controller="list">
-            <p class="ly-breadcrumb"></p>
+            <!--<p class="ly-breadcrumb"></p>-->
+            <div class="search-empty" ms-visible="noResult">
+                <p>抱歉，没有搜索到与 “<span>{{keyword}}</span>”相关的商品</p>
+                <p>请检查您的输入是否有误</p>
+            </div>
             <div class="brand-box" ms-visible="fBrand">
                 <div class="first-brand">
                     <p>品牌：<a href="javascript:;" ms-repeat="brands" ms-click="getProducts(el.brandId)">{{el.brandName}}</a><a class="more" href="javascript:;" ms-click="more">更多</a></p>
                 </div>
             </div>
-            <div class="rank-box">
-                <a class="rank up" href="javascript:;" ms-click="orderSynthesize">综合</a>
+            <div class="rank-box" ms-visible="!noResult">
+                <a class="rank down" href="javascript:;" ms-click="orderSynthesize">综合</a>
                 <a class="rank updown" href="javascript:;" ms-click="orderPrice">价格</a>
-                <a class="rank up" href="javascript:;" ms-click="orderSales">销量</a>
+                <a class="rank down" href="javascript:;" ms-click="orderSales">销量</a>
                 <div class="limit">
                     <input type="checkbox" id="ipt_limit" />限时抢购
                 </div>
@@ -36,8 +40,8 @@
                             <em ms-class="{{el.country}}"></em>
                             <span>{{el.country | area}}</span>
                         </div>
-                        <span class="price">¥{{el.currentPrice}}</span>
                         <del class="reference">¥{{el.originPrice}}</del>
+                        <span class="price">¥{{el.minPrice}}</span>
                     </div>
                 </a>
             </div>
@@ -56,7 +60,7 @@
                                             <em ms-class="{{el.country}}"></em>
                                             <span>{{el.country | area}}</span>
                                         </div>
-                                        <span class="price">¥{{el.price}}</span>
+                                        <span class="price">¥{{el.minPrice}}</span>
                                         <del class="reference">¥{{el.originPrice}}</del>
                                     </div>
                                 </a>
@@ -86,6 +90,8 @@
                     brands: [],
                     items: [],
                     recent: [],
+                    keyword: "",
+                    noResult: false,
                     getProducts: function(id){
                         param.currentPage = 1;
                         param.brandId = id;
@@ -152,6 +158,10 @@
                     data: param,
                     dataType: "json",
                     success: function(data){
+                        if(data.total == 0 && param.name){
+                            listCtrl.keyword = param.name;
+                            listCtrl.noResult = true;
+                        }
                         listCtrl.items = data.rows;
                         
                         laypage({

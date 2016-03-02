@@ -7,6 +7,9 @@ DI.login = DI.baseURL + "/personal/login";
 DI.sendPhoneMessage = DI.baseURL + "/personal/sendPhoneMessage";
 DI.addPersonal = DI.baseURL + "/personal/addPersonal";
 DI.checkIsUnusedPhone = DI.baseURL + "/personal/checkIsUnusedPhone";
+DI.checkIsUnusedEmail = DI.baseURL + "/personal/checkIsUnusedEmail";
+DI.updatePasswordByPhone = DI.baseURL + "/personal/updatePasswordByPhone";
+DI.updatePasswordByEmail = DI.baseURL + "/personal/updatePasswordByEmail";
 // 首页相关
 DI.getHomeInfo = DI.baseURL + "/home/getHomeInfo";
 DI.getItems = DI.baseURL+"/home/getItems";
@@ -18,8 +21,9 @@ DI.getAdviser = DI.baseURL+"/home/getAdviser";
 DI.getHotSell = DI.baseURL+"/home/getHotSell";
 DI.getHotSellTwo = DI.baseURL+"/home/getHotSellTwo";
 DI.getWin = DI.baseURL+"/home/getWin";
-DI.getLogedUser = DI.baseURL+"/home/getCurrentUser";
+DI.getCurrentUser = DI.baseURL+"/home/getCurrentUser";
 DI.logout = DI.baseURL+"/personal/logout";
+DI.getPersonlName = DI.baseURL+"/personal/getPersonlName";
 // 商品详情
 DI.getDetailInfo = DI.baseURL+"/front/detail/getDetailInfo";
 DI.getcatalogItems = DI.baseURL+"/front/detail/getcatalogItems";
@@ -68,6 +72,7 @@ DI.delAddress = DI.baseURL+"/shopcar/delAddress";
 DI.setDefaultAddress = DI.baseURL+"/shopcar/setDefaultAddress";
 // 购物车相关
 DI.checkShoppingcart = DI.baseURL+"/shopcar/checkShoppingcart";
+DI.checkShoppingcartSize = DI.baseURL+"/shopcar/checkShoppingcartSize";
 DI.delShoppingcart = DI.baseURL+"/shopcar/delShoppingcart";
 DI.modifyNumber = DI.baseURL+"/shopcar/modifyNumber";
 DI.modifySelected = DI.baseURL+"/shopcar/modifySelected";

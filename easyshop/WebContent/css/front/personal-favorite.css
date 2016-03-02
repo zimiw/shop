@@ -23,6 +23,9 @@
 .favorite-box .item .info-box .name {
 	padding: 15px 0;
 	font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .favorite-box .item .info-box .price-box {
 	font-size: 0;

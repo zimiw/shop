@@ -17,3 +17,7 @@
 .u-form .stripe {
     background-color: #EBECED;
 }
+
+.u-form.limit .u-ipt {
+    width: 185px;
+}

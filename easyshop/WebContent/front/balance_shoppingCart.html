@@ -154,14 +154,15 @@
                             url: DI.delShoppingcart,
                             dataType: "json",
                             data: {
-                                productId: el.product.productId
+                                shoppingcartId: el.shoppingcartId
                             },
                             success: function(data){
-                                alert(data.status);
                                 if(data.status == "success"){
                                     total();
                                     checkShoppingcart();
+                                    Buylll.checkShoppingcartSize();
                                 }
+                                alert("删除成功");
                             },
                             error: function(err){
                                 console.log(err);

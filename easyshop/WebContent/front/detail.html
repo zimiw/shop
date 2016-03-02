@@ -41,13 +41,13 @@
                             <div class="item mgt1">
                                 <label>颜色</label>
                                 <div class="cnt">
-                                    <span class="choice color" ms-repeat="colors" ms-on-click="colorClk(el)" ms-class="chked: $index==0" ms-class-1="dis: el.flag == 0">{{el.color}}</span>
+                                    <span class="choice color" ms-repeat="colors" ms-on-click="colorClk(el)" ms-class-1="dis: el.flag == 0">{{el.color}}</span>
                                 </div>
                             </div>
                             <div class="item mgt2">
                                 <label>尺码</label>
                                 <div class="cnt">
-                                    <span class="choice size" ms-repeat="sizes" ms-on-click="sizeClk(el)" ms-class="chked: $index==0" ms-class-1="dis: el.flag == 0">{{el.size}}</span>
+                                    <span class="choice size" ms-repeat="sizes" ms-on-click="sizeClk(el)" ms-class-1="dis: el.flag == 0">{{el.size}}</span>
                                 </div>
                             </div>
                             <div class="item mgt2">
@@ -138,8 +138,9 @@
                     country: "",
                     price: "-",
                     reference: "-",
-                    directAddToSelected: function(id){
-                        detailCtrl.getProductTypeId();
+                    directAddToSelected: function(){
+                        var flag = detailCtrl.getProductTypeId();
+                        if(!flag) return alert("请选择商品属性");
                         $.ajax({
                             type: "post",
                             url: DI.directAddToSelected,
@@ -162,12 +163,17 @@
                         });
                     },
                     addShoppingcart: function(){
-                        detailCtrl.getProductTypeId();
+                        var flag = detailCtrl.getProductTypeId();
+                        if(!flag) return alert("请选择商品属性");
                         Buylll.addShoppingcart(productId, detailCtrl.productTypeId, detailCtrl.num);
                     },
                     getProductTypeId: function(){
                         var size = $(".choice.size.chked").html(),
                             color = $(".choice.color.chked").html();
+                        
+                        if(size == undefined || color == undefined){
+                            return false;
+                        }
                         
                         detailCtrl.productTypes.some(function(item){
                             if(item.size == size && item.color == color){
@@ -177,6 +183,7 @@
                                 return true;
                             }
                         });
+                        return true;
                     },
                     productTypeId: "",
                     addFavorite: function(id){

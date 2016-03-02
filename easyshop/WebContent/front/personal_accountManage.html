@@ -76,7 +76,7 @@
 		        					</div>
 		        					<div class="item">
 		        						<label>昵称：</label>
-		        						<input class="ipt-form" ms-duplex="userinfo.nickName" name="nickname" />
+		        						<input class="ipt-form" ms-duplex="userinfo.nickname" name="nickname" />
 		        					</div>
 		        					<div class="item">
 		        						<label>性别：</label>
@@ -374,7 +374,7 @@
                         id: "",
                     	avator: "img/demo_detail-11.png",
                     	name: "",
-                    	nickName: "",
+                    	nickname: "",
                     	sex: 1,
                     	phone: "",
                     	email: "",
@@ -438,7 +438,7 @@
                                 id: accountCtrl.userinfo.id,
                                 img: img,
                                 name: accountCtrl.userinfo.name,
-                                nickName: accountCtrl.userinfo.nickName,
+                                nickname: accountCtrl.userinfo.nickname,
                                 sex: accountCtrl.userinfo.sex,
                                 birth: accountCtrl.userinfo.birth,
                                 province: accountCtrl.userinfo.province,
@@ -472,16 +472,27 @@
                         accountCtrl.mPhone = true;
                     },
                     sendPhoneMessage: function(val){
-                        var phoneNum = accountCtrl.mPhoneNew != "" ? accountCtrl.mPhoneNew : accountCtrl.userinfo.phone;
-                        $.ajax({
-                            type: "post",
-                            url: DI.sendPhoneMessage,
-                            data: {phone: phoneNum},
-                            dataType: "json",
-                            success: function(data){
-                                alert(data.msg);
-                            }
-                        });
+                        var phone = accountCtrl.mPhoneNew != "" ? accountCtrl.mPhoneNew : accountCtrl.userinfo.phone;
+                        if(accountCtrl.mPhoneNew != ""){
+                            $.ajax({
+                                type: "post",
+                                url: DI.checkIsUnusedPhone,
+                                data: {phone: phone},
+                                dataType: "json",
+                                success: function(data){
+                                    if(data.status == "success" && data.msg == "true"){
+                                        Buylll.sendPhoneMessage(phone);
+                                    }else{
+                                        alert("获取信息失败");
+                                    }
+                                },
+                                error: function(err){
+                                    console.log(err);
+                                }
+                            });
+                        }else{
+                            Buylll.sendPhoneMessage(phone);
+                        }
                     },
                     mPhoneNext: function(){
                         $.ajax({
@@ -499,6 +510,9 @@
                                 }else{
                                     alert(data.msg);
                                 }
+                            },
+                            error: function(err){
+                                console.log(err);
                             }
                         });
                     },
@@ -529,11 +543,17 @@
                                                 accountCtrl.popupSuccessStatus = data.status == "success";
                                                 accountCtrl.reload();
                                             }
+                                        },
+                                        error: function(err){
+                                            console.log(err);
                                         }
                                     });
                                 }else{
                                     alert(data.msg);
                                 }
+                            },
+                            error: function(err){
+                                console.log(err);
                             }
                         });
                     },
@@ -546,15 +566,26 @@
                     },
                     sendEmailMessage: function(){
                         var email = accountCtrl.mEmailNew != "" ? accountCtrl.mEmailNew : accountCtrl.userinfo.email;
-                        $.ajax({
-                            type: "post",
-                            url: DI.sendEmailMessage,
-                            data: {email: email},
-                            dataType: "json",
-                            success: function(data){
-                                alert(data.msg);
-                            }
-                        });
+                        if(accountCtrl.mEmailNew != ""){
+                            $.ajax({
+                                type: "post",
+                                url: DI.checkIsUnusedEmail,
+                                data: {email: email},
+                                dataType: "json",
+                                success: function(data){
+                                    if(data.status == "success" && data.msg == "true"){
+                                        Buylll.sendEmailMessage(email);
+                                    }else{
+                                        alert("获取信息失败");
+                                    }
+                                },
+                                error: function(err){
+                                    console.log(err);
+                                }
+                            });
+                        }else{
+                            Buylll.sendEmailMessage(email);
+                        }
                     },
                     mEmailNext: function(){
                         $.ajax({
@@ -572,6 +603,9 @@
                                 }else{
                                     alert(data.status);
                                 }
+                            },
+                            error: function(err){
+                                console.log(err);
                             }
                         });
                     },
@@ -601,12 +635,17 @@
                                                 accountCtrl.popupSuccessStatus = data.status == "success";
                                                 accountCtrl.reload();
                                             }
-                                            
+                                        },
+                                        error: function(err){
+                                            console.log(err);
                                         }
                                     });
                                 }else{
                                     alert(data.status);
                                 }
+                            },
+                            error: function(err){
+                                console.log(err);
                             }
                         });
                     },
@@ -634,6 +673,9 @@
                                         accountCtrl.popupSuccess = true;
                                         accountCtrl.popupSuccessStatus = data.status == "success";
                                     }
+                                },
+                                error: function(err){
+                                    console.log(err);
                                 }
                             });
                         }else{
@@ -681,11 +723,17 @@
                                                 }else{
                                                     alert(data.msg);
                                                 }
+                                            },
+                                            error: function(err){
+                                                console.log(err);
                                             }
                                         });
                                     }else{
                                         alert(data.msg);
                                     }
+                                },
+                                error: function(err){
+                                    console.log(err);
                                 }
                             });
                         }else{
@@ -707,6 +755,9 @@
                                     }else{
                                         alert(data.msg);
                                     }
+                                },
+                                error: function(err){
+                                    console.log(err);
                                 }
                             });
                         }
@@ -723,11 +774,15 @@
                         url: DI.getFullPersonlInfoById,
                         dataType: "json",
                         success: function(data){
-                            if(!data.img){
-                                data.img = "../img/defaultHead.jpg";
-                            }
+                            if(!data.img) data.img = "../img/defaultHead.jpg";
+                            if(!data.province) data.province = "";
+                            if(!data.city) data.city = "";
+                            if(!data.district) data.district = "";
                             
                             accountCtrl.userinfo = data;
+                        },
+                        error: function(err){
+                            console.log(err);
                         }
                     });
                 }

@@ -147,7 +147,7 @@
                             },
                             dataType: "json",
                             success: function(data){
-                                if(data.msg == "true"){
+                                if(data.status == "success" && data.msg == "true"){
                                     $.ajax({
                                         type: "post",
                                         url: DI.sendPhoneMessage,
@@ -171,6 +171,8 @@
                                                             i--;
                                                         }
                                                     }, 1000);
+                                            }else{
+                                                alert(data.msg);
                                             }
                                         },
                                         error: function(err){
@@ -178,7 +180,7 @@
                                         }
                                     });
                                 }else{
-                                    alert(data.msg)
+                                    alert("该账号已注册");
                                 }
                             },
                             error: function(err){
@@ -198,15 +200,13 @@
 		                    type: "post",
 		                    url: DI.login,
 		                    data: {
-		                        "name": loginCtrl.loginName,
-		                        "password": loginCtrl.loginPwd
+		                        name: loginCtrl.loginName,
+		                        password: loginCtrl.loginPwd,
+		                        isAutoLogin: loginCtrl.autoFlag
 		                    },
 		                    dataType: "json",
 		                    success: function(data){
 		                    	if(data.status=="success"){
-			                        if(loginCtrl.autoFlag){
-	                                    localStorage.setItem("loginDate", new Date())
-	                                }
 			                        window.location.href = "home.html";
 		                    	}else{
 		                    		loginCtrl.loginTimer++;
@@ -239,15 +239,13 @@
                                         type: "post",
                                         url: DI.login,
                                         data: {
-                                            "name": loginCtrl.registName,
-                                            "password": loginCtrl.registPwd
+                                            name: loginCtrl.registName,
+                                            password: loginCtrl.registPwd,
+                                            isAutoLogin: loginCtrl.autoFlag
                                         },
                                         dataType: "json",
                                         success: function(data){
                                             if(data.status=="success"){
-                                                if(loginCtrl.autoFlag){
-                                                    localStorage.setItem("loginDate", new Date())
-                                                }
                                                 window.location.href = "home.html";
                                             }else{
                                                 alert(data.msg);

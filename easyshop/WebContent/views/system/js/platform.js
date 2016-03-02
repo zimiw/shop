@@ -239,10 +239,10 @@ PLATFORM.imgUpload = function(container, browseBtn, uploadBtn, single){
 PLATFORM.fileUploaded = function(uploader, file, result){
     var $uploader = $("#" + uploader.settings.container);
     if(result.status == 200){
-        var img = new Image();
-        img.src = PLATFORM.remote.host + "/" + PLATFORM.imgName;
+//      var img = new Image();
+//      img.src = PLATFORM.remote.host + "/" + PLATFORM.imgName;
         
-        var imgBox = $("<div class='img-opt'><div class='img-container'><a class='del'>×</a></div></div>").append(img)
+        var imgBox = $("<div class='img-opt'><div class='img-container'><a class='del'>×</a><img src='" + PLATFORM.remote.host + "/" + PLATFORM.imgName + "' /></div></div>");
         $uploader.find(".img-box").append(imgBox);
         $uploader.find(".info-box").hide();
     }else{
