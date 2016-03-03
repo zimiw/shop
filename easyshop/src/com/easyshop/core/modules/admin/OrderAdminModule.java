@@ -88,7 +88,7 @@ public class OrderAdminModule {
             // cnd.and("productName", "like", "%" + orderId + "%");
         }
 
-        List<Order> orderList = dao.query(Order.class, cnd.desc("orderId"), pager);
+        List<Order> orderList = dao.query(Order.class, cnd.desc("createTime"), pager);
         List<Map<String, Object>> resList = new ArrayList<Map<String, Object>>();
 
         String sqlOp = "SELECT a.number num, b.*  FROM connectorop a, product b  "
