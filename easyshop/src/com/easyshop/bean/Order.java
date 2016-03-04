@@ -84,6 +84,9 @@ public class Order {
      */
     @Column
     private Date chargeExpireTime; // 订单失效时间
+    
+    @Column
+    private Date confirmTime; // 用户确认收货时间
 
     private List<OrderProgress> orderProgress; // 订单进度
 
@@ -93,15 +96,15 @@ public class Order {
     private List<ConnectorOP> connectorOPs;
 
     private List<Product> products;
+ 
 
-    // // 手机号码处理
-    // public String getCellPhoneNew() {
-    // String phone = cellphone;
-    // if (!StringUtils.isEmpty(phone) && phone.length() >= 11) {
-    // phone = phone.substring(0, 3) + "****" + phone.substring(7, 11);
-    // }
-    // return phone;
-    // }
+    public Date getConfirmTime() {
+        return confirmTime;
+    }
+
+    public void setConfirmTime(Date confirmTime) {
+        this.confirmTime = confirmTime;
+    }
 
     public String getChargeId() {
         return chargeId;
@@ -290,10 +293,6 @@ public class Order {
         builder.append(status);
         builder.append(", addressId=");
         builder.append(addressId);
-        // builder.append(", consignee=");
-        // builder.append(consignee);
-        // builder.append(", cellphone=");
-        // builder.append(cellphone);
         builder.append(", createTime=");
         builder.append(createTime);
         builder.append(", chargeId=");
@@ -308,6 +307,8 @@ public class Order {
         builder.append(chargePaidTime);
         builder.append(", chargeExpireTime=");
         builder.append(chargeExpireTime);
+        builder.append(", confirmTime=");
+        builder.append(confirmTime);
         builder.append(", orderProgress=");
         builder.append(orderProgress);
         builder.append(", user=");

@@ -448,7 +448,8 @@ public class OrderModule {
             return result;
         }
         
-        int res = dao.update(Order.class, Chain.make("status", 104), Cnd.where("orderId", "=", orderId).and("userId", "=",
+        int res = dao.update(Order.class, Chain.make("status", 104).add("confirmTime", TimeUtils.dateToStr(new Date(), TimeUtils.FORMAT14)), 
+                Cnd.where("orderId", "=", orderId).and("userId", "=",
                 userId).and("status", "=", 103));
         
         result.put("status", "success");
