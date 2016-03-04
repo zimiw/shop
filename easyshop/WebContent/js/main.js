@@ -62,6 +62,8 @@ Buylll.addFavorite = function(id){
         success: function(data){
             if(data.status == "success"){
                 alert("收藏成功");
+            }else{
+                alert(data.msg);
             }
         },
         error: function(err){
@@ -241,6 +243,10 @@ avalon.filters.orderStatus = function(status){
         val = "待评价";
     }else if(status == 105){
         val = "退/换货";
+    }else if(status == 106){
+        val = "已完成";
+    }else if(status == 100 || status == 107){
+        val = "交易关闭";
     }
     return val;
 };
@@ -362,6 +368,9 @@ Buylll.checkShoppingcartSize = function(){
             }catch(e){
                 avalon.vmodels.common.header.productNum = data.size;
             }
+        },
+        error: function(err){
+            console.log(err);
         }
     });
 };
@@ -440,7 +449,10 @@ $(function(){
         	    success:function(data){
         	        if(data != '{"status":"fail","target":"login.html"}'){
                         commonCtrl.header.logged = true;
-                        commonCtrl.header.uname = data; 
+                        commonCtrl.header.uname = data;
+                        if(avalon.vmodels.cart){
+                            avalon.vmodels.cart.login = true;
+                        }
         	        }
         	    },
                 error: function(err){

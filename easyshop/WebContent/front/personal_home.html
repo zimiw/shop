@@ -158,6 +158,9 @@
                                 success: function(data){
                                     alert(data.msg);
                                     getFavorite()
+                                },
+                                error: function(err){
+                                    console.log(err)
                                 }
                             });
                         }
@@ -197,11 +200,16 @@
                 
                 //最新订单
                 $.ajax({
-                	type:"post",
-                	dataType:"json",
+                	type: "post",
+                	dataType: "json",
                 	url: DI.getRecent,
-                	success:function(data){
-                		homeCtrl.recently = data.recent;
+                	success: function(data){
+                	    if(data.recent){
+                    		homeCtrl.recently = data.recent.slice(0, 3);
+                	    }
+                	},
+                	error: function(err){
+                	    console.log(err)
                 	}
                 });
                 
@@ -209,30 +217,35 @@
                 //收藏的商品
                 function getFavorite(){
 	                $.ajax({
-	                	type:"post",
-	                	dataType:"json",
+	                	type: "post",
+	                	dataType: "json",
 	                	url: DI.getFavorite,
-	                	success:function(data){
+	                	success: function(data){
 	                		var favoriteAll = data.favoriteAll,
 	                		    favorite = [];
 	                		    
 	                		homeCtrl.favoriteNum = data.favoriteNum; 
 	                		homeCtrl.favoriteAll = favoriteAll.slice(0, 6);
 	                		homeCtrl.favorite = favoriteAll.slice(0, 3);
-	                		
-	                	}
+	                	},
+                        error: function(err){
+                            console.log(err)
+                        }
 	                });
                 }
                 
               	//购物车
                 $.ajax({
-                	type:"post",
-                	dataType:"json",
+                	type: "post",
+                	dataType: "json",
                 	url: DI.getCart,
-                	success:function(data){
+                	success: function(data){
                 		homeCtrl.cartNum = data.cartNum; 
             		    homeCtrl.cart = data.cart.slice(0, 3);
-                	}
+                	},
+                    error: function(err){
+                        console.log(err)
+                    }
                 });
             });
         </script>

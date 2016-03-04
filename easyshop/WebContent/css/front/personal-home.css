@@ -163,7 +163,7 @@
 	margin-bottom: 15px;
 }
 .recently-box .item .info-box .info .buy-box p,
-.recently-box .item .info-box .info .buy-box button {
+.recently-box .item .info-box .info .buy-box .yl-btn {
 	display: inline-block;
 	vertical-align: middle;
 }

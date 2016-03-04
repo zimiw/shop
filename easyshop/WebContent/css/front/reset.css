@@ -300,6 +300,7 @@ body {
     background: url(images/rightbar.png) no-repeat;
 }
 .right-bar .shop-cart {
+    display: block;
     position: relative;
     height: 137px;
 }

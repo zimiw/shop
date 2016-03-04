@@ -41,6 +41,8 @@ public class Address {
     // 手机号码处理
     public String getCellPhoneNew() {
         String phone = cellphone;
+        
+        phone = StringUtils.isEmpty(phone) ?  this.phone : phone;
         if (!StringUtils.isEmpty(phone) && phone.length() >= 11) {
             phone = phone.substring(0, 3) + "****" + phone.substring(7, 11);
         }

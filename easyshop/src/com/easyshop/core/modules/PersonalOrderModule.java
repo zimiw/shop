@@ -29,7 +29,6 @@ import com.easyshop.bean.Images;
 import com.easyshop.bean.Order;
 import com.easyshop.bean.OrderChange;
 import com.easyshop.bean.OrderChangeDetail;
-import com.easyshop.bean.PaymentInfo;
 import com.easyshop.bean.Personal;
 import com.easyshop.bean.Product;
 import com.easyshop.core.modules.admin.OrderConstant;
@@ -308,7 +307,7 @@ public class PersonalOrderModule {
         }
 
         // 查询支付信息
-        PaymentInfo paymentInfo = dao.fetch(PaymentInfo.class, Cnd.where("orderId", "=", orderId));
+//        PaymentInfo paymentInfo = dao.fetch(PaymentInfo.class, Cnd.where("orderId", "=", orderId));
 
         // 查询订单商品信息
         String sqlStr = "SELECT b.productId, b.name,  t.price, t.number num " + " FROM product b, connectorop t "
@@ -349,13 +348,13 @@ public class PersonalOrderModule {
         Address addr = orderUtil.getAdress(queryOrder.getAddressId());
 
         result.put("consignee", addr.getName());
-        result.put("addr", orderUtil.getAdressDesc(addr));
+        result.put("address", orderUtil.getAdressDesc(addr));
         result.put("phone", addr.getCellPhoneNew());
 
         // 支付及配送方式
         // paymentInfo
-        result.put("type", OrderConstant.PAYTYPEMAP.get(paymentInfo.getPayWay()));
-        result.put("oid", paymentInfo.getId());
+        result.put("paytype", OrderConstant.PAYTYPEMAP.get(queryOrder.getChargeChannel()));
+        result.put("oid", queryOrder.getTransportId());
         result.put("company", "顺丰");
 
         result.put("goods", goodsList);

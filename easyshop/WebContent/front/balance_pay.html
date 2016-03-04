@@ -100,10 +100,12 @@
                         location.href = "personal_orderDetail.html?orderId=" + param.orderId;
                     },
                     goPay: function(){
-                        if(payCtrl.channel == "upacp_pc") {
+                        if(payCtrl.channel == "upacp_pc"){
                             window.open("pay_upacp.html?orderId=" + param.orderId + "&channel=" + payCtrl.channel, "_blank");
-                        }else if (payCtrl.channel == "wx_pub_qr") {
+                        }else if(payCtrl.channel == "wx_pub_qr") {
                             window.open("pay_qr.html?orderId=" + param.orderId + "&channel=" + payCtrl.channel, "_blank");
+                        }else if(payCtrl.channel == "alipay_pc_direct"){
+                            window.open("pay_alipay.html?orderId=" + param.orderId + "&channel=" + payCtrl.channel, "_blank");
                         }
                         listeningIsHasPaid();
                         payCtrl.popup.pay = true;

@@ -5,10 +5,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
 import org.nutz.dao.Sqls;
@@ -23,11 +25,17 @@ import org.nutz.mvc.annotation.Param;
 import org.nutz.trans.Atom;
 import org.nutz.trans.Trans;
 
+import com.easyshop.bean.Address;
 import com.easyshop.bean.ConnectorOP;
 import com.easyshop.bean.Images;
 import com.easyshop.bean.Order;
+import com.easyshop.bean.OrderAppraisal;
 import com.easyshop.bean.OrderProgress;
 import com.easyshop.bean.Product;
+import com.easyshop.core.modules.admin.OrderConstant;
+import com.easyshop.core.modules.admin.OrderUtil;
+import com.easyshop.utils.StringUtils;
+import com.easyshop.utils.TimeUtils;
 
 @IocBean
 @At("/order")
@@ -38,6 +46,9 @@ public class OrderModule {
 	protected Dao dao;
 	public final static String FRONT_USER_ID = "frontUserId";// 前台用户sessionId
 
+	@Inject
+	protected OrderUtil orderUtil;
+	  
 	Logger logger = Logger.getLogger(OrderModule.class);
 
 	/**
@@ -59,7 +70,7 @@ public class OrderModule {
 		try {
 			Pager pager = dao.createPager(pageNum, pageSize);
 			List<Order> list = dao.query(Order.class,
-					Cnd.where("userId", "=", Integer.parseInt(userId)), pager);
+					Cnd.where("userId", "=", Integer.parseInt(userId)).desc("createTime"), pager);
 			pager.setRecordCount(dao.count(Order.class,
 					Cnd.where("userId", "=", Integer.parseInt(userId))));
 			for (Order order : list) {
@@ -131,12 +142,13 @@ public class OrderModule {
 			List<Order> list = dao.query(
 					Order.class,
 					Cnd.where("userId", "=", Integer.parseInt(userId)).and(
-							"status", "=", status), pager);
+							"status", "=", status).desc("createTime"), pager);
 			for (Order order : list) {
 				order.setProducts(getRelativeProduct(order.getOrderId()));
 			}
 			result.put("data", list);
-			result.put("count", dao.count(Order.class));
+			result.put("count", dao.count(Order.class, Cnd.where("userId", "=", Integer.parseInt(userId)).and(
+                    "status", "=", status)));
 			logger.info("调用getOrdersByStatus方法，获取状态为：" + status + ",用户id为："
 					+ userId + "订单成功！");
 		} catch (Exception e) {
@@ -189,32 +201,83 @@ public class OrderModule {
 	public Object getOrderDetail(HttpSession session,
 			@Param("orderId") int orderId) {
 
-		logger.info("调用getOrderDetail方法，获取订单id为：" + orderId + "的订单详情");
-		Date startTime = new Date();
-		System.out.println("-----------------开始查询时间 ：" + startTime.getTime()
-				+ "--------------------");
-		HashMap<String, Object> result = new HashMap<String, Object>();
-		try {
-			Order order = dao.fetch(Order.class,
-					Cnd.where("orderId", "=", orderId));
-			order.setProducts(getRelativeProduct(order.getOrderId()));
-			List<OrderProgress> lpList = dao.query(OrderProgress.class,
-					Cnd.where("orderId", "=", order.getOrderId()));
-			order.setOrderProgress(lpList);
-			result.put("data", order);
-			logger.info("调用getOrderDetail方法，获取订单id为：" + orderId + "的订单详情成功");
-		} catch (Exception e) {
-			logger.error("调用getOrderDetail方法，获取订单id为：" + orderId
-					+ "的订单详情失败  in getOrdersByStatus", e);
-			result.put("status", "fail");
-		}
-		Date endTime = new Date();
-		System.out.println("-----------------结束查询时间 ：" + endTime.getTime()
-				+ "--------------------");
-		System.out.println("花费时间为： "
-				+ (endTime.getTime() - startTime.getTime()));
-		return result;
+	    Map<String, Object> result = new HashMap<String, Object>();
+        String userId = String.valueOf(session.getAttribute(OrderConstant.FRONT_USER_ID));
+
+        // 获取订单信息
+        Cnd cnd = Cnd.where("userId", "=", userId).and("orderId", "=", orderId);
+        Order queryOrder = dao.fetch(Order.class, cnd);
+
+        if (queryOrder == null) {
+            result.put("status", "fail");
+            result.put("msg", "该订单不存在!");
+            return result;
+        }
+
+        // 查询支付信息
+//        PaymentInfo paymentInfo = dao.fetch(PaymentInfo.class, Cnd.where("orderId", "=", orderId));
+
+        // 查询订单商品信息
+        String sqlStr = "SELECT b.productId, b.name,  t.price, t.number num " + " FROM product b, connectorop t "
+                + " WHERE b.productId = t.productId  and t.orderId = @orderId ";
+
+        Sql sql = Sqls.create(sqlStr);
+        sql.params().set("orderId", orderId);
+        sql.setCallback(Sqls.callback.maps());
+        dao.execute(sql);
+        List<Map> goodsList = sql.getList(Map.class);
+        String productId;
+        for (Map map : goodsList) {// 取每个商品的主图片
+            productId = String.valueOf(map.get("productId"));
+            map.put("img", fetchImg(Integer.parseInt(productId)).getImgsource());
+        }
+
+        // dateList订单跟踪
+        sqlStr = "SELECT  DATE_FORMAT(a.time, '%Y-%m-%d') day, " + "    DATE_FORMAT(a.time, '%T') time, statusCode "
+                + "FROM  orderprogress a WHERE a.orderId = @orderId " + "ORDER BY a.statusCode";
+
+        sql = Sqls.create(sqlStr);
+        sql.params().set("orderId", orderId);
+        sql.setCallback(Sqls.callback.maps());
+        dao.execute(sql);
+        List<Map> dateList = sql.getList(Map.class);
+        // 订单信息
+        // oid
+        result.put("orderId", queryOrder.getOrderId());
+        result.put("odate", queryOrder.getCreateTime());
+        result.put("status", queryOrder.getStatus());
+
+        result.put("freight", "0");// 邮费
+        result.put("total", queryOrder.getAmount());// 订单总金额
+
+        result.put("dateList", dateList);
+
+        // 收货人信息
+        Address addr = orderUtil.getAdress(queryOrder.getAddressId());
+
+        result.put("consignee", addr.getName());
+        result.put("address", orderUtil.getAdressDesc(addr));
+        result.put("phone", addr.getCellPhoneNew());
+
+        // 支付及配送方式
+        // paymentInfo
+        result.put("paytype", OrderConstant.PAYTYPEMAP.get(queryOrder.getChargeChannel()));
+        result.put("oid", queryOrder.getTransportId());
+        result.put("company", "顺丰");
+
+        result.put("products", goodsList);
+        return result;
 	}
+	
+	 /**
+     * 根据商品id获取对应是商品id
+     * 
+     * @return
+     */
+    private Images fetchImg(int productId) {
+        Images imgs = dao.fetch(Images.class, Cnd.where("productId", "=", productId).and("isTopimg", "=", true));
+        return imgs != null ? imgs : new Images();
+    }
 
 	/**
 	 * 获取某种状态订单数
@@ -363,5 +426,87 @@ public class OrderModule {
 			return result;
 		}
 	}
+	
+	/**
+	 * 订单确认
+	 * @param session
+	 * @param orderId
+	 * @return
+	 */
+	@At
+	public Object orderConfirm(HttpSession session,
+            @Param("orderId") final int orderId){
+	    Map<String, Object> result = new HashMap<String, Object>();
+	    String userId = String.valueOf(session.getAttribute(FRONT_USER_ID));
+        final Order queryOrder = dao.fetch(
+                Order.class,
+                Cnd.where("orderId", "=", orderId).and("userId", "=",
+                        userId).and("status", "=", 103));//查询待收货订单
+        if (queryOrder == null ) {
+            result.put("status", "fail");
+            result.put("msg", "该订单不存在 !");
+            return result;
+        }
+        
+        int res = dao.update(Order.class, Chain.make("status", 104), Cnd.where("orderId", "=", orderId).and("userId", "=",
+                userId).and("status", "=", 103));
+        
+        result.put("status", "success");
+        result.put("msg", "确认收货成功");
+        
+        return result;
+	}
+	
+	
+	/**
+	 * 订单评价
+	 * @return
+	 */
+	@At
+	public Object orderApp(HttpSession session,
+            @Param("orderId") final int orderId, 
+            @Param("appType") final int appType,
+            @Param("appContent") final String appContent){
+	    Map<String, Object> result = new HashMap<String, Object>();
+        final String userId = String.valueOf(session.getAttribute(FRONT_USER_ID));
+        
+        if(orderId==0||appType==0||StringUtils.isEmpty(appContent)){
+            result.put("status", "fail");
+            result.put("msg", "参数不能为空 !");
+            return result;
+        }
+        
+        final Order queryOrder = dao.fetch(
+                Order.class,
+                Cnd.where("orderId", "=", orderId).and("userId", "=",
+                        userId).and("status", "=", 104));//查询待收货订单
+        
+        if (queryOrder == null ) {
+            result.put("status", "fail");
+            result.put("msg", "该订单不存在 !");
+            return result;
+        }
+        Trans.exec(new Atom() {
+            @Override
+            public void run() {
+                dao.update(Order.class, Chain.make("status", 106), Cnd.where("orderId", "=", orderId).and("userId", "=",
+                        userId).and("status", "=", 105));
+                
+                OrderAppraisal app = new OrderAppraisal();
+                app.setOrderId(orderId);
+                app.setAppTime(TimeUtils.dateToStr(new Date(), TimeUtils.FORMAT14));
+                app.setAppContent(appContent);
+                app.setAppType(appType);
+            }
+        });
+        
+        result.put("status", "success");
+        result.put("msg", "评价成功");
+        return result;
+        
+	}
+	
+	
+	
 
 }

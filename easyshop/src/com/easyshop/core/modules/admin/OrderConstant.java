@@ -16,11 +16,14 @@ public class OrderConstant {
     public final static String FRONT_USER_ID = "frontUserId";// 前台用户sessionId
 
     // 1-银联,2-微信,3-支付宝
-    public final static Map<Integer, String> PAYTYPEMAP = new HashMap<Integer, String>() {
+    //// 支付渠道 upacp_pc:银联 PC 网页支付 wx_pub:微信公众账号支付 wx_pub_qr:微信公众账号扫码支付
+    public final static Map<String, String> PAYTYPEMAP = new HashMap<String, String>() {
         {
-            put(1, "银联");
-            put(2, "微信");
-            put(3, "支付宝");
+            put("upacp_pc", "银联");
+            put("PC", "网页支付");
+            put("wx_pub", "微信");
+            put("wx_pub_qr", "微信");
+            put("alipay_pc_direct", "支付宝");
         }
     };
 

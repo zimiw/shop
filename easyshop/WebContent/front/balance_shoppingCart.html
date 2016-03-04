@@ -12,80 +12,82 @@
         <div ms-include-src="'../template/header.html'" data-include-replace="true" data-include-loaded="initHeader"></div>
         
         <div class="wrap" ms-controller="cart">
-        	<div ms-visible="items.length > 0">
-	            <table class="tb-cart thead">
-	                <thead>
-	                    <tr>
-	                        <th class="col1">
-	                            <div class="yl-chkbox" ms-click="check('all')">
-	                                <em></em>
-	                                <span>全选</span>
-	                            </div>
-	                        </th>
-	                        <th class="col2">商品信息</th>
-	                        <th class="col3">单价（元）</th>
-	                        <th class="col4">数量</th>
-	                        <th class="col5">金额</th>
-	                        <th class="operate">操作</th>
-	                    </tr>
-	                </thead>
-	            </table>
-	            <table class="tb-cart tbody">
-	                <tbody>
-	                    <tr ms-repeat="items">
-	                        <td class="col1">
-	                            <div class="yl-chkbox" ms-click="check(el)" ms-data-shoppingcartid="el.shoppingcartId">
-	                                <em></em>
-	                            </div>
-	                            <img class="img" ms-attr-src="el.productVo.imgUrl" />
-	                        </td>
-	                        <td class="col2">
-	                            <p>{{el.productVo.name}}</p>
-	                        </td>
-	                        <td class="col3">
-	                            <p>{{el.productVo.price | currency(" ")}}&nbsp;</p>
-	                        </td>
-	                        <td class="col4">
-	                            <div class="yl-num">
-	                                <a class="minus" href="javascript:;" ms-click="minus(el)">-</a>
-	                                <input class="ipt_num" type="text" ms-duplex="el.number" />
-	                                <a class="add" href="javascript:;" ms-click="add(el)">+</a>
-	                            </div>
-	                        </td>
-	                        <td class="col5">
-	                            <p class="total">{{el.productVo.price * el.number | currency(" ")}}&nbsp;</p>
-	                        </td>
-	                        <td class="operate">
-	                            <a href="javascript:;" ms-click="del(el)">删除</a>
-	                            <a href="javascript:;" ms-click="favorite(el.productId)">加入收藏夹</a>
-	                        </td>
-	                    </tr>
-	                </tbody>
-	            </table>
-	            <div class="balance-box">
-	            	<div class="info-box">
-	            		<!--<div class="yl-chkbox">
-		                    <em></em>
-		                    <span>全选</span>
-		                </div>-->
-		                <a class="del" href="javascript:;" ms-click="delCheck">删除选中商品</a>
-		                <p class="freight">运费：<span>¥0</span></p>
-		                <p class="all-chk">
-		                	已选择<span>{{product}}</span>件商品，总计<span>{{total | currency}}</span>
-		                </p>
-	            	</div>
-	            	<button class="btn-balance" ms-click="balance">立即结算</button>
-	            </div>
-        	</div>
-        	<div ms-visible="items.length == 0">
-        		<div class="cart-empty">
-        			<p class="go">购物车空空如也，赶紧去<a href="home.html">逛逛吧▶▶</a></p>
-        			<div class="login">
-        				<p>或者您也可以进行</p>
-        				<a class="btn-login" href="login.html"></a>
-        			</div>
-        		</div>
-        	</div>
+            <div ms-visible="overload">
+            	<div ms-visible="items.length > 0">
+    	            <table class="tb-cart thead">
+    	                <thead>
+    	                    <tr>
+    	                        <th class="col1">
+    	                            <div class="yl-chkbox" ms-click="check('all')">
+    	                                <em></em>
+    	                                <span>全选</span>
+    	                            </div>
+    	                        </th>
+    	                        <th class="col2">商品信息</th>
+    	                        <th class="col3">单价（元）</th>
+    	                        <th class="col4">数量</th>
+    	                        <th class="col5">金额</th>
+    	                        <th class="operate">操作</th>
+    	                    </tr>
+    	                </thead>
+    	            </table>
+    	            <table class="tb-cart tbody">
+    	                <tbody>
+    	                    <tr ms-repeat="items">
+    	                        <td class="col1">
+    	                            <div class="yl-chkbox" ms-click="check(el)" ms-data-shoppingcartid="el.shoppingcartId">
+    	                                <em></em>
+    	                            </div>
+    	                            <img class="img" ms-attr-src="el.productVo.imgUrl" />
+    	                        </td>
+    	                        <td class="col2">
+    	                            <p>{{el.productVo.name}}</p>
+    	                        </td>
+    	                        <td class="col3">
+    	                            <p>{{el.productVo.price | currency(" ")}}&nbsp;</p>
+    	                        </td>
+    	                        <td class="col4">
+    	                            <div class="yl-num">
+    	                                <a class="minus" href="javascript:;" ms-click="minus(el)">-</a>
+    	                                <input class="ipt_num" type="text" ms-duplex="el.number" />
+    	                                <a class="add" href="javascript:;" ms-click="add(el)">+</a>
+    	                            </div>
+    	                        </td>
+    	                        <td class="col5">
+    	                            <p class="total">{{el.productVo.price * el.number | currency(" ")}}&nbsp;</p>
+    	                        </td>
+    	                        <td class="operate">
+    	                            <a href="javascript:;" ms-click="del(el)">删除</a>
+    	                            <a href="javascript:;" ms-click="favorite(el.productId)">加入收藏夹</a>
+    	                        </td>
+    	                    </tr>
+    	                </tbody>
+    	            </table>
+    	            <div class="balance-box">
+    	            	<div class="info-box">
+    	            		<!--<div class="yl-chkbox">
+    		                    <em></em>
+    		                    <span>全选</span>
+    		                </div>-->
+    		                <a class="del" href="javascript:;" ms-click="delCheck">取消选中商品</a>
+    		                <p class="freight">运费：<span>¥0</span></p>
+    		                <p class="all-chk">
+    		                	已选择<span>{{product}}</span>件商品，总计<span>{{total | currency}}</span>
+    		                </p>
+    	            	</div>
+    	            	<button class="btn-balance" ms-click="balance">立即结算</button>
+    	            </div>
+            	</div>
+            	<div ms-visible="items.length == 0">
+            		<div class="cart-empty">
+            			<p class="go">购物车空空如也，赶紧去<a href="home.html">逛逛吧▶▶</a></p>
+            			<div class="login" ms-visible="!login">
+            				<p>或者您也可以进行</p>
+            				<a class="btn-login" href="login.html"></a>
+            			</div>
+            		</div>
+            	</div>
+            </div>
         </div>
         <div ms-include-src="'../template/footer.html'" data-include-replace="true"></div>
 
@@ -100,6 +102,8 @@
                     items: [],
                     product: 0,
                     total: 0,
+                    overload: false,
+                    login: false,
                     minus: function(el){
                         el.number = Number(el.number);
                         el.number = el.number - 1 > 1 ? el.number - 1 : 1;
@@ -161,8 +165,8 @@
                                     total();
                                     checkShoppingcart();
                                     Buylll.checkShoppingcartSize();
+                                    alert("删除成功");
                                 }
-                                alert("删除成功");
                             },
                             error: function(err){
                                 console.log(err);
@@ -216,7 +220,12 @@
                         url: DI.checkShoppingcart,
                         dataType: "json",
                         success: function(data){
-                            cartCtrl.items = data.data;
+                            if(data.number == 0){
+                                cartCtrl.items = [];
+                            }else{
+                                cartCtrl.overload = true;
+                                cartCtrl.items = data.data;
+                            }
                         },
                         error: function(err){
                             console.log(err);

@@ -151,9 +151,9 @@
                 </div>
                 <div class="toolbar-box">
                     <div class="right-bar" id="right-bar">
-                        <div class="shop-cart">
+                        <a class="shop-cart" href="balance_shoppingCart.html">
                             <p class="num">{{productNum}}</p>
-                        </div>
+                        </a>
                         <div class="tel">
                             <script src="http://chat16.live800.com/live800/chatClient/staticButton.js?jid=9247684444&companyID=547265&configID=145350&codeType=custom"></script>
                         </div>
@@ -220,7 +220,7 @@
                     	var timer = setTimeout(function(){
                     		for(var i=0; i<data.limit.length; i++){
                                 $(".countdown-sale" + i).countdown({
-                                    date: new Date(data.limit[i].external),
+                                    date: new Date(data.limit[i].external.replace(/-/g, "/")),
                                     render: function(data) {
                                         $(this.el).html(this.leadingZeros(data.days * 24 + data.hours, 2) + "小时 " + this.leadingZeros(data.min, 2) + "分 " + this.leadingZeros(data.sec, 2) + "秒");
                                         if(data.sec % 5 == 0){
@@ -272,7 +272,7 @@
                     	var timer = setTimeout(function(){
                     		for(var i=0; i<data.activity.length; i++){
                                 $(".countdown-activity" + i).countdown({
-                                    date: new Date(data.activity[i].endTime),
+                                    date: new Date(data.activity[i].endTime.replace(/-/g, "/")),
                                     render: function(data) {
                                         $(this.el).html(this.leadingZeros(data.days * 24 + data.hours, 2) + "小时 " + this.leadingZeros(data.min, 2) + "分 " + this.leadingZeros(data.sec, 2) + "秒");
                                     },
@@ -299,6 +299,22 @@
 						}
 					}
 				});
+				// 购物车数量
+				$.ajax({
+                    type: "post",
+                    dataType: "json",
+                    url: DI.checkShoppingcartSize,
+                    success: function(data){
+                        try{
+                            JSON.parse(data);
+                        }catch(e){
+                            homeCtrl.productNum = data.size;
+                        }
+                    },
+                    error: function(err){
+                        console.log(err);
+                    }
+                });
 				
 				function getFree(){
                     var now = new Date(),
@@ -309,9 +325,9 @@
                         limit = null;
                     
                     if(hour > 8){
-                        limit = new Date(year + "-" + (month + 1) + "-" + (day + 1) + " 09:00");
+                        limit = new Date(year + "/" + (month + 1) + "/" + (day + 1) + " 09:00");
                     }else{
-                        limit = new Date(year + "-" + (month + 1) + "-" + day + " 09:00");
+                        limit = new Date(year + "/" + (month + 1) + "/" + day + " 09:00");
                     }
 				    return limit;
 				}

@@ -64,6 +64,7 @@ DI.getOrderAndProduct = DI.baseURL+"/personalorder/getOrderAndProduct";
 DI.addToOrder = DI.baseURL+"/shopcar/addToOrder";
 DI.orderChange = DI.baseURL+"/personalchange/orderChange";
 DI.orderReturn = DI.baseURL+"/personalchange/orderReturn";
+DI.cancelOrder = DI.baseURL+"/order/cancelOrder";
 // 地址相关
 DI.getAddress = DI.baseURL+"/shopcar/getAddress";
 DI.addAddress = DI.baseURL+"/shopcar/addAddress";

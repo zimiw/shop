@@ -74,7 +74,7 @@
 	        						<div class="tb-body" ms-repeat="allList">
 	        							<div class="title-box">
 	        								<p>订单号：{{el.orderId}}</p>
-	        								<p>下单时间：{{el.createTime}}</p>
+                                            <p>下单时间：{{el.createTime}}</p>
 	        							</div>
 	        							<div class="asTr">
 	        								<div class="good-box">
@@ -129,8 +129,8 @@
         						<div>
 	        						<div class="tb-body" ms-repeat="noPyaList">
 	        							<div class="title-box">
-	        								<p>订单号：{{el.payno}}</p>
-	        								<p>下单时间：{{el.paydate}}</p>
+	        								<p>订单号：{{el.orderId}}</p>
+                                            <p>下单时间：{{el.createTime}}</p>
 	        							</div>
 	        							<div class="asTr">
                                             <div class="good-box">
@@ -138,7 +138,7 @@
                                                     <div class="asTd col1">
                                                         <img ms-attr-src="good.imgs[0].imgsource" />
                                                     </div>
-                                                    <p class="asTd col2">{{good.title}}</p>
+                                                    <p class="asTd col2">{{good.name}}</p>
                                                     <p class="asTd col3">{{good.price}}</p>
                                                     <p class="asTd col4">{{good.num}}</p>
                                                 </div>
@@ -174,8 +174,8 @@
         						<div>
 	        						<div class="tb-body" ms-repeat="noDeliverList">
 	        							<div class="title-box">
-	        								<p>订单号：{{el.payno}}</p>
-	        								<p>下单时间：{{el.paydate}}</p>
+	        								<p>订单号：{{el.orderId}}</p>
+	        								<p>下单时间：{{el.createTime}}</p>
 	        							</div>
 	        							<div class="asTr">
                                             <div class="good-box">
@@ -183,7 +183,7 @@
                                                     <div class="asTd col1">
                                                         <img ms-attr-src="good.imgs[0].imgsource" />
                                                     </div>
-                                                    <p class="asTd col2">{{good.title}}</p>
+                                                    <p class="asTd col2">{{good.name}}</p>
                                                     <p class="asTd col3">{{good.price}}</p>
                                                     <p class="asTd col4">{{good.num}}</p>
                                                     <a class="link-grey aftersale" href="javascript:;" ms-click="applySaleafter(good.productId)" ms-visible="el.status == 102 || el.status == 103 || el.status == 104">申请售后</a>
@@ -226,7 +226,7 @@
                                                     <div class="asTd col1">
                                                         <img ms-attr-src="good.imgs[0].imgsource" />
                                                     </div>
-                                                    <p class="asTd col2">{{good.title}}</p>
+                                                    <p class="asTd col2">{{good.name}}</p>
                                                     <p class="asTd col3">{{good.price}}</p>
                                                     <p class="asTd col4">{{good.num}}</p>
                                                     <a class="link-grey aftersale" href="javascript:;" ms-click="applySaleafter(good.productId)" ms-visible="el.status == 102 || el.status == 103 || el.status == 104">申请售后</a>
@@ -436,6 +436,9 @@
                                 dataType: "json",
                                 success: function(data){
                                     orderCtrl.allList = data.data;
+                                },
+                                error: function(err){
+                                    console.log(err);
                                 }
                             });
                     	}else{
@@ -460,6 +463,9 @@
                                     }else if(idx == 105){
                                         orderCtrl.returnList = data.data;
                                     }
+                                },
+                                error: function(err){
+                                    console.log(err);
                                 }
                             });
                     	}
@@ -492,6 +498,29 @@
                             location.href = "personal_applyReturn.html?productId=" + orderCtrl.popup.productId;
                         }
                     },
+                    cancelOrder: function(id){
+                        $.ajax({
+                            type: "post",
+                            url: DI.cancelOrder,
+                            data: {
+                                orderId: id
+                            },
+                            dataType: "json",
+                            success: function(data){
+                                if(data.status == "success"){
+                                    $(this).parents(".tb-body").remove();
+                                    orderCtrl.all -= 1;
+                                    orderCtrl.waitPay -= 1;
+                                    alert("取消订单成功");
+                                }else{
+                                    alert(data.msg);
+                                }
+                            },
+                            error: function(err){
+                                console.log(err);
+                            }
+                        });
+                    },
                     applySaleafter: function(productId){
                         orderCtrl.popup.saleafter = true;
                         orderCtrl.popup.productId = productId;
@@ -511,6 +540,9 @@
                 	dataType: "json",
                 	success: function(data){
                 	    var item = data.count,
+                	        finished = 0,
+                	        userCanceled = 0,
+                	        adminCanceled = 0,
                 	        row = null;
                 	    for(var i=0; i<item.length; i++){
                 	        row = item[i];
@@ -522,11 +554,20 @@
                 	            orderCtrl.waitReceive = row.count;
                 	        }else if(row.status == "104"){
                 	            orderCtrl.waitEvaluate = row.count;
+                	        }else if(row.status == "106"){
+                	            finished = row.count;
+                	        }else if(row.status == "100"){
+                	            userCanceled = row.count;
+                	        }else if(row.status == "107"){
+                	            adminCanceled = row.count;
                 	        }
                 	        
-            	            orderCtrl.all += orderCtrl.waitPay + orderCtrl.waitDeliver + orderCtrl.waitReceive + orderCtrl.waitEvaluate;
+            	            orderCtrl.all += orderCtrl.waitPay + orderCtrl.waitDeliver + orderCtrl.waitReceive + orderCtrl.waitEvaluate + finished + userCanceled + adminCanceled;
                 	    }
-                	}
+                	},
+                    error: function(err){
+                        console.log(err);
+                    }
                 });
                 
                 //获取订单信息
@@ -540,6 +581,9 @@
                     dataType: "json",
                     success: function(data){
                         orderCtrl.allList = data.data;
+                    },
+                    error: function(err){
+                        console.log(err);
                     }
                 });
             });
