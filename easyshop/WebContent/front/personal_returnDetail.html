@@ -133,6 +133,9 @@
                         returnCtrl.returnInfo = data.returnInfo;
                         returnCtrl.process = data.process;
                         returnCtrl.goods = data.goods;
+                    },
+                    error: function(err){
+                        console.log(err);
                     }
                 });
             });

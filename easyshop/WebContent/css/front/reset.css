@@ -1313,6 +1313,27 @@ body {
 }
 
 
+.u-uploadImg .img-box {
+    width: 80px;
+}
+.u-uploadImg .img-box img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+.u-uploadImg .img-box.avatar {
+    height: 80px;
+}
+.u-uploadImg .img-box.avatar img {
+    height: 100%;
+}
+.u-uploadImg .info-box {
+    font-size: 12px;
+    padding: 5px 0;
+}
+.u-uploadImg .btn-box button {
+    margin: 0 5px;
+}
 
 
 

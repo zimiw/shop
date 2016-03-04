@@ -71,11 +71,7 @@
         			<div class="yl-dialog">
         				<p class="title">退款申请</p>
         				<div class="dialog-cnt">
-        					<form class="yl-form six" id="form_return" enctype="multipart/form-data">
-            				    <input type="hidden" name="orderId" ms-duplex="param.orderId" />
-            				    <input type="hidden" name="productId" ms-duplex="param.productId" />
-            				    <input type="hidden" name="num" ms-duplex="param.num" />
-            				    <input type="hidden" name="amount" ms-duplex="param.amount" />
+        					<div class="yl-form six">
         						<div class="item">
 	        						<label><span>*</span>退款原因：</label>
 	        						<select class="yl-select" name="changeReason" ms-duplex="param.changeReason" data-duplex-changed="selectchange">
@@ -90,21 +86,48 @@
 	        						</select>
 	        					</div>
 	        					<div class="item">
+                                    <label><span>*</span>退货数量：</label>
+                                    <input class="ipt-form" ms-duplex="param.num" />
+                                </div>
+	        					<div class="item">
+                                    <label><span>*</span>退款金额：</label>
+                                    <input class="ipt-form" ms-duplex="param.amount" />
+                                </div>
+	        					<div class="item">
 	        						<label>退款说明：</label>
-	        						<textarea class="yl-textarea" name="remark" ms-duplex="param.remark"></textarea>
+	        						<textarea class="yl-textarea" ms-duplex="param.remark"></textarea>
 	        					</div>
 	        					<div class="item">
 	        						<label>退款凭证：</label>
 	        						<div class="form-cnt">
-                                        <div class="yl-uploadimg">
-                                            <img src="../img/defaultHead.jpg">
-                                            <p class="as-btn">点击上传</p>
-                                            <input type="file" name="image1">
+                                        <div class="u-uploadImg" id="uplpad1">
+                                            <div class="img-box">
+                                            </div>
+                                            <div class="info-box">
+                                                <p class="name"></p>
+                                                <p class="process"></p>
+                                            </div>
+                                            <div class="btn-box">
+                                                <button class="u-btn small gray" id="btn1">选择文件</button>
+                                                <button class="u-btn small orange" id="btn-upload1">上传</button>
+                                            </div>
+                                        </div>
+                                        <div class="u-uploadImg" id="uplpad2">
+                                            <div class="img-box">
+                                            </div>
+                                            <div class="info-box">
+                                                <p class="name"></p>
+                                                <p class="process"></p>
+                                            </div>
+                                            <div class="btn-box">
+                                                <button class="u-btn small gray" id="btn2">选择文件</button>
+                                                <button class="u-btn small orange" id="btn-upload2">上传</button>
+                                            </div>
                                         </div>
                                     </div>
-	        						<a href="javascript:;" class="help-tip">上传帮助</a>
+	        						<!--<a href="javascript:;" class="help-tip">上传帮助</a>-->
 	        					</div>
-        					</form>
+        					</div>
         					<div class="yl-form six">
 	        					<div class="item forBtn">
 	        						<label></label>
@@ -123,6 +146,12 @@
         <script src="../js/jquery.form.js"></script>
         <script src="../js/main.js"></script>
         <script src="../js/data-interface.js"></script>
+        <script src="../views/system/js/vendor/crypto/crypto/crypto.js"></script>
+        <script src="../views/system/js/vendor/crypto/hmac/hmac.js"></script>
+        <script src="../views/system/js/vendor/crypto/sha1/sha1.js"></script>
+        <script src="../views/system/js/vendor/base64.js"></script>
+        <script src="../views/system/js/vendor/plupload/plupload.full.min.js"></script>
+        <script src="../views/system/js/vendor/plupload/zh_CN.js"></script>
         <script>
             $(function(){
                 var param = Buylll.getUrlArgs();
@@ -130,8 +159,6 @@
                 var returnCtrl = avalon.define({
                     $id: "return",
                     param: {
-                        orderId: param.orderId,
-                        productId: param.productId,
                         num: 0,
                         amount: 0,
                         changeReason: 0,
@@ -148,12 +175,29 @@
                     total: "",
                     odate: "",
                     apply: function(){
-                        $("#form_return").ajaxSubmit({
+                        var data = {
+                                orderId: param.orderId,
+                                productId: param.productId,
+                                num: returnCtrl.num,
+                                amount: returnCtrl.param.amount,
+                                changeReason: returnCtrl.param.changeReason,
+                                remark: returnCtrl.param.remark
+                            };
+                        if($("#uplpad1 .img-box img")){
+                            data.image1 = $("#uplpad1 .img-box img").attr("src");
+                        }
+                        if($("#uplpad2 .img-box img")){
+                            data.image2 = $("#uplpad2 .img-box img").attr("src");
+                        }
+                        $.ajax({
                             type: "post",
                             url: DI.orderReturn,
-                            dataType: "json",
+                            data: data,
                             success: function(data){
-                                location.href = "personal_myOrder.html";
+                                alert(data.msg);
+                                if(data.status == "success"){
+                                    location.href = "personal_myOrder.html";
+                                }
                             },
                             error: function(err){
                                 console.log(err);
@@ -189,7 +233,8 @@
                     }
                 });
                 
-                Buylll.uploadPreview();
+                Buylll.imgUpload("uplpad1", "btn1", "btn-upload1", true);
+                Buylll.imgUpload("uplpad2", "btn2", "btn-upload2", true);
             });
         </script>
     </body>

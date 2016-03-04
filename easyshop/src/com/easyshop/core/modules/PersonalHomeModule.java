@@ -4,9 +4,14 @@ import javax.servlet.http.HttpSession;
 
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.mvc.annotation.At;
+import org.nutz.mvc.annotation.By;
 import org.nutz.mvc.annotation.Fail;
+import org.nutz.mvc.annotation.Filters;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.Param;
+import org.nutz.mvc.filter.CheckSession;
+
+import com.easyshop.core.modules.admin.OrderConstant;
 
 /**
  * 用户个人中心
@@ -16,6 +21,8 @@ import org.nutz.mvc.annotation.Param;
 @IocBean
 @At("personalhome")
 @Fail("http:500")
+@Filters(@By(type = CheckSession.class, args = { OrderConstant.FRONT_USER_ID,
+		"/front/login.html" }))
 public class PersonalHomeModule {
 
 	/**

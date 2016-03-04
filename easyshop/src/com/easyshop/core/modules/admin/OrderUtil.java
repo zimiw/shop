@@ -48,7 +48,7 @@ public class OrderUtil {
 
 		String sqlStr = "SELECT   (SELECT t.name  FROM province t  WHERE t.code = a.province) province, "
 				+ "    (SELECT t.name   FROM city t  WHERE t.code = a.city) city, "
-				+ "    (SELECT t.name FROM area t  WHERE t.code = a.district) district, street, addressId, name "
+				+ "    (SELECT t.name FROM area t  WHERE t.code = a.district) district, street, addressId, name,  phone, cellphone "
 				+ " FROM address a where addressId = @addressId  ";
 		Sql sql = Sqls.create(sqlStr);
 		sql.params().set("addressId", addressId);

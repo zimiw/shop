@@ -62,8 +62,10 @@ Buylll.addFavorite = function(id){
         success: function(data){
             if(data.status == "success"){
                 alert("收藏成功");
-            }else{
+            }else if(data.status == "fail"){
                 alert(data.msg);
+            }else{
+                location.href = "login.html";
             }
         },
         error: function(err){

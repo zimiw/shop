@@ -17,7 +17,7 @@
         	<div class="order-status">
         		<p>订单号：{{orderId}}</p>
         		<p>下单时间：{{createTime}}</p>
-        		<p>状态：<span ms-class="ready: status==3">{{status | orderStatus}}</span></p>
+        		<p>状态：<span ms-class="ready: status==106">{{status | orderStatus}}</span></p>
         		<div class="btn-box" ms-visible="status==101">
         			<a class="cancel" href="javascript:;" ms-click="cancelOrder">取消订单</a>
         			<a class="yl-btn middle" ms-attr-href="'balance_pay.html?orderId=' + orderId">立即支付</a>
@@ -27,10 +27,10 @@
         		</div>-->
         	</div>
         	<div class="order-detail">
-        		<div class="status" ms-class="status{{status}}"></div>
+        		<div class="status" ms-class="status{{orderProgress.length}}"></div>
         		<div class="time-box">
         			<div class="date" ms-repeat="orderProgress">
-        				<p>{{el.time}}</p>
+        				<p>{{el.day + " " + el.time}}</p>
         			</div>
         		</div>
         		<div class="yl-dialog">
@@ -85,10 +85,10 @@
         					</thead>
         					<tbody>
         						<tr ms-repeat="products">
-        							<td class="col1"><img class="img" ms-attr-src="el.imgs[0].imgsource" /></td>
+        							<td class="col1"><img class="img" ms-attr-src="el.img" /></td>
         							<td class="col2">{{el.name}}</td>
         							<td class="col3">{{el.price}}</td>
-        							<td class="col4">{{el.number}}</td>
+        							<td class="col4">{{el.num}}</td>
         						</tr>
         					</tbody>
         				</table>
@@ -126,8 +126,8 @@
                 		phone: ""
                 	},
                     pay: {
-                		type: "",
-                		oid: "",
+                		type: "暂无",
+                		oid: "暂无",
                 		company: "EMS"
                 	},
                 	cancelOrder: function(){
@@ -166,18 +166,17 @@
                     },
                     dataType: "json",
                     success: function(data){
-                       // var data = data.data;
                         orderCtrl.orderId = data.orderId;
                         orderCtrl.createTime = data.createTime;
                         orderCtrl.status = data.status;
-                        orderCtrl.orderProgress = data.orderProgress;
+                        orderCtrl.orderProgress = data.dateList;
                         orderCtrl.consigneeInfo.consignee = data.consignee;
                         orderCtrl.consigneeInfo.address = data.address;
                         orderCtrl.consigneeInfo.phone = data.phone;
                         orderCtrl.products = data.products;
-                        orderCtrl.amount = data.amount;
-                        orderCtrl.pay.type = data.paytype;
-                        orderCtrl.pay.oid = data.oid;
+                        orderCtrl.amount = data.total;
+                        orderCtrl.pay.type = data.paytype ? data.paytype : "暂无";
+                        orderCtrl.pay.oid = data.oid ? data.oid : "暂无";
                     }
                 });
             });

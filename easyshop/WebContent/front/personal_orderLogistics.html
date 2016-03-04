@@ -81,50 +81,46 @@
         <script src="../js/data-interface.js"></script>
         <script>
             $(function(){
+                var param = Buylll.getUrlArgs();
+                
                 var orderCtrl = avalon.define({
                     $id: "order",
-                    oid: "1189 2344 5566",
-                    odate: "2015-11-23  23:12:34",
-                    status: "2",
-                    dateList: [
-                    	{
-	                    	"day": "2015-06-06",
-	                    	"time": "22:33:14"
-                    	},
-                    	{
-	                    	"day": "2015-06-06",
-	                    	"time": "22:33:14"
-                    	}
-                    ],
+                    oid: "",
+                    odate: "",
+                    status: "",
+                    dateList: [],
                     consigneeInfo: {
-                		consignee: "刘梦雅",
-                		addr: "上海市浦东新区香江丽晶889号蒲昌元69号201室",
-                		phone: "189****7987"
+                		consignee: "",
+                		addr: "",
+                		phone: ""
                 	},
                     pay: {
                 		type: "支付宝在线支付/银联在线支付/微信在线支付",
-                		oid: "718031660539",
-                		company: "EMS国际快递"
+                		oid: "",
+                		company: "EMS"
                 	},
-                	goods: [
-                    	{
-	                    	"img": "img/demo_1.png",
-	                    	"name": "AKEO KIKUCHI/菊池武2015A 男士牛皮鳄鱼纹设计感皮带",
-	                    	"price": "988",
-	                    	"num": "1"
-                    	},
-                    	{
-	                    	"img": "img/demo_1.png",
-	                    	"name": "AKEO KIKUCHI/菊池武2015A 男士牛皮鳄鱼纹设计感皮带",
-	                    	"price": "988",
-	                    	"num": "1"
-                    	}
-                    ],
-                    freight: "10",
-                    total: "5236"
+                	goods: [],
+                    total: ""
                 });
 
                 avalon.scan();
+                
+                $.ajax({
+                    type: "post",
+                    url: DI.queryExpressList,
+                    dataType: "json",
+                    data: {
+                        orderId: Number(param.orderId)
+                    },
+                    success:function(data){
+                        orderCtrl.returnInfo = data.returnInfo;
+                        orderCtrl.process = data.process;
+                        orderCtrl.goods = data.goods;
+                    },
+                    error: function(err){
+                        console.log(err);
+                    }
+                });
             });
         </script>
     </body>

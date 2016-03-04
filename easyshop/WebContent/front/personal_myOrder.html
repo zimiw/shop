@@ -85,28 +85,28 @@
 	        										<p class="asTd col2">{{good.name}}</p>
 	        										<p class="asTd col3">{{good.price}}</p>
 	        										<p class="asTd col4">{{good.number}}</p>
-	        										<a class="link-grey aftersale" href="javascript:;" ms-click="applySaleafter(good.productId)" ms-visible="el.status == 102 || el.status == 103 || el.status == 104">申请售后</a>
-	        										<button class="yl-btn-add small btn-evaluate" ms-click="applyEvaluate(good.productId)" ms-visible="el.status == 104">评价</button>
+	        										<a class="link-grey aftersale" href="javascript:;" ms-click="applySaleafter(good.productId, el.orderId)" ms-visible="el.status == 102 || el.status == 103 || el.status == 104">申请售后</a>
+	        										<button class="yl-btn-add small btn-evaluate" ms-click="applyEvaluate(good.productId, el.orderId)" ms-visible="el.status == 104">评价</button>
 	        									</div>
 	        								</div>
 	        								<div class="operate-box">
 	        									<p class="asTd col5">{{el.amount}}</p>
 	        									<div class="asTd col6">
 	        										<p class="status">{{el.status | orderStatus}}</p>
-	        										<a class="link-normal" ms-attr-href="'personal_orderDetail.html?orderId=' + el.orderId">订单详情</a>
+	        										<a class="link-normal" ms-attr-href="'personal_orderDetail.html?orderId=' + el.orderId" target="_blank">订单详情</a>
 	        									</div>
 	        									<div class="asTd col7" ms-visible="el.status == 101">
 	        										<a class="yl-btn small" ms-attr-href="'balance_pay.html?orderId=' + el.orderId">立刻付款</a>
 	        										<a class="link-normal" href="javascript:;" ms-click="cancelOrder(el.orderId)">取消订单</a>
 	        									</div>
 	        									<div class="asTd col7" ms-visible="el.status == 103">
-	        										<button class="yl-btn small">确认收货</button>
+	        										<button class="yl-btn small" ms-click="orderConfirm(el.orderId)">确认收货</button>
 	        										<a class="link-normal first" ms-attr-href="'personal_orderLogistics.html?orderId=' + el.orderId">查看物流</a>
-	        										<button class="yl-btn-special contact">请联系客服</button>
+	        										<!--<button class="yl-btn-special contact">请联系客服</button>-->
 	        									</div>
 	        									<div class="asTd col7" ms-visible="el.status == 104">
 	        										<a class="link-normal" ms-attr-href="'personal_orderLogistics.html?orderId=' + el.orderId">查看物流</a>
-	        										<button class="yl-btn-special last">剩余售后时间{{el.last}}天</button>
+	        										<button class="yl-btn-special last" ms-visible="el.last <= 7">剩余售后时间{{el.last}}天</button>
 	        									</div>
 	        								</div>
 	        							</div>
@@ -147,7 +147,7 @@
                                                 <p class="asTd col5">{{el.amount}}</p>
                                                 <div class="asTd col6">
                                                     <p class="status">{{el.status | orderStatus}}</p>
-                                                    <a class="link-normal" ms-attr-href="'personal_orderDetail.html?orderId=' + el.orderId">订单详情</a>
+                                                    <a class="link-normal" ms-attr-href="'personal_orderDetail.html?orderId=' + el.orderId" target="_blank">订单详情</a>
                                                 </div>
                                                 <div class="asTd col7">
                                                     <a class="yl-btn small" ms-attr-href="'balance_pay.html?orderId=' + el.orderId">立刻付款</a>
@@ -186,15 +186,15 @@
                                                     <p class="asTd col2">{{good.name}}</p>
                                                     <p class="asTd col3">{{good.price}}</p>
                                                     <p class="asTd col4">{{good.num}}</p>
-                                                    <a class="link-grey aftersale" href="javascript:;" ms-click="applySaleafter(good.productId)" ms-visible="el.status == 102 || el.status == 103 || el.status == 104">申请售后</a>
-                                                    <button class="yl-btn-add small btn-evaluate" ms-click="applyEvaluate(good.productId)" ms-visible="el.status == 104">评价</button>
+                                                    <a class="link-grey aftersale" href="javascript:;" ms-click="applySaleafter(good.productId, el.orderId)" ms-visible="el.status == 102 || el.status == 103 || el.status == 104">申请售后</a>
+                                                    <button class="yl-btn-add small btn-evaluate" ms-click="applyEvaluate(good.productId, el.orderId)" ms-visible="el.status == 104">评价</button>
                                                 </div>
                                             </div>
                                             <div class="operate-box">
                                                 <p class="asTd col5">{{el.amount}}</p>
                                                 <div class="asTd col6">
                                                     <p class="status">{{el.status | orderStatus}}</p>
-                                                    <a class="link-normal" ms-attr-href="'personal_orderDetail.html?orderId=' + el.orderId">订单详情</a>
+                                                    <a class="link-normal" ms-attr-href="'personal_orderDetail.html?orderId=' + el.orderId" target="_blank">订单详情</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -229,20 +229,20 @@
                                                     <p class="asTd col2">{{good.name}}</p>
                                                     <p class="asTd col3">{{good.price}}</p>
                                                     <p class="asTd col4">{{good.num}}</p>
-                                                    <a class="link-grey aftersale" href="javascript:;" ms-click="applySaleafter(good.productId)" ms-visible="el.status == 102 || el.status == 103 || el.status == 104">申请售后</a>
-                                                    <button class="yl-btn-add small btn-evaluate" ms-click="applyEvaluate(good.productId)" ms-visible="el.status == 104">评价</button>
+                                                    <a class="link-grey aftersale" href="javascript:;" ms-click="applySaleafter(good.productId, el.orderId)" ms-visible="el.status == 102 || el.status == 103 || el.status == 104">申请售后</a>
+                                                    <button class="yl-btn-add small btn-evaluate" ms-click="applyEvaluate(good.productId, el.orderId)" ms-visible="el.status == 104">评价</button>
                                                 </div>
                                             </div>
                                             <div class="operate-box">
                                                 <p class="asTd col5">{{el.amount}}</p>
                                                 <div class="asTd col6">
                                                     <p class="status">{{el.status | orderStatus}}</p>
-                                                    <a class="link-normal" ms-attr-href="'personal_orderDetail.html?orderId=' + el.orderId">订单详情</a>
+                                                    <a class="link-normal" ms-attr-href="'personal_orderDetail.html?orderId=' + el.orderId" target="_blank">订单详情</a>
                                                 </div>
                                                 <div class="asTd col7">
-                                                    <button class="yl-btn small">确认收货</button>
+                                                    <button class="yl-btn small" ms-click="orderConfirm(el.orderId)">确认收货</button>
                                                     <a class="link-normal first" ms-attr-href="'personal_orderLogistics.html?orderId=' + el.orderId">查看物流</a>
-                                                    <button class="yl-btn-special contact">请联系客服</button>
+                                                    <!--<button class="yl-btn-special contact">请联系客服</button>-->
                                                 </div>
                                             </div>
                                         </div>
@@ -277,19 +277,19 @@
                                                     <p class="asTd col2">{{good.title}}</p>
                                                     <p class="asTd col3">{{good.price}}</p>
                                                     <p class="asTd col4">{{good.num}}</p>
-                                                    <a class="link-grey aftersale" href="javascript:;" ms-click="applySaleafter(good.productId)" ms-visible="el.status == 102 || el.status == 103 || el.status == 104">申请售后</a>
-                                                    <button class="yl-btn-add small btn-evaluate" ms-click="applyEvaluate(good.productId)" ms-visible="el.status == 104">评价</button>
+                                                    <a class="link-grey aftersale" href="javascript:;" ms-click="applySaleafter(good.productId, el.orderId)" ms-visible="el.status == 102 || el.status == 103 || el.status == 104">申请售后</a>
+                                                    <button class="yl-btn-add small btn-evaluate" ms-click="applyEvaluate(good.productId, el.orderId)" ms-visible="el.status == 104">评价</button>
                                                 </div>
                                             </div>
                                             <div class="operate-box">
                                                 <p class="asTd col5">{{el.amount}}</p>
                                                 <div class="asTd col6">
                                                     <p class="status">{{el.status | orderStatus}}</p>
-                                                    <a class="link-normal" ms-attr-href="'personal_orderDetail.html?orderId=' + el.orderId">订单详情</a>
+                                                    <a class="link-normal" ms-attr-href="'personal_orderDetail.html?orderId=' + el.orderId" target="_blank">订单详情</a>
                                                 </div>
                                                 <div class="asTd col7">
                                                     <a class="link-normal" ms-attr-href="'personal_orderLogistics.html?orderId=' + el.orderId">查看物流</a>
-                                                    <button class="yl-btn-special last">剩余售后时间{{el.last}}天</button>
+                                                    <button class="yl-btn-special last" ms-visible="el.last <= 7">剩余售后时间{{el.last}}天</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -426,21 +426,7 @@
                     	orderCtrl.cnt = idx;
                     	
                     	if(idx == 999){
-                    	    $.ajax({
-                                type: "post",
-                                url: DI.getOrders,
-                                data: {
-                                    pageNum: 1,
-                                    pageSize: 20
-                                },
-                                dataType: "json",
-                                success: function(data){
-                                    orderCtrl.allList = data.data;
-                                },
-                                error: function(err){
-                                    console.log(err);
-                                }
-                            });
+                    	    getOrders(1, 10);
                     	}else{
                     	    $.ajax({
                                 type: "post",
@@ -472,12 +458,33 @@
                     },
                     popup: {
                         productId: "",
+                        orderId: "",
                         saleafter: false,
                         evaluate: false,
                         evaluateStyle: "1",
                         evaluateVal: "",
                         evaluateSubmit: function(){
-                            
+                            $.ajax({
+                                type: "post",
+                                url: DI.orderApp,
+                                data: {
+                                    orderId: orderCtrl.popup.orderId,
+                                    productId: orderCtrl.popup.productId,
+                                    appType: orderCtrl.popup.evaluateStyle,
+                                    appContent: orderCtrl.popup.evaluateVal
+                                },
+                                dataType: "json",
+                                success: function(data){
+                                    if(data.status == "success"){
+                                        orderCtrl.popup.evaluate = false;
+                                        getOrders(1, 10);
+                                    }
+                                    alert(data.msg);
+                                },
+                                error: function(err){
+                                    console.log(err);
+                                }
+                            });
                         },
                         logistics: false,
                         logisticsSel: "",
@@ -492,10 +499,10 @@
                             orderCtrl.popup.saleafter = orderCtrl.popup.evaluate = orderCtrl.popup.logistics = false;
                         },
                         changeFunc: function(){
-                            location.href = "personal_applyChange.html?productId=" + orderCtrl.popup.productId;
+                            location.href = "personal_applyChange.html?productId=" + orderCtrl.popup.productId + "&orderId=" + orderCtrl.popup.orderId;
                         },
                         returnFunc: function(){
-                            location.href = "personal_applyReturn.html?productId=" + orderCtrl.popup.productId;
+                            location.href = "personal_applyReturn.html?productId=" + orderCtrl.popup.productId + "&orderId=" + orderCtrl.popup.orderId;
                         }
                     },
                     cancelOrder: function(id){
@@ -521,13 +528,34 @@
                             }
                         });
                     },
-                    applySaleafter: function(productId){
+                    orderConfirm: function(id){
+                        $.ajax({
+                            type: "post",
+                            url: DI.orderConfirm,
+                            data: {
+                                orderId: id
+                            },
+                            dataType: "json",
+                            success: function(data){
+                                if(data.status == "success"){
+                                    orderCtrl.tab(orderCtrl.cnt);
+                                }
+                                alert(data.msg);
+                            },
+                            error: function(err){
+                                console.log(err);
+                            }
+                        });
+                    },
+                    applySaleafter: function(productId, orderId){
                         orderCtrl.popup.saleafter = true;
                         orderCtrl.popup.productId = productId;
+                        orderCtrl.popup.orderId = orderId;
                     },
-                    applyEvaluate: function(productId){
+                    applyEvaluate: function(productId, orderId){
                         orderCtrl.popup.evaluate = true;
                         orderCtrl.popup.productId = productId;
+                        orderCtrl.popup.orderId = orderId;
                     }
                 });
 
@@ -570,22 +598,33 @@
                     }
                 });
                 
+                getOrders(1, 10);
+                
                 //获取订单信息
-                $.ajax({
-                    type: "post",
-                    url: DI.getOrders,
-                    data: {
-                        pageNum: 1,
-                        pageSize: 20
-                    },
-                    dataType: "json",
-                    success: function(data){
-                        orderCtrl.allList = data.data;
-                    },
-                    error: function(err){
-                        console.log(err);
-                    }
-                });
+                function getOrders(pageNum, pageSize){
+                    $.ajax({
+                        type: "post",
+                        url: DI.getOrders,
+                        data: {
+                            pageNum: pageNum,
+                            pageSize: pageSize
+                        },
+                        dataType: "json",
+                        success: function(data){
+                            orderCtrl.allList = data.data;
+                            for(var i=0; i<orderCtrl.allList.length; i++){
+                                if(orderCtrl.allList[i].confirmTime){
+                                    var confirmTime = new Date(orderCtrl.allList[i].confirmTime.replace(/-/g, "/")),
+                                        now = new Date();
+                                    orderCtrl.allList[i].last = (now.getTime() - confirmTime.getTime()) / (24 * 60 * 60 * 1000);
+                                }
+                            }
+                        },
+                        error: function(err){
+                            console.log(err);
+                        }
+                    });
+                }
             });
         </script>
     </body>

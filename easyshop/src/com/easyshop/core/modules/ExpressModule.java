@@ -18,10 +18,11 @@ import org.nutz.mvc.annotation.Fail;
 import org.nutz.mvc.annotation.Filters;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.Param;
-import org.nutz.mvc.filter.CheckSession;
 import org.nutz.trans.Atom;
 import org.nutz.trans.Trans;
 
+import com.easy.core.filters.CheckBackUserLoginFilter;
+import com.easy.core.filters.CheckFrontUserLoginFilter;
 import com.easyshop.bean.Area;
 import com.easyshop.bean.City;
 import com.easyshop.bean.Order;
@@ -57,7 +58,7 @@ public class ExpressModule {
 	 * @return
 	 */
 	@At
-	// @Filters(@By(type = CheckFrontUserLoginFilter.class))
+	@Filters(@By(type = CheckBackUserLoginFilter.class))
 	public Object endExpress(@Param("orderId") String orderId,
 			@Param("provinceCode") String provinceCode,
 			@Param("cityCode") String cityCode,
@@ -142,7 +143,7 @@ public class ExpressModule {
 	 * @return
 	 */
 	@At
-	// @Filters(@By(type = CheckFrontUserLoginFilter.class))
+	@Filters(@By(type = CheckBackUserLoginFilter.class))
 	public Object upExpress(@Param("orderId") String orderId,
 			@Param("provinceCode") String provinceCode,
 			@Param("cityCode") String cityCode,
@@ -201,7 +202,7 @@ public class ExpressModule {
 	 * @return
 	 */
 	@At
-	// @Filters(@By(type = CheckFrontUserLoginFilter.class))
+	@Filters(@By(type = CheckBackUserLoginFilter.class))
 	public Object queryExpressAdmin(@Param("orderId") String orderId) {
 
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -227,8 +228,7 @@ public class ExpressModule {
 	 * @return
 	 */
 	@At
-	@Filters(@By(type = CheckSession.class, args = {
-			OrderConstant.FRONT_USER_ID, "/front/login.html" }))
+	@Filters(@By(type = CheckFrontUserLoginFilter.class))
 	public Object queryExpressList(HttpSession session,
 			@Param("orderId") String orderId) {
 		ResultVo resultVo = new ResultVo();

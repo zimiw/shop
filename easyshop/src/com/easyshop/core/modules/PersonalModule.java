@@ -29,7 +29,6 @@ import org.nutz.mvc.annotation.Fail;
 import org.nutz.mvc.annotation.Filters;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.Param;
-import org.nutz.mvc.filter.CheckSession;
 
 import com.easy.core.filters.CheckBackUserLoginFilter;
 import com.easy.core.filters.CheckFrontUserLoginFilter;
@@ -56,8 +55,7 @@ import com.easyshop.vo.ResultVo;
 @At("personal")
 @Ok("json")
 @Fail("http:500")
-@Filters(@By(type = CheckSession.class, args = { OrderConstant.FRONT_USER_ID,
-		"/front/login.html" }))
+@Filters(@By(type = CheckFrontUserLoginFilter.class))
 public class PersonalModule {
 
 	Logger logger = Logger.getLogger(PersonalModule.class);
@@ -316,9 +314,10 @@ public class PersonalModule {
 	@At
 	@Filters
 	public Object login(@Param("name") String name,
-			@Param("password") String password,@Param("isAutoLogin") String isAutoLogin, HttpSession session,
-			HttpServletResponse response,
-			HttpServletRequest request) throws IOException {
+			@Param("password") String password,
+			@Param("isAutoLogin") String isAutoLogin, HttpSession session,
+			HttpServletResponse response, HttpServletRequest request)
+			throws IOException {
 		if (StringUtils.isEmpty(name) || StringUtils.isEmpty(password)) {
 			return new ResultVo("fail", "用户名或密码为空");
 		}
@@ -337,25 +336,27 @@ public class PersonalModule {
 			// httpServletResponse.sendRedirect(httpServletRequest.getContextPath()
 			// + "/front/home.html");
 
-            if ("true".equals(isAutoLogin)) {
-                //String host = request.getServerName();
-                Cookie cookie = new Cookie("frontUserId", String.valueOf(person.getId())); // 保存用户名到Cookie
-                //Cookie cookie = new Cookie("SESSION_LOGIN_USERNAME", name); // 保存用户名到Cookie
-                cookie.setPath("/");
-                //cookie.setDomain(host);
-                //以秒为单位 目前是两周内有效.
-                cookie.setMaxAge(2 * 7 * 24 * 60 * 60);
-                response.addCookie(cookie);
-                /*if (ParamUtils.getBooleanParameter(request, "savePassword")) {
-                    // 保存密码到Cookie，注意需要加密一下
-                    cookie = new Cookie("SESSION_LOGIN_PASSWORD", MD5.encode(u.getPassword()));
-                    cookie.setPath("/");
-                    cookie.setDomain(host);
-                    cookie.setMaxAge(99999999);
-                    response.addCookie(cookie);
-                }*/
-            }else{
-				CookieUtil.remove(request,response,"frontUserId");
+			if ("true".equals(isAutoLogin)) {
+				// String host = request.getServerName();
+				Cookie cookie = new Cookie("frontUserId", String.valueOf(person
+						.getId())); // 保存用户名到Cookie
+				// Cookie cookie = new Cookie("SESSION_LOGIN_USERNAME", name);
+				// // 保存用户名到Cookie
+				cookie.setPath("/");
+				// cookie.setDomain(host);
+				// 以秒为单位 目前是两周内有效.
+				cookie.setMaxAge(2 * 7 * 24 * 60 * 60);
+				response.addCookie(cookie);
+				/*
+				 * if (ParamUtils.getBooleanParameter(request, "savePassword"))
+				 * { // 保存密码到Cookie，注意需要加密一下 cookie = new
+				 * Cookie("SESSION_LOGIN_PASSWORD",
+				 * MD5.encode(u.getPassword())); cookie.setPath("/");
+				 * cookie.setDomain(host); cookie.setMaxAge(99999999);
+				 * response.addCookie(cookie); }
+				 */
+			} else {
+				CookieUtil.remove(request, response, "frontUserId");
 			}
 
 			result.put("status", "success");
@@ -423,7 +424,7 @@ public class PersonalModule {
 			HttpServletResponse httpServletResponse,
 			HttpServletRequest httpServletRequest) throws IOException {
 		session.invalidate();
-		CookieUtil.clear(httpServletRequest,httpServletResponse);
+		CookieUtil.clear(httpServletRequest, httpServletResponse);
 		httpServletResponse.sendRedirect(httpServletRequest.getContextPath()
 				+ "/front/login.html");
 	}
@@ -480,19 +481,19 @@ public class PersonalModule {
 	}
 
 	@At
-    @Filters(@By(type = CheckFrontUserLoginFilter.class))
+	@Filters(@By(type = CheckFrontUserLoginFilter.class))
 	public String getPersonlName() {
 		Personal personal = dao.fetch(
 				Personal.class,
 				Integer.parseInt(Mvcs.getHttpSession(false)
 						.getAttribute(OrderConstant.FRONT_USER_ID).toString()));
 
-        //首先查看是否有名字,如果没有就返回手机号
-        if (!StringUtils.isEmpty(personal.getNickname())) {
-            return personal.getNickname();
-        }
+		// 首先查看是否有名字,如果没有就返回手机号
+		if (!StringUtils.isEmpty(personal.getNickname())) {
+			return personal.getNickname();
+		}
 
-        return personal.getPhone();
+		return personal.getPhone();
 	}
 
 	/**
@@ -503,6 +504,7 @@ public class PersonalModule {
 	 * "bindPhone":0,"bindEmail":0,"pnopay":0,"psend":0,"pwait":0,"pevaluate":0}
 	 * bindPhone 表示是否绑定手机 bindEmail表示是否绑定邮箱 1为绑定 0为未绑定 sex 性别 0未设置 1男 2女 name
 	 * 是真实姓名 nickName 是昵称 如果缺少参数,比如地址,表示没有数据库为空没有设置
+	 * 
 	 * @param id
 	 * @return
 	 */
@@ -547,37 +549,50 @@ public class PersonalModule {
 	/**
 	 *
 	 * 查询前台用户列表:
-	 * http://localhost:8181/easyshop/personal/getPersonallList?currentPage=1&peerpageRows=2&email=1&phone=1
+	 * http://localhost:8181/easyshop/personal/getPersonallList?currentPage
+	 * =1&peerpageRows=2&email=1&phone=1
 	 *
-	 *{"total":5,"rows":[{"id":1,"password":"1","name":"1","sex":0,"phone":"1","email":"1111","bindPhone":0,"bindEmail":0,"pnopay":0,"psend":0,"pwait":0,"pevaluate":0,"isPlayGame":false}, {"id":103,"password":"1986520","sex":0,"phone":"15951701933","email":"11","bindPhone":0,"bindEmail":0,"pnopay":0,"psend":0,"pwait":0,"pevaluate":0,"isPlayGame":false}]}
+	 * {"total":5,"rows":[{"id":1,"password":"1","name":"1","sex":0,"phone":"1",
+	 * "email"
+	 * :"1111","bindPhone":0,"bindEmail":0,"pnopay":0,"psend":0,"pwait":0,
+	 * "pevaluate":0,"isPlayGame":false},
+	 * {"id":103,"password":"1986520","sex":0,
+	 * "phone":"15951701933","email":"11",
+	 * "bindPhone":0,"bindEmail":0,"pnopay":0,
+	 * "psend":0,"pwait":0,"pevaluate":0,"isPlayGame":false}]}
 	 * 如果查询不到数据:{"total":0,"rows":[]}
 	 *
-	 * @param currentPage     当前第几页
-	 * @param peerpageRows    每页多少条
-	 * @param email 模糊查询
-	 * @param phone 模糊查询
+	 * @param currentPage
+	 *            当前第几页
+	 * @param peerpageRows
+	 *            每页多少条
+	 * @param email
+	 *            模糊查询
+	 * @param phone
+	 *            模糊查询
 	 * @return
 	 */
 	@At
 	@Filters(@By(type = CheckBackUserLoginFilter.class))
-	public Object getPersonallList(@Param("page")int page,@Param("rows")int rows,
-			@Param("email") String email,@Param("phone") String phone,@Param("name") String name) {
-		Map<String,Object> result=new HashMap<String,Object>();
-		//设置分页参数
+	public Object getPersonallList(@Param("page") int page,
+			@Param("rows") int rows, @Param("email") String email,
+			@Param("phone") String phone, @Param("name") String name) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		// 设置分页参数
 		Pager pager = dao.createPager(page, rows);
 		Cnd condition = Cnd.where("1", "=", 1);
 		if (!StringUtils.isEmpty(email)) {
 			condition.and("email", "like", "%" + email + "%");
 		}
 		if (!StringUtils.isEmpty(phone)) {
-			condition.and("phone", "like", "%"+phone+"%");
+			condition.and("phone", "like", "%" + phone + "%");
 		}
 		if (!StringUtils.isEmpty(name)) {
 			condition.and("name", "like", "%" + name + "%");
 		}
-		result.put("total", dao.count(Personal.class,condition));
-		List<Personal> list = dao.query(Personal.class, condition,pager);
-		result.put("rows",list);
+		result.put("total", dao.count(Personal.class, condition));
+		List<Personal> list = dao.query(Personal.class, condition, pager);
+		result.put("rows", list);
 		return result;
 	}
 
@@ -600,10 +615,10 @@ public class PersonalModule {
 			@Param("..") NutMap nm) {
 		ResultVo resultVo = new ResultVo();
 		try {
-//			if (!StringUtils.isEmpty(newPersonal.getImg())) {
-//				// 对图片做一下进行base64转码
-//				newPersonal.setImg(ImageUtils.imageFileEncode2Str(nm, "img"));
-//			}
+			// if (!StringUtils.isEmpty(newPersonal.getImg())) {
+			// // 对图片做一下进行base64转码
+			// newPersonal.setImg(ImageUtils.imageFileEncode2Str(nm, "img"));
+			// }
 			dao.updateIgnoreNull(newPersonal);
 			resultVo.setMsg("保存成功");
 		} catch (Exception e) {
@@ -921,16 +936,16 @@ public class PersonalModule {
 		return new ResultVo("修改成功");
 	}
 
-    /**
-     * 重置密码为123456
-     * http://localhost:8181/easyshop/personal/resetPassword?id=1
-     * {"status":"success","msg":"修改成功"}
-     * {"status":"fail","msg":"参数错误"}
-     * @param id 前台用户id
-     * @return
-     */
+	/**
+	 * 重置密码为123456 http://localhost:8181/easyshop/personal/resetPassword?id=1
+	 * {"status":"success","msg":"修改成功"} {"status":"fail","msg":"参数错误"}
+	 * 
+	 * @param id
+	 *            前台用户id
+	 * @return
+	 */
 	@At
-    @Filters(@By(type = CheckBackUserLoginFilter.class))
+	@Filters(@By(type = CheckBackUserLoginFilter.class))
 	public ResultVo resetPassword(@Param("id") String id) {
 		if (StringUtils.isEmpty(id)) {
 			return new ResultVo(ResultVo.STATUS_FAIL, "参数错误");
@@ -944,8 +959,7 @@ public class PersonalModule {
 
 	/**
 	 * 修改手机号 http://localhost:8181/easyshop/personal/updatePhone?newPhone=1
-	 * {"status":"success","msg":"修改成功"}
-     * {"status":"fail","msg":"参数错误"}
+	 * {"status":"success","msg":"修改成功"} {"status":"fail","msg":"参数错误"}
 	 * 
 	 * @param newPhone
 	 * @return
