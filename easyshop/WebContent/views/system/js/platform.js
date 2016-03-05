@@ -284,6 +284,26 @@ PLATFORM.getUrlArgs = function(){
     return args;
 };
 
+avalon.filters.orderStatus = function(status){
+    var val = "";
+    if(status == 101){
+        val = "待付款";
+    }else if(status == 102){
+        val = "待发货";
+    }else if(status == 103){
+        val = "待收货";
+    }else if(status == 104){
+        val = "待评价";
+    }else if(status == 105){
+        val = "退/换货";
+    }else if(status == 106){
+        val = "已完成";
+    }else if(status == 100 || status == 107){
+        val = "交易关闭";
+    }
+    return val;
+};
+
 $(function(){
 	PLATFORM.popupClose();
 //	PLATFORM.tab();

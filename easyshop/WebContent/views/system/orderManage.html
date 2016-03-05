@@ -18,14 +18,14 @@
                 <div class="column">
                     <div class="cell">
                         <label>订单编号：</label>
-                        <input class="u-ipt" ms-duplex="param.code">
+                        <input class="u-ipt" ms-duplex="param.orderId">
                     </div>
                     <div class="cell">
                         <label>商品名称：</label>
-                        <input class="u-ipt" ms-duplex="param.name">
+                        <input class="u-ipt" ms-duplex="param.productName">
                     </div>
                 </div>
-                <div class="column">
+                <!--<div class="column">
                     <div class="cell">
                         <label>成交时间：</label>
                         <div class="cnt-box">
@@ -34,7 +34,7 @@
                             <input class="u-ipt ipt-timepicker" type="text" id="timepickerEnd" placeholder="结束时间" ms-duplex="param.endtime">
                         </div>
                     </div>
-                </div>
+                </div>-->
                 <div class="column btn-box">
                     <div class="cell">
                         <label></label>
@@ -62,7 +62,6 @@
                                 fitColumns: true,
                                 rownumbers: true,
                                 nowrap: false,
-                                pagination: true,
                                 onLoadSuccess: orderOnLoadSuccess">
                         </table>
                     </div>
@@ -75,18 +74,21 @@
                                 fitColumns: true,
                                 rownumbers: true,
                                 nowrap: false,
-                                pagination: true,
                                 onLoadSuccess: orderOnLoadSuccess">
                             <thead>
                                 <tr>
-                                    <th data-options="field:'img', width:150, align:'center'"></th>
+                                    <th data-options="field:'orderId', width:150, align:'center'">订单编号</th>
+                                    <th data-options="field:'createTime', width:150, align:'center'">创建时间</th>
+                                    <th data-options="field:'img', width:150, align:'center', formatter: function(value, row, index){
+                                        return '&lt;img class=\'u-img\' src=\'' + value + '\' />';
+                                    }"></th>
                                     <th data-options="field:'title', width:150, align:'center'">商品</th>
                                     <th data-options="field:'price', width:150, align:'center'">单价（元）</th>
                                     <th data-options="field:'num', width:80, align:'center'">数量</th>
                                     <th data-options="field:'nickname', width:100, align:'center'">买家昵称</th>
                                     <th data-options="field:'amount', width:100, align:'center'">实收金额</th>
                                     <th data-options="field:'operate', width:100, align:'center', formatter: function(value,rowData,index){
-                                        return '&lt;a href=&quot;javascript:;&quot; class=&quot;btn-operate detail&quot;&gt;订单详情&lt;a&gt;&lt;button class=&quot;u-btn small&quot;&gt;发货&lt;button&gt;';
+                                        return '&lt;a href=&quot;javascript:;&quot; class=&quot;btn-operate detail&quot;&gt;订单详情&lt;a&gt;&lt;button class=&quot;u-btn small btn-deliver&quot;&gt;发货&lt;button&gt;';
                                     }">交易状态</th>
                                 </tr>
                             </thead>
@@ -101,18 +103,22 @@
                                 fitColumns: true,
                                 rownumbers: true,
                                 nowrap: false,
-                                pagination: true,
                                 onLoadSuccess: orderOnLoadSuccess">
                             <thead>
                                 <tr>
-                                    <th data-options="field:'img', width:150, align:'center'"></th>
+                                    <th data-options="field:'orderId', width:150, align:'center'">订单编号</th>
+                                    <th data-options="field:'createTime', width:150, align:'center'">创建时间</th>
+                                    <th data-options="field:'img', width:150, align:'center', formatter: function(value, row, index){
+                                        return '&lt;img class=\'u-img\' src=\'' + value + '\' />';
+                                    }"></th>
                                     <th data-options="field:'title', width:150, align:'center'">商品</th>
                                     <th data-options="field:'price', width:150, align:'center'">单价（元）</th>
                                     <th data-options="field:'num', width:80, align:'center'">数量</th>
                                     <th data-options="field:'nickname', width:100, align:'center'">买家昵称</th>
                                     <th data-options="field:'amount', width:100, align:'center'">实收金额</th>
                                     <th data-options="field:'operate', width:100, align:'center', formatter: function(value,rowData,index){
-                                        return '&lt;a href=&quot;javascript:;&quot; class=&quot;btn-operate detail&quot;&gt;订单详情&lt;a&gt;&lt;a href=&quot;javascript:;&quot; class=&quot;u-btn small&quot;&gt;查看物流&lt;a&gt;';
+                                        <!--return '&lt;a href=&quot;javascript:;&quot; class=&quot;btn-operate detail&quot;&gt;订单详情&lt;a&gt;&lt;a href=&quot;javascript:;&quot; class=&quot;u-btn small btn-logistics&quot;&gt;查看物流&lt;a&gt;';-->
+                                        return '&lt;a href=&quot;javascript:;&quot; class=&quot;btn-operate detail&quot;&gt;订单详情&lt;a&gt;';
                                     }">交易状态</th>
                                 </tr>
                             </thead>
@@ -127,18 +133,22 @@
                                 fitColumns: true,
                                 rownumbers: true,
                                 nowrap: false,
-                                pagination: true,
                                 onLoadSuccess: orderOnLoadSuccess">
                             <thead>
                                 <tr>
-                                    <th data-options="field:'img', width:150, align:'center'"></th>
+                                    <th data-options="field:'orderId', width:150, align:'center'">订单编号</th>
+                                    <th data-options="field:'createTime', width:150, align:'center'">创建时间</th>
+                                    <th data-options="field:'img', width:150, align:'center', formatter: function(value, row, index){
+                                        return '&lt;img class=\'u-img\' src=\'' + value + '\' />';
+                                    }"></th>
                                     <th data-options="field:'title', width:150, align:'center'">商品</th>
                                     <th data-options="field:'price', width:150, align:'center'">单价（元）</th>
                                     <th data-options="field:'num', width:80, align:'center'">数量</th>
                                     <th data-options="field:'nickname', width:100, align:'center'">买家昵称</th>
                                     <th data-options="field:'amount', width:100, align:'center'">实收金额</th>
                                     <th data-options="field:'operate', width:100, align:'center', formatter: function(value,rowData,index){
-                                        return '&lt;a href=&quot;javascript:;&quot; class=&quot;btn-operate detail&quot;&gt;订单详情&lt;a&gt;&lt;a href=&quot;javascript:;&quot; class=&quot;u-btn small&quot;&gt;查看物流&lt;a&gt;';
+                                        <!--return '&lt;a href=&quot;javascript:;&quot; class=&quot;btn-operate detail&quot;&gt;订单详情&lt;a&gt;&lt;a href=&quot;javascript:;&quot; class=&quot;u-btn small btn-logistics&quot;&gt;查看物流&lt;a&gt;';-->
+                                        return '&lt;a href=&quot;javascript:;&quot; class=&quot;btn-operate detail&quot;&gt;订单详情&lt;a&gt;';
                                     }">交易状态</th>
                                 </tr>
                             </thead>
@@ -156,6 +166,7 @@
                                     pagination: true">
                             <thead>
                                 <tr>
+                                    <th data-options="field:'orderId', width:150, align:'center'">订单编号</th>
                                     <th data-options="field:'field1', width:150, align:'center'">商品</th>
                                     <th data-options="field:'field2', width:150, align:'center'">单价（元）</th>
                                     <th data-options="field:'field3', width:80, align:'center'">数量</th>
@@ -175,73 +186,7 @@
         </div>
         <div ms-visible="detail.flag">
             <p class="u-title">订单详情</p>
-            <div class="u-datainfo" ms-visible="detail.status == 101">
-                <p class="info-title">订单信息</p>
-                <div class="column">
-                    <div class="cell">
-                        <label>订单编号：</label>
-                        <span class="cnt-box">{{orderId}}</span>
-                    </div>
-                </div>
-                <div class="column">
-                    <div class="cell">
-                        <label>创建时间：</label>
-                        <span class="cnt-box">{{detail.createTime}}</span>
-                    </div>
-                </div>
-                <div class="column">
-                    <div class="cell">
-                        <label>订单状态：</label>
-                        <span class="cnt-box">{{detail.status | orderStatus}}</span>
-                    </div>
-                </div>
-                <div class="column">
-                    <div class="cell">
-                        <label></label>
-                        <button class="u-btn">关闭交易</button>
-                    </div>
-                </div>
-            </div>
-            <div class="u-datainfo" ms-visible="detail.status == 102">
-                <p class="info-title">订单信息</p>
-                <div class="column">
-                    <div class="cell">
-                        <label>订单编号：</label>
-                        <span class="cnt-box">{{orderId}}</span>
-                    </div>
-                </div>
-                <div class="column">
-                    <div class="cell">
-                        <label>交易号：</label>
-                        <span class="cnt-box">{{detail.paymentId}}</span>
-                    </div>
-                </div>
-                <div class="column">
-                    <div class="cell">
-                        <label>成交时间：</label>
-                        <span class="cnt-box">{{detail.chargePaidTime}}</span>
-                    </div>
-                </div>
-                <div class="column">
-                    <div class="cell">
-                        <label>订单状态：</label>
-                        <span class="cnt-box">{{detail.status | orderStatus}}</span>
-                    </div>
-                </div>
-                <div class="column">
-                    <div class="cell">
-                        <label>收货信息：</label>
-                        <span class="cnt-box">{{detail.addr}}</span>
-                    </div>
-                </div>
-                <div class="column">
-                    <div class="cell">
-                        <label></label>
-                        <button class="u-btn" ms-click="deliver.show">发货</button>
-                    </div>
-                </div>
-            </div>
-            <div class="u-datainfo seven" ms-visible="detail.status == 103">
+            <div class="u-datainfo seven" ms-visible="detail.status == 103 || detail.status == 104 || detail.status == 105 || detail.status == 106">
                 <p class="info-title">物流信息</p>
                 <div class="column">
                     <div class="cell">
@@ -295,6 +240,51 @@
                     </div>
                 </div>
             </div>
+            <div class="u-datainfo">
+                <p class="info-title">订单信息</p>
+                <div class="column">
+                    <div class="cell">
+                        <label>订单编号：</label>
+                        <span class="cnt-box">{{orderId}}</span>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="cell">
+                        <label>交易号：</label>
+                        <span class="cnt-box">{{detail.paymentId}}</span>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="cell">
+                        <label>创建时间：</label>
+                        <span class="cnt-box">{{detail.createTime}}</span>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="cell">
+                        <label>订单状态：</label>
+                        <span class="cnt-box">{{detail.status | orderStatus}}</span>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="cell">
+                        <label>收货信息：</label>
+                        <span class="cnt-box">{{detail.addr}}</span>
+                    </div>
+                </div>
+                <div class="column" ms-visible="detail.status == 101">
+                    <div class="cell">
+                        <label></label>
+                        <button class="u-btn close">关闭交易</button>
+                    </div>
+                </div>
+                <div class="column" ms-visible="detail.status == 102">
+                    <div class="cell">
+                        <label></label>
+                        <button class="u-btn" ms-click="deliver.show">发货</button>
+                    </div>
+                </div>
+            </div>
             <table id="dg-product" class="easyui-datagrid" data-options="
                         autoRowHeight: false,
                         method: 'post',
@@ -306,7 +296,9 @@
                         onLoadSuccess: detailOnLoadSuccess">
                 <thead>
                     <tr>
-                        <th data-options="field:'img', width:150, align:'center'"></th>
+                        <th data-options="field:'img', width:150, align:'center', formatter: function(value, row, index){
+                            return '&lt;img class=\'u-img\' src=\'' + value + '\' />';
+                        }"></th>
                         <th data-options="field:'name', width:150, align:'center'">商品</th>
                         <th data-options="field:'price', width:150, align:'center'">单价（元）</th>
                         <th data-options="field:'num', width:80, align:'center'">数量</th>
@@ -334,7 +326,7 @@
                                 <p class="u-step">2. 确认发货信息</p>
                                 <div class="u-form">
                                     <div class="column">
-                                        <label>收货地址：</label>
+                                        <label>发货地址：</label>
                                         <div class="cnt-box district-box">
                                             <select class="district" ms-duplex="address.province" data-duplex-changed="provinceChange">
                                                 <option ms-repeat="address.provinceAll" ms-attr-value="el.provinceCode">{{el.name}}</option>
@@ -404,33 +396,14 @@
             var orderCtrl = avalon.define({
                 $id: "order",
                 param: {
-                    code: "",
-                    name: "",
-                    nickname: "",
-                    starttime: "",
-                    endtime: "",
+                    orderId: "",
+                    productName: "",
                     search: function(){
-                        $.ajax({
-                            type: "post",
-                            url: DI.queryAllProducts,
-                            data: {
-                                productId: productCtrl.param.productId,
-                                name: productCtrl.param.name,
-                                catalogId3: productCtrl.param.catalogId3,
-                                status: productCtrl.param.status,
-                            },
-                            dataType: "json",
-                            success: function(data){
-                                
-                            },
-                            error: function(err){
-                                console.log(err);
-                            }
-                        });
+                        queryOrderList(orderCtrl.param.productName, orderCtrl.param.orderId);
                     }
                 },
                 orderId: "",
-                step: 3,
+                step: 1,
                 cnt: 999,
                 allMerge: [],
                 noDeliverMerge:[],
@@ -516,7 +489,10 @@
                             },
                             dataType: "json",
                             success: function(data){
-                                orderCtrl.address.areaAll = data;
+                                if(data.status == "success"){
+                                    orderCtrl.address.areaAll = data;
+                                }
+                                alert(data.msg);
                             },
                             error: function(err){
                                 console.log(err);
@@ -560,7 +536,6 @@
                                     products[i].status = data.order.status;
                                     products[i].amount = data.order.amount;
                                     products[i].nickname = data.nickname;
-                                    products[i].img = data.nickname;
                                 }
                                 $("#dg-product").datagrid({}).datagrid("loadData", products);
                             }
@@ -580,22 +555,40 @@
                     columns:[[
                         {field: "orderId", title: "订单编号", width: 150, align: "center"},
                         {field: "createTime", title: "创建时间", width: 150, align: "center"},
-                        {field: "img", title: "", width: 150, align: "center"},
+                        {field: "img", title: "", width: 150, align: "center", formatter: function(value, row, index){
+                            return "<img class='u-img' src='" + value + "' />";
+                        }},
                         {field: "title", title: "商品", width: 150, align: "center"},
                         {field: "price", title: "单价（元）", width: 150, align: "center"},
                         {field: "num", title: "数量", width: 150, align: "center"},
                         {field: "nickname", title: "买家昵称", width: 150, align: "center"},
                         {field: "amount", title: "实收金额", width: 150, align: "center"},
                         {field: "operate", title: "交易状态", width: 150, align: "center", formatter: function(value, row, index){
-                                var status = "<p>" + row.status + "</p>",
+                                var status = "",
                                     detail = "<a href='javascript:;' class='btn-operate detail'>查看详情</a>",
                                     operate = null;
                                 if(row.status == "101"){
-                                    operate = "<a href='javascript:;' class='btn-operate close'>关闭交易</a>"
+                                    status = "待付款";
                                 }else if(row.status == "102"){
-                                    operate = "<button href='javascript:;' class='u-btn small deliver'>发货</button>"
+                                    status = "待发货";
+                                }else if(row.status == "103"){
+                                    status = "待收货";
+                                }else if(row.status == "104"){
+                                    status = "待评价";
+                                }else if(row.status == "105"){
+                                    status = "退/换货";
+                                }else if(row.status == "106"){
+                                    status = "已完成";
+                                }else if(row.status == "100" || row.status == "107"){
+                                    status = "交易关闭";
+                                }
+                                status = "<p>" + status + "</p>"
+                                if(row.status == "101"){
+                                    operate = "<a href='javascript:;' class='btn-operate close'>关闭交易</a>";
+                                }else if(row.status == "102"){
+                                    operate = "<button href='javascript:;' class='u-btn small btn-deliver'>发货</button>";
                                 }else{
-                                    operate = "<a href='javascript:;' class='btn-operate logistics'>查看物流</a>"
+//                                  operate = "<a href='javascript:;' class='btn-operate btn-logistics'>查看物流</a>";
                                 }
                                 return status + detail + operate;
                             }
@@ -609,11 +602,13 @@
                 }
             });
             
-            function queryOrderList(){
+            function queryOrderList(productName, orderId){
                 $.ajax({
                     type: "post",
                     url: DI.queryOrderList,
                     data: {
+                        productName: productName ? productName : "",
+                        orderId: orderId ? orderId : "",
                         status: orderCtrl.cnt == "999" ? "" : orderCtrl.cnt
                     },
                     dataType: "json",
@@ -632,7 +627,7 @@
                                 product.orderId = data.data[i].orderId;
                                 product.createTime = data.data[i].createTime;
                                 
-                                product.img = "";
+                                product.img = product.img;
                                 products.push(product);
                             }
                             merges.push({
@@ -737,6 +732,27 @@
                     selected = $("#dg-" + table).datagrid("getSelected");
                     
                 orderCtrl.detail.check(selected);
+            });
+            $("body").on("click", ".btn-logistics", function(){
+                
+            });
+            $("body").on("click", ".btn-deliver", function(){
+                var table = getTable(),
+                    selected = $("#dg-" + table).datagrid("getSelected");
+                
+                orderCtrl.orderId = selected.orderId;
+                $.ajax({
+                    type: "post",
+                    url: DI.getOrderDetail,
+                    data: {
+                        orderId: orderCtrl.orderId
+                    },
+                    dataType: "json",
+                    success: function(data){
+                        orderCtrl.detail.addr = data.addr;
+                    }
+                });
+                orderCtrl.deliver.show();
             });
         </script>
     </body>

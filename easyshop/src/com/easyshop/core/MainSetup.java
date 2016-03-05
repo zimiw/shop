@@ -89,6 +89,79 @@ public class MainSetup implements Setup {
 		public int diffDate(Date jzDate, Date qsDate) {
 			return (int) ((jzDate.getTime() - qsDate.getTime()) / (60 * 1000));
 		}
+		
+		/**
+		 * 根据限时商品价格修改商品最低价格
+		 */
+		private void runProduct(){
+		    
+		    String dayTime  = TimeUtils.dateToStr(new Date(), TimeUtils.FORMAT14);
+		    //正在进行的限时活动
+		    String sqlStr = 
+		            "SELECT a.productId ,  MIN(a.price) price " +
+		            " FROM activityproduct a " +
+		            " WHERE beginTime<=@dayTime " +
+		            " AND endTime>=@dayTime" +
+		            " AND leftNum>0 " +
+		            " AND status = 1  " +
+		            " GROUP BY a.productId ";
+		   Sql sql = Sqls.create(sqlStr);
+	        sql.params().set("dayTime", dayTime);
+	        sql.setCallback(Sqls.callback.maps());
+	        dao.execute(sql);
+	        List<Map> list = sql.getList(Map.class);
+	        
+	        sqlStr = " update product set minPrice = @minPrice, limitActivityStatus=1 "
+                    + " where productId = @productId and minPrice>@minPrice   ";
+	        // 更新商品中的价格
+	        for(Map map : list){
+	            sql = Sqls.create(sqlStr);
+	            sql.params().set("productId", map.get("productId"));
+	            sql.params().set("minPrice", map.get("price"));
+	            dao.execute(sql);
+	        }
+		 
+	        //售完的商品
+	        sqlStr = "SELECT a.productId ,  MIN(a.price) price " +
+                    " FROM activityproduct a " +
+                    " WHERE beginTime<=@dayTime " +
+                    " AND endTime>=@dayTime" +
+                    " AND leftNum<=0 " +
+                    " AND status = 1  " +
+                    " GROUP BY a.productId ";
+	        sql = Sqls.create(sqlStr);
+            sql.params().set("dayTime", dayTime);
+            sql.setCallback(Sqls.callback.maps());
+            dao.execute(sql);
+           list = sql.getList(Map.class);
+           sqlStr = " update product set minPrice = (select min(currentPrice) from producttype t where t.productId = product.productId ), limitActivityStatus = 2 "
+                   + " where productId = @productId and limitActivityStatus in (1, 0) ";
+	        for(Map map : list){
+                sql = Sqls.create(sqlStr);
+                sql.params().set("productId", map.get("productId"));
+                dao.execute(sql);
+            }
+	        
+	        //结束的活动
+	        sqlStr = "SELECT a.productId ,  MIN(a.price) price " +
+                    " FROM activityproduct a " +
+                    " WHERE endTime<@dayTime" +
+                    " AND status = 1  " +
+                    " GROUP BY a.productId ";
+            sql = Sqls.create(sqlStr);
+            sql.params().set("dayTime", dayTime);
+            sql.setCallback(Sqls.callback.maps());
+            dao.execute(sql);
+            sqlStr = " update product set minPrice = (select min(currentPrice) from producttype t where t.productId = product.productId ), limitActivityStatus = 3 "
+                    + " where productId = @productId and limitActivityStatus in (1, 2) ";
+             for(Map map : list){
+                 sql = Sqls.create(sqlStr);
+                 sql.params().set("productId", map.get("productId"));
+                 dao.execute(sql);
+             }
+		    
+		}
+		
 
 		/**
 		 * 每隔30分钟就把未支付订单取消
@@ -152,6 +225,13 @@ public class MainSetup implements Setup {
 
 			while (true) {
 
+			    
+			    try {
+			        runProduct();
+                } catch (Exception e) {
+                    logger.error("限时活动商品价格修改", e);
+                }
+			    
 				try {
 					runOrder();
 				} catch (Exception e) {

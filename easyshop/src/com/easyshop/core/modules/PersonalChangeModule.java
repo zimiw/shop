@@ -241,9 +241,9 @@ public class PersonalChangeModule {
 		OrderChange queryChange = dao.fetch(
 				OrderChange.class,
 				Cnd.where("orderId", "=", orderChange.getOrderId()).and(
-						"productId", "=", orderChange.getProductId()));
+						"productId", "=", orderChange.getProductId()).and("changeType", "=", type));
 
-		if (queryChange == null) {
+		if (queryChange != null)  {
 			resultVo.setMsg("该订单已经申请过" + str);
 			return resultVo;
 		}

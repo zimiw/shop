@@ -9,6 +9,7 @@ import org.nutz.ioc.loader.annotation.IocBean;
 
 import com.easyshop.bean.Address;
 import com.easyshop.bean.Images;
+import com.easyshop.utils.StringUtils;
 
 /**
  * 订单相关公共方法
@@ -77,7 +78,8 @@ public class OrderUtil {
 
 		String sqlStr = "SELECT   (SELECT t.name  FROM province t  WHERE t.code = a.province) province, "
 				+ "    (SELECT t.name   FROM city t  WHERE t.code = a.city) city, "
-				+ "    (SELECT t.name FROM area t  WHERE t.code = a.district) district, street  FROM address a where addressId = @addressId  ";
+				+ "    (SELECT t.name FROM area t  WHERE t.code = a.district) district, street, name,  phone, cellphone  "
+				+ " FROM address a where addressId = @addressId  ";
 		Sql sql = Sqls.create(sqlStr);
 		sql.params().set("addressId", addressId);
 		sql.setCallback(Sqls.callback.maps());
@@ -85,6 +87,14 @@ public class OrderUtil {
 		Address address = sql.getObject(Address.class);
 		StringBuffer str = new StringBuffer();
 		if (address != null) {
+		    String phone = address.getPhone();
+		    
+		    phone = StringUtils.isEmpty(phone) ? address.getCellphone() : phone;
+		    
+		    str.append(address.getName());
+		    str.append(" ");
+		    str.append(phone);
+		    str.append(" ");
 			str.append(address.getProvince());
 			str.append(address.getCity());
 			str.append(address.getDistrict());

@@ -591,7 +591,11 @@ select.district {
     color: #0069D6;
 }
 
-
+.u-img {
+    display: inline-block;
+    width: 60px;
+    height: 60px;
+}
 
 
 

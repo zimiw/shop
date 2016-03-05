@@ -370,16 +370,26 @@ public class ActivityAdminModule {
 					ap.setStatus(1);
 					ap.setLeftNum(ap.getNum());// 剩余数量和活动数量相关
 					dao.insert(ap);
-
-					int res = dao.update(Cnd
-							.wrap(" update producttype set storeCount  = storeCount- "
-									+ ap.getNum()
-									+ " where  productTypeId = "
-									+ ap.getProductTypeId()
-									+ " and storeCount- " + ap.getNum() + ">0 "));
-					if (res != 1) {
-						throw new RuntimeException("该商品库存不足!");
-					}
+					
+					String sqlStr = " update producttype set storeCount  = storeCount-@num "
+                            + " where  productTypeId = @productTypeId "
+                            + " and storeCount- @num  >0 ";
+					Sql sql = Sqls.create(sqlStr);
+			        sql.params().set("num", ap.getNum());
+			        sql.params().set("productTypeId", ap.getProductTypeId());
+			        dao.execute(sql);
+//			        sql.setCallback(Sqls.callback.integer());
+//			        int res =  dao.execute(sql);
+//
+//					int res = dao.update(Cnd
+//							.wrap(" update producttype set storeCount  = storeCount- "
+//									+ ap.getNum()
+//									+ " where  productTypeId = "
+//									+ ap.getProductTypeId()
+//									+ " and storeCount- " + ap.getNum() + ">0 "));
+//					if (res != 1) {
+//						throw new RuntimeException("该商品库存不足!");
+//					}
 				}
 
 				// 根据商品中对应的状态

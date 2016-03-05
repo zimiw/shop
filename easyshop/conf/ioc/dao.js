@@ -6,12 +6,12 @@ var ioc = {
             depose : 'close'
         },
         fields : {
-            url : "jdbc:mysql://rdsi1w39xy2x5qp1r219.mysql.rds.aliyuncs.com:3306/easyshop",
-            username : "db",
-            password : "easyshop_123456",
-            //url : "jdbc:mysql://localhost:3306/easyshop",
-            //username : "root",
-            //password : "root123",
+            //url : "jdbc:mysql://rdsi1w39xy2x5qp1r219.mysql.rds.aliyuncs.com:3306/easyshop",
+            //username : "db",
+            //password : "easyshop_123456",
+            url : "jdbc:mysql://localhost:3306/easyshop",
+            username : "root",
+            password : "root123",
             testWhileIdle : true,
             validationQuery : "select 1" ,
             maxActive : 100
