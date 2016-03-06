@@ -88,6 +88,7 @@ public class PersonalOrderModule {
 			map.put("name", product.getName());
 			map.put("img", image.getImgsource());
 			map.put("country", product.getCountry());
+			map.put("productId", product.getProductId());
 			map.put("price", product.getMinPrice());
 			map.put("originPrice", type.getCurrentPrice());
 			result.add(map);
