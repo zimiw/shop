@@ -915,7 +915,10 @@ public class ProductModule {
 	public Object getProductActivtyNum(@Param("productTypeId") int productTypeId) {
 		ActivityProduct ap = dao.fetch(ActivityProduct.class,
 				Cnd.where("productTypeId", "=", productTypeId));
-		int leftNum = ap.getLeftNum();
+		int leftNum = 0;
+		if (ap != null) {
+			leftNum = ap.getLeftNum();
+		}
 		return leftNum < 0 ? 0 : leftNum;
 	}
 }
