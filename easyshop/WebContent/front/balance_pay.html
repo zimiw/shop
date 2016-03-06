@@ -120,19 +120,6 @@
 
                 avalon.scan();
                 
-                var now = new Date(),
-                    nowtime = now.getTime();
-                now.setTime(nowtime + 1000*60*30);
-                $(".time-countdown").countdown({
-                    date: now,
-                    render: function(data) {
-                        $(this.el).html(this.leadingZeros(data.min, 2) + "分" + this.leadingZeros(data.sec, 2) + "秒");
-                    },
-                    onEnd: function(){
-                        alert("过期了");
-                    }
-                });
-
                 function listeningIsHasPaid() {
                     window.timer = window.setInterval(checkIsHasPaid,1000);
                 }
@@ -170,6 +157,20 @@
                     dataType: "json",
                     success: function(data){
                         payCtrl.amount = data.data.amount;
+                        
+                        var createTime = new Date(data.data.createTime),
+                            createTimeTime = createTime.getTime();
+                        createTime.setTime(createTimeTime + 1000*60*30);
+                        $(".time-countdown").countdown({
+                            date: createTime,
+                            render: function(data) {
+                                $(this.el).html(this.leadingZeros(data.min, 2) + "分" + this.leadingZeros(data.sec, 2) + "秒");
+                            },
+                            onEnd: function(){
+                                alert("该订单已过期");
+                                location.href = "personal_myOrder.html";
+                            }
+                        });
                     }
                 });
             });

@@ -1335,6 +1335,10 @@ body {
     margin: 0 5px;
 }
 
+.pagination {
+    text-align: center;
+    padding: 20px 0;
+}
 
 
 

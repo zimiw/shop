@@ -94,7 +94,10 @@ DI.getHotdictByStatus = DI.baseURL+"/hotdict/getHotdictByStatus";
 // 获取省市区
 DI.getCitys = DI.baseURL + "/address/getCitys";
 DI.getAreas = DI.baseURL + "/address/getAreas";
-
+// 获取最近浏览
+DI.getScan = DI.baseURL + "/personalorder/getScan";
+// 获取最近浏览
+DI.getProductActivtyNum = DI.baseURL + "/product/getProductActivtyNum";
 
 
 

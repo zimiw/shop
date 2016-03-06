@@ -5,6 +5,7 @@
 .brand-box .first-brand {
     position: relative;
     height: 65px;
+    margin-top: 20px;
     line-height: 65px;
     color: #999;
 }
@@ -146,10 +147,7 @@
     background: #000 url(images/arrow_rt.png) no-repeat center;
 }
 
-.pagination {
-    text-align: center;
-    padding: 20px 0;
-}
+
 
 .search-empty {
     display: none;

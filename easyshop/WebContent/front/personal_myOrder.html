@@ -6,6 +6,7 @@
         <title>洋流网</title>
 
         <link rel="stylesheet" href="../css/front/reset.css" />
+        <link rel="stylesheet" href="../js/vendor/skin/laypage.css" />
         <link rel="stylesheet" href="../css/front/personal-order.css" />
     </head>
     <body ms-controller="common">
@@ -112,6 +113,7 @@
 	        							</div>
 	        						</div>
         						</div>
+        						<div class="pagination" id="pagination"></div>
         					</div>
         					<div class="cnt" ms-visible="cnt == 101">
         						<!--<div class="search-order">
@@ -157,6 +159,7 @@
                                         </div>
 	        						</div>
         						</div>
+        						<div class="pagination" id="pagination2"></div>
         					</div>
         					<div class="cnt" ms-visible="cnt == 102">
         						<!--<div class="search-order">
@@ -200,6 +203,7 @@
                                         </div>
 	        						</div>
         						</div>
+        						<div class="pagination" id="pagination3"></div>
         					</div>
         					<div class="cnt" ms-visible="cnt == 103">
         						<!--<div class="search-order">
@@ -248,12 +252,9 @@
                                         </div>
 	        						</div>
         						</div>
+        						<div class="pagination" id="pagination4"></div>
         					</div>
         					<div class="cnt" ms-visible="cnt == 104">
-        						<!--<div class="search-order">
-        							<input type="text" placeholder="输入订单号和商品名称" />
-        							<button>搜索</button>
-        						</div>-->
         						<div class="tb-head">
         							<p class="asTd col1">商品</p>
         							<p class="asTd col2">售价（元）</p>
@@ -295,6 +296,7 @@
                                         </div>
 	        						</div>
         						</div>
+        						<div class="pagination" id="pagination5"></div>
         					</div>
         					<div class="cnt" ms-visible="cnt == 105">
         						<div class="tb-head return">
@@ -323,6 +325,7 @@
         								</div>
         							</div>
         						</div>
+        						<div class="pagination" id="pagination6"></div>
         					</div>
         				</div>
         			</div>
@@ -404,6 +407,7 @@
 
         <script src="../js/avalon.shim.sn.js"></script>
         <script src="../js/jquery.min.js"></script>
+        <script src="../js/vendor/laypage.js"></script>
         <script src="../js/main.js"></script>
         <script src="../js/data-interface.js"></script>
         <script>
@@ -426,34 +430,9 @@
                     	orderCtrl.cnt = idx;
                     	
                     	if(idx == 999){
-                    	    getOrders(1, 10);
+                    	    getOrders(1);
                     	}else{
-                    	    $.ajax({
-                                type: "post",
-                                url: DI.getOrdersByStatus,
-                                data: {
-                                    status: idx,
-                                    pageNum: 1,
-                                    pageSize: 20
-                                },
-                                dataType: "json",
-                                success: function(data){
-                                    if(idx == 101){
-                                        orderCtrl.noPyaList = data.data;
-                                    }else if(idx == 102){
-                                        orderCtrl.noDeliverList = data.data;
-                                    }else if(idx == 103){
-                                        orderCtrl.noReceiveList = data.data;
-                                    }else if(idx == 104){
-                                        orderCtrl.noEvluateList = data.data;
-                                    }else if(idx == 105){
-                                        orderCtrl.returnList = data.data;
-                                    }
-                                },
-                                error: function(err){
-                                    console.log(err);
-                                }
-                            });
+                    	    getOrdersByStatus(idx, 1);
                     	}
                     },
                     popup: {
@@ -477,7 +456,7 @@
                                 success: function(data){
                                     if(data.status == "success"){
                                         orderCtrl.popup.evaluate = false;
-                                        getOrders(1, 10);
+                                        getOrders(1);
                                     }
                                     alert(data.msg);
                                 },
@@ -598,16 +577,16 @@
                     }
                 });
                 
-                getOrders(1, 10);
+                getOrders(1);
                 
                 //获取订单信息
-                function getOrders(pageNum, pageSize){
+                function getOrders(pageNum){
                     $.ajax({
                         type: "post",
                         url: DI.getOrders,
                         data: {
                             pageNum: pageNum,
-                            pageSize: pageSize
+                            pageSize: 20
                         },
                         dataType: "json",
                         success: function(data){
@@ -617,6 +596,126 @@
                                     var confirmTime = new Date(orderCtrl.allList[i].confirmTime.replace(/-/g, "/")),
                                         now = new Date();
                                     orderCtrl.allList[i].last = (now.getTime() - confirmTime.getTime()) / (24 * 60 * 60 * 1000);
+                                }
+                            }
+                            
+                            if($("#pagination").is(":empty")){
+                                laypage({
+                                    cont: $("#pagination"),
+                                    pages: Math.ceil(data.count / 20),
+                                    skin: 'molv',
+                                    first: 1,
+                                    last: Math.ceil(data.count / 20),
+                                    prev: '<',
+                                    next: '>',
+                                    jump: function(obj, first){
+                                        if(first) return;
+                                        getOrders(obj.curr);
+                                    }
+                                });
+                            }
+                        },
+                        error: function(err){
+                            console.log(err);
+                        }
+                    });
+                }
+                // 根据状态查询订单
+                function getOrdersByStatus(idx, pageNum){
+                    $.ajax({
+                        type: "post",
+                        url: DI.getOrdersByStatus,
+                        data: {
+                            status: idx,
+                            pageNum: pageNum,
+                            pageSize: 20
+                        },
+                        dataType: "json",
+                        success: function(data){
+                            if(idx == 101){
+                                orderCtrl.noPyaList = data.data;
+                                if($("#pagination2").is(":empty")){
+                                    laypage({
+                                        cont: $("#pagination2"),
+                                        pages: Math.ceil(data.count / 20),
+                                        skin: 'molv',
+                                        first: 1,
+                                        last: Math.ceil(data.count / 20),
+                                        prev: '<',
+                                        next: '>',
+                                        jump: function(obj, first){
+                                            if(first) return;
+                                            getOrdersByStatus(101, obj.curr);
+                                        }
+                                    });
+                                }
+                            }else if(idx == 102){
+                                orderCtrl.noDeliverList = data.data;
+                                if($("#pagination3").is(":empty")){
+                                    laypage({
+                                        cont: $("#pagination3"),
+                                        pages: Math.ceil(data.count / 20),
+                                        skin: 'molv',
+                                        first: 1,
+                                        last: Math.ceil(data.count / 20),
+                                        prev: '<',
+                                        next: '>',
+                                        jump: function(obj, first){
+                                            if(first) return;
+                                            getOrdersByStatus(102, obj.curr);
+                                        }
+                                    });
+                                }
+                            }else if(idx == 103){
+                                orderCtrl.noReceiveList = data.data;
+                                if($("#pagination4").is(":empty")){
+                                    laypage({
+                                        cont: $("#pagination4"),
+                                        pages: Math.ceil(data.count / 20),
+                                        skin: 'molv',
+                                        first: 1,
+                                        last: Math.ceil(data.count / 20),
+                                        prev: '<',
+                                        next: '>',
+                                        jump: function(obj, first){
+                                            if(first) return;
+                                            getOrdersByStatus(103, obj.curr);
+                                        }
+                                    });
+                                }
+                            }else if(idx == 104){
+                                orderCtrl.noEvluateList = data.data;
+                                if($("#pagination5").is(":empty")){
+                                    laypage({
+                                        cont: $("#pagination5"),
+                                        pages: Math.ceil(data.count / 20),
+                                        skin: 'molv',
+                                        first: 1,
+                                        last: Math.ceil(data.count / 20),
+                                        prev: '<',
+                                        next: '>',
+                                        jump: function(obj, first){
+                                            if(first) return;
+                                            getOrdersByStatus(104, obj.curr);
+                                        }
+                                    });
+                                }
+                            }else if(idx == 105){
+                                orderCtrl.returnList = data.data;
+                                if($("#pagination6").is(":empty")){
+                                    laypage({
+                                        cont: $("#pagination6"),
+                                        pages: Math.ceil(data.count / 20),
+                                        skin: 'molv',
+                                        first: 1,
+                                        last: Math.ceil(data.count / 20),
+                                        prev: '<',
+                                        next: '>',
+                                        jump: function(obj, first){
+                                            if(first) return;
+                                            getOrdersByStatus(105, obj.curr);
+                                        }
+                                    });
                                 }
                             }
                         },

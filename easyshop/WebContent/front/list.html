@@ -41,7 +41,7 @@
                             <span>{{el.country | area}}</span>
                         </div>
                         <del class="reference">¥{{el.originPrice}}</del>
-                        <span class="price">¥{{el.minPrice}}</span>
+                        <span class="price">¥{{el.price}}</span>
                     </div>
                 </a>
             </div>
@@ -52,7 +52,7 @@
                     <table>
                         <tr>
                             <td ms-repeat="recent">
-                                <a class="list-item" ms-attr-href="el.url">
+                                <a class="list-item" ms-attr-href="'detail.html?productId=' + el.productId">
                                     <img class="product" ms-attr-src="el.img" />
                                     <p class="name">{{el.name}}</p>
                                     <div class="info-box">
@@ -60,16 +60,16 @@
                                             <em ms-class="{{el.country}}"></em>
                                             <span>{{el.country | area}}</span>
                                         </div>
-                                        <span class="price">¥{{el.minPrice}}</span>
                                         <del class="reference">¥{{el.originPrice}}</del>
+                                        <span class="price">¥{{el.price}}</span>
                                     </div>
                                 </a>
                             </td>
                         </tr>
                     </table>
                 </div>
-                <a class="arrow lt" href="javascript:;"></a>
-                <a class="arrow rt" href="javascript:;"></a>
+                <!--<a class="arrow lt" href="javascript:;" ms-click="recentLt"></a>
+                <a class="arrow rt" href="javascript:;" ms-click="recentRt"></a>-->
             </div>
         </div>
         <div ms-include-src="'../template/footer.html'" data-include-replace="true"></div>
@@ -115,6 +115,15 @@
                         param.orderBy = 34;
                         delete param.activityType;
                         getProducts();
+                    },
+                    recentLt: function(){
+                        var td_visible = $(".recent-box td:visible");
+                        if(td_visible.length > 4){
+                            td_visible.eq(0).hide();
+                        }
+                    },
+                    recentRt: function(){
+                        $(".recent-box td:visible:first").prev().show();
                     }
                 });
 
@@ -140,10 +149,10 @@
                 }
                 $.ajax({
                     type: "post",
-                    url: DI.getRecent,
+                    url: DI.getScan,
                     dataType: "json",
                     success: function(data){
-                        listCtrl.recent = data.recent;
+                        listCtrl.recent = data;
                     },
                     error: function(err){
                         console.log(err);

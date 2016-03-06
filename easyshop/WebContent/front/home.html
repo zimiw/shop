@@ -40,7 +40,7 @@
                 <div class="flash-sale">
                     <p class="home-title flash"></p>
                     <div class="container">
-                        <div class="cell" ms-class="no-mgl: $index % 2 == 0" ms-repeat="limit">
+                        <div class="cell" ms-class="no-mgl: $index % 2 == 0" ms-repeat="limit" ms-data-producttypeid="el.productTypeId">
                             <img class="product" ms-attr-src="el.imgs[0].imgsource" />
                             <div class="info-box">
                                 <div class="yl-area">
@@ -208,6 +208,9 @@
                             clearTimeout(timer);
                             timer = null;
                         }, 0);
+                    },
+                    error: function(err){
+                        console.log(err);
                     }
                 });
 				//Limit
@@ -225,7 +228,27 @@
                                         $(this.el).html(this.leadingZeros(data.days * 24 + data.hours, 2) + "小时 " + this.leadingZeros(data.min, 2) + "分 " + this.leadingZeros(data.sec, 2) + "秒");
                                         if(data.sec % 5 == 0){
                                             // 查询是否还有库存
-                                            
+                                            $.ajax({
+                                                type: "post",
+                                                url: DI.getProductActivtyNum,
+                                                data: {
+                                                    prototypeId: $(this.el).parents(".cell").data("producttypeid")
+                                                },
+                                                dataType: "json",
+                                                success:function(data){
+                                                    homeCtrl.banner = data.banner;
+                                                    var timer = setTimeout(function(){
+                                                        $('.banner').unslider({
+                                                            dots: true
+                                                        });
+                                                        clearTimeout(timer);
+                                                        timer = null;
+                                                    }, 0);
+                                                },
+                                                error: function(err){
+                                                    console.log(err);
+                                                }
+                                            });
                                         }
                                     },
                                     onEnd: function(){
@@ -239,6 +262,9 @@
                     		 clearTimeout(timer);
                              timer = null;
                          }, 0);
+                    },
+                    error: function(err){
+                        console.log(err);
                     }
                 });
 				//hotsell
@@ -252,6 +278,9 @@
                         homeCtrl.hot3 = data.hot[2];
                         homeCtrl.hot4 = data.hot[3];
                         homeCtrl.hot5 = data.hot[4];
+                    },
+                    error: function(err){
+                        console.log(err);
                     }
                 });
 				$.ajax({
@@ -260,6 +289,9 @@
                     dataType: "json",
                     success:function(data){
                     	homeCtrl.hots = data.hot;
+                    },
+                    error: function(err){
+                        console.log(err);
                     }
                 });
 				//special
@@ -285,6 +317,9 @@
                             clearTimeout(timer);
                             timer = null;
                         }, 0);
+                    },
+                    error: function(err){
+                        console.log(err);
                     }
                 });
 				//win
@@ -297,7 +332,10 @@
 						if(data.win.length == 0){
 						    homeCtrl.rule = true;
 						}
-					}
+					},
+                    error: function(err){
+                        console.log(err);
+                    }
 				});
 				// 购物车数量
 				$.ajax({
