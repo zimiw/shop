@@ -231,6 +231,7 @@ public class PersonalModule {
 				favMap.put("productId", fav.getProductId());
 				favMap.put("img", image.getImgsource());
 				favMap.put("name", product.getName());
+				favMap.put("country", product.getCountry());
 				favMap.put("area", product.getProvider());// 供货商
 				favMap.put("flag", "");// TODO: 收藏夹页面 flag: "img/demo_9.png",
 										// 没法取

@@ -31,6 +31,8 @@ import com.easyshop.bean.OrderChange;
 import com.easyshop.bean.OrderChangeDetail;
 import com.easyshop.bean.Personal;
 import com.easyshop.bean.Product;
+import com.easyshop.bean.ProductScan;
+import com.easyshop.bean.ProductType;
 import com.easyshop.core.modules.admin.OrderConstant;
 import com.easyshop.core.modules.admin.OrderUtil;
 import com.easyshop.utils.StringUtils;
@@ -54,6 +56,45 @@ public class PersonalOrderModule {
 	protected Dao dao;
 	@Inject
 	protected OrderUtil orderUtil;
+
+	/**
+	 * 最新浏览记录
+	 * 
+	 * @return
+	 */
+	@At
+	public Object getScan(HttpSession session) {
+		String userId = String.valueOf(session
+				.getAttribute(OrderConstant.FRONT_USER_ID));
+
+		Pager pager = dao.createPager(1, 4);
+
+		List<ProductScan> listScan = dao.query(ProductScan.class,
+				Cnd.where("personalId", "=", userId).desc("id"), pager);
+
+		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+		Map<String, Object> map = null;
+		Product product = null;
+		ProductType type = null;
+		for (ProductScan scan : listScan) {
+
+			map = new HashMap<String, Object>();
+			type = dao.fetch(ProductType.class,
+					Cnd.where("productTypeId", "=", scan.getProductTypeId()));
+			product = dao.fetch(Product.class,
+					Cnd.where("productId", "=", scan.getProductId()));
+			Images image = fetchImg(scan.getProductId());
+
+			map.put("name", product.getName());
+			map.put("img", image.getImgsource());
+			map.put("country", product.getCountry());
+			map.put("price", product.getMinPrice());
+			map.put("originPrice", type.getCurrentPrice());
+			result.add(map);
+		}
+
+		return result;
+	}
 
 	/**
 	 * 根据用户id取最近3笔订单
