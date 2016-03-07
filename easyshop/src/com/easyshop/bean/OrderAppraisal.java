@@ -24,7 +24,7 @@ public class OrderAppraisal {
 	private int personalId;// 会员id
 
 	@Column
-	private int appType;// 评价类型
+	private int appType;// 评价类型   1 好  2 中   3 差
 
 	@Column
 	private String appContent;// 评价内容

@@ -64,78 +64,129 @@ public class OrderAdminModule {
      */
     @At
     public Object queryOrderList(@Param("orderId") String orderId, @Param("productName") String productName,
-            @Param("status") String status, int pageNum, int pageSize) {
+            @Param("status") String status, int page, int rows) {
         Map<String, Object> result = new HashMap<String, Object>();
-        Map<String, Object> map = null;
         List<Map<String, Object>> goodsList = null;// 每个订单对应的商品
         Map<String, Object> goods = null;
 
-        Pager pager = dao.createPager(pageNum, pageSize);
-
         Sql sql = null;
+       String sqlStr =  "SELECT t.orderId,  t.createTime,  t.userId, t.status, " +
+               "    t.amount,  b.minPrice price, a.number num,  b.name   title " +
+               "FROM orders t,  connectorop a, product b " +
+               "WHERE t.orderId = a.orderId " +
+               "AND a.productId = b.productId ";
+       
+       String sqlStr2 =  "SELECT  count(1) " +
+               "FROM orders t,  connectorop a, product b " +
+               "WHERE t.orderId = a.orderId " +
+               "AND a.productId = b.productId ";
+       
+       String sqlWhere = "";
+       List<String> paramsList = new ArrayList<String>();
+       Map<String, Object> valMap = new HashMap<String, Object>();
+       
+       if (!StringUtils.isEmpty(status)) {
+           sqlWhere += " and t.status = @status ";
+           paramsList.add("status");
+           valMap.put("status", status);
+       }
 
-        Cnd cnd = Cnd.NEW();
+       if (!StringUtils.isEmpty(orderId)) {// 订单编号
+           sqlWhere += " and t.orderId = @orderId ";
+           paramsList.add("orderId");
+           valMap.put("orderId", orderId);
+       }
+       
+       if (!StringUtils.isEmpty(productName)) {// 商品名称
+           sqlWhere += " and b.name  like @productName  ";
+           paramsList.add("productName");
+           valMap.put("productName", "%" + productName + "%");
+    }
+       
+       sql = Sqls.create(sqlStr2 + sqlWhere);
+       for (String str : paramsList) {
+           sql.params().set(str, valMap.get(str));
+       }
+       sql.setCallback(Sqls.callback.integer());
+       dao.execute(sql);
+       int total = sql.getInt();
+       result.put("total", total);
 
-        if (!StringUtils.isEmpty(status)) {
-            cnd.and("status", "=", status);
-        }
+       if (total == 0) {
+           return result;
+       }
+       
+       sqlStr += sqlWhere+" limit @pageNum, @pageSize ";
+       sql = Sqls.create(sqlStr);
+       for (String str : paramsList) {
+           sql.params().set(str, valMap.get(str));
+       }
+       
+       Pager pager = dao.createPager(page, rows);
+       sql.params().set("pageNum", pager.getOffset());
+       sql.params().set("pageSize", pager.getPageSize());
+       
+       sql.setCallback(Sqls.callback.maps());
+       dao.execute(sql);
+       List<Map> list = sql.getList(Map.class);
+       String userId = "";
+       String statusDesc = "";
+       String productId = "";
+       for(Map map : list){
+           userId = String.valueOf(map.get("userId"));
+           statusDesc = String.valueOf(map.get("status"));
+           productId = String.valueOf(map.get("productId"));
+           map.put("nickname", getOrderPersonal(Integer.parseInt(userId)).getNickname());// 会员昵称
+           map.put("statusDesc", OrderConstant.statusMap.get(statusDesc));
+           map.put("img", orderUtil.fetchImg(productId, true).getImgsource());
+       }
+       
 
-        if (!StringUtils.isEmpty(orderId)) {// 订单编号
-            cnd.and("orderId", "=", orderId);
-        }
+//        String sqlOp = "SELECT a.number num, b.*  FROM connectorop a, product b  "
+//                + " WHERE a.productId = b.productId and a.orderId = @orderId ";
+//
+//        for (Order order : orderList) {
+//            map = new HashMap<String, Object>();
+//            map.put("orderId", order.getOrderId());
+//            map.put("createTime", order.getCreateTime());
+//            map.put("userId", order.getUserId());
+//            map.put("nickname", getOrderPersonal(order.getUserId()).getNickname());// 会员昵称
+//            map.put("status", order.getStatus());
+//            map.put("statusDesc", OrderConstant.statusMap.get(order.getStatus()));
+//            map.put("amount", order.getAmount());
+//            // 查询每个订单对应商品和数量
+//            sql = Sqls.create(sqlOp);
+//            sql.params().set("orderId", order.getOrderId());
+//            sql.setCallback(Sqls.callback.maps());
+//            dao.execute(sql);
+//            List<Map> list = sql.getList(Map.class);
+//
+//            goodsList = new ArrayList<Map<String, Object>>();
+//
+//            for (Map opMap : list) {// 查询每个商品和对应的数量
+//                goods = new HashMap<String, Object>();
+//                float minPrice = Float.parseFloat(String.valueOf(opMap.get("minPrice")));
+//                int num = Integer.parseInt(String.valueOf(opMap.get("num")));
+//                goods.put("title", opMap.get("name"));
+//                goods.put("img", orderUtil.fetchImg(String.valueOf(opMap.get("productId")), true).getImgsource());
+//                goods.put("price", minPrice);
+//                goods.put("num", num);
+//                goodsList.add(goods);
+//                // total += currentPrice * num;// 当个商品价格
+//            }
+//            // total
+//            map.put("products", goodsList);
+//
+//            resList.add(map);
+//        }
+//
+//        // { payno: "1563315489", paydate: "2014-05-08 18:00:26", total: "132",
+//        // status: 1
+//        // goods: [ {img: "img/demo_1.png", name:
+//        // "TAKEO KIKUCHI/菊池武2015A 男士牛皮鳄鱼纹公",
+//        // price: "606",num: 1 } ]}
 
-        if (!StringUtils.isEmpty(productName)) {// 商品名称
-            // cnd.and("productName", "like", "%" + orderId + "%");
-        }
-
-        List<Order> orderList = dao.query(Order.class, cnd.desc("createTime"), pager);
-        List<Map<String, Object>> resList = new ArrayList<Map<String, Object>>();
-
-        String sqlOp = "SELECT a.number num, b.*  FROM connectorop a, product b  "
-                + " WHERE a.productId = b.productId and a.orderId = @orderId ";
-
-        for (Order order : orderList) {
-            map = new HashMap<String, Object>();
-            map.put("orderId", order.getOrderId());
-            map.put("createTime", order.getCreateTime());
-            map.put("userId", order.getUserId());
-            map.put("nickname", getOrderPersonal(order.getUserId()).getNickname());// 会员昵称
-            map.put("status", order.getStatus());
-            map.put("statusDesc", OrderConstant.statusMap.get(order.getStatus()));
-            map.put("amount", order.getAmount());
-            // 查询每个订单对应商品和数量
-            sql = Sqls.create(sqlOp);
-            sql.params().set("orderId", order.getOrderId());
-            sql.setCallback(Sqls.callback.maps());
-            dao.execute(sql);
-            List<Map> list = sql.getList(Map.class);
-
-            goodsList = new ArrayList<Map<String, Object>>();
-
-            for (Map opMap : list) {// 查询每个商品和对应的数量
-                goods = new HashMap<String, Object>();
-                float minPrice = Float.parseFloat(String.valueOf(opMap.get("minPrice")));
-                int num = Integer.parseInt(String.valueOf(opMap.get("num")));
-                goods.put("title", opMap.get("name"));
-                goods.put("img", orderUtil.fetchImg(String.valueOf(opMap.get("productId")), true).getImgsource());
-                goods.put("price", minPrice);
-                goods.put("num", num);
-                goodsList.add(goods);
-                // total += currentPrice * num;// 当个商品价格
-            }
-            // total
-            map.put("products", goodsList);
-
-            resList.add(map);
-        }
-
-        // { payno: "1563315489", paydate: "2014-05-08 18:00:26", total: "132",
-        // status: 1
-        // goods: [ {img: "img/demo_1.png", name:
-        // "TAKEO KIKUCHI/菊池武2015A 男士牛皮鳄鱼纹公",
-        // price: "606",num: 1 } ]}
-
-        result.put("data", resList);
+        result.put("rows", list);
 
         return result;
     }

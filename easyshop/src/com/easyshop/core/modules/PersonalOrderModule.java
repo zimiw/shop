@@ -137,6 +137,7 @@ public class PersonalOrderModule {
 			map.put("img", image.getImgsource());
 			map.put("name", product.getName());
 			map.put("price", product.getCurrentPrice());
+			map.put("productId", product.getProductId());
 			queryList.add(map);
 		}
 

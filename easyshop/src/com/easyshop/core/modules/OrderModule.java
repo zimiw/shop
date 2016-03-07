@@ -501,6 +501,14 @@ public class OrderModule {
 			return result;
 		}
 
+		OrderAppraisal oapp = dao.fetch(OrderAppraisal.class, Cnd.where("orderId", "=", orderId));
+	        
+        if(oapp!=null){
+            result.put("status", "fail");
+            result.put("msg", "该订单已评价!");
+            return result;
+        }
+	        
 		final Order queryOrder = dao.fetch(Order.class,
 				Cnd.where("orderId", "=", orderId).and("userId", "=", userId)
 						.and("status", "=", 104));// 查询待收货订单
@@ -510,6 +518,7 @@ public class OrderModule {
 			result.put("msg", "该订单不存在 !");
 			return result;
 		}
+		
 
 		Trans.exec(new Atom() {
 			@Override
@@ -519,7 +528,7 @@ public class OrderModule {
 						Chain.make("status", 106),
 						Cnd.where("orderId", "=", orderId)
 								.and("userId", "=", userId)
-								.and("status", "=", 105));
+								.and("status", "=", 104));
 
 				OrderAppraisal app = new OrderAppraisal();
 				app.setOrderId(orderId);
@@ -529,6 +538,7 @@ public class OrderModule {
 				app.setAppType(appType);
 				app.setPersonalId(Integer.parseInt(userId));
 				app.setProductId(productId);
+				dao.insert(app);
 			}
 		});
 

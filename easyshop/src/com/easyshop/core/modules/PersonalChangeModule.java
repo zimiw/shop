@@ -8,6 +8,7 @@ import java.util.Date;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
 import org.nutz.img.Images;
@@ -27,6 +28,7 @@ import org.nutz.trans.Trans;
 import sun.misc.BASE64Encoder;
 
 import com.easy.core.filters.CheckFrontUserLoginFilter;
+import com.easyshop.bean.Order;
 import com.easyshop.bean.OrderChange;
 import com.easyshop.bean.OrderChangeDetail;
 import com.easyshop.core.modules.admin.OrderConstant;
@@ -90,7 +92,10 @@ public class PersonalChangeModule {
 		Trans.exec(new Atom() {
 			@Override
 			public void run() {
-				OrderChange change = dao.insert(orderChange);
+
+			    dao.update(Order.class, Chain.make("status", 105), Cnd.where("orderId", "=", orderChange.getOrderId()));
+			    
+			    OrderChange change = dao.insert(orderChange);
 
 				insertDetail(change, "买家已提交退货申请", orderChange.getStatus());// 插入流程信息
 			}
@@ -140,6 +145,9 @@ public class PersonalChangeModule {
 		Trans.exec(new Atom() {
 			@Override
 			public void run() {
+			    
+			    dao.update(Order.class, Chain.make("status", 105), Cnd.where("orderId", "=", orderChange.getOrderId()));
+			    
 				OrderChange change = dao.insert(orderChange);
 
 				insertDetail(change, "买家已提交退货申请", orderChange.getStatus());// 插入流程信息

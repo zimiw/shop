@@ -70,7 +70,6 @@ public class PersonalModule {
 	 * @return
 	 */
 	@At
-	@Filters(@By(type = CheckFrontUserLoginFilter.class))
 	public Object getUserInfo(HttpSession session) {
 
 		String userId = String.valueOf(session
@@ -126,6 +125,7 @@ public class PersonalModule {
 				imgMap = new HashMap<String, Object>();
 				imgMap.put("favoriteId", fav.getFavoriteId());
 				imgMap.put("img", image.getImgsource());
+				imgMap.put("productId", fav.getProductId());
 				imgList.add(imgMap);
 			}
 		}
@@ -260,7 +260,7 @@ public class PersonalModule {
 		// 查看用户收藏商品数量
 		int count = dao.count(Shoppingcart.class,
 				Cnd.where("userId", "=", userId));
-		List<Map<String, String>> imgList = new LinkedList<Map<String, String>>();
+		List<Map<String, Object>> imgList = new LinkedList<Map<String, Object>>();
 		if (count > 0) {
 			Pager pager = dao.createPager(0, 3);
 			List<Shoppingcart> cartList = dao
@@ -268,11 +268,12 @@ public class PersonalModule {
 							.desc("shoppingcartId"), pager);
 			Images image = null;
 
-			Map<String, String> map = null;
+			Map<String, Object> map = null;
 			for (Shoppingcart cart : cartList) {// 取没有商品的图片
 				image = fetchImg(cart.getProductId());
-				map = new HashMap<String, String>();
+				map = new HashMap<String, Object>();
 				map.put("img", image.getImgsource());
+				map.put("productId", cart.getProductId());
 				imgList.add(map);
 			}
 		}
