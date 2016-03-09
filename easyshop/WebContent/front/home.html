@@ -26,7 +26,7 @@
                     <div class="free-countdown"></div>
                 </div>
                 <div class="prize-box">
-                    <a href="javascript:;" ms-click="freeRule">活动说明</a>
+                    <a href="javascript:;" ms-click="freeRule" ms-visible="rule">活动说明</a>
                     <div class="name-box" ms-visible="!rule">
                         <p ms-repeat="win">{{el.id}}&nbsp;&nbsp;&nbsp;&nbsp;{{el.name}}&nbsp;&nbsp;&nbsp;&nbsp;{{el.bindPhone}}</p>
                     </div>
@@ -186,7 +186,7 @@
                     hot5: [],
                     hots: [],
                     productNum: "0",
-                    rule: false,
+                    rule: true,
                     freeRule: function(){
                         homeCtrl.rule = !homeCtrl.rule;
                     }
@@ -225,25 +225,26 @@
                                 $(".countdown-sale" + i).countdown({
                                     date: new Date(data.limit[i].external.replace(/-/g, "/")),
                                     render: function(data) {
-                                        $(this.el).html(this.leadingZeros(data.days * 24 + data.hours, 2) + "小时 " + this.leadingZeros(data.min, 2) + "分 " + this.leadingZeros(data.sec, 2) + "秒");
+                                        var _this = this,
+                                            el = $(this.el);
+                                        el.html(this.leadingZeros(data.days * 24 + data.hours, 2) + "小时 " + this.leadingZeros(data.min, 2) + "分 " + this.leadingZeros(data.sec, 2) + "秒");
                                         if(data.sec % 5 == 0){
                                             // 查询是否还有库存
                                             $.ajax({
                                                 type: "post",
                                                 url: DI.getProductActivtyNum,
                                                 data: {
-                                                    prototypeId: $(this.el).parents(".cell").data("producttypeid")
+                                                    prototypeId: el.parents(".cell").data("producttypeid")
                                                 },
                                                 dataType: "json",
                                                 success:function(data){
-                                                    homeCtrl.banner = data.banner;
-                                                    var timer = setTimeout(function(){
-                                                        $('.banner').unslider({
-                                                            dots: true
-                                                        });
-                                                        clearTimeout(timer);
-                                                        timer = null;
-                                                    }, 0);
+                                                    if(data == 0){
+                                                        var cell = el.parents(".cell");
+                                                        cell.find(".addDetail").remove();
+                                                        el.remove();
+                                                        cell.append("<img class='tag_status' src='../img/goods_out.png' />");
+                                                        _this.stop();
+                                                    }
                                                 },
                                                 error: function(err){
                                                     console.log(err);
@@ -255,7 +256,7 @@
                                         var cell = $(this.el).parents(".cell");
                                         cell.find(".addDetail").remove();
                                         $(this.el).remove();
-                                        cell.append("<img class='tag_status' src='../img/goods_over.png' />")
+                                        cell.append("<img class='tag_status' src='../img/goods_over.png' />");
                                     }
                                 });
                             };

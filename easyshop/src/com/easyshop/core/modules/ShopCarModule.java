@@ -92,7 +92,7 @@ public class ShopCarModule {
 		String day = TimeUtils.dateToStr(new Date(), TimeUtils.FORMAT14);
 		ActivityProduct acp = dao.fetch(ActivityProduct.class,
 				Cnd.where("beginTime", "<=", day).and("endTime", ">=", day)
-						.and("productTypeId", "=", pt.getProductTypeId()));
+						.and("productTypeId", "=", pt.getProductTypeId()).and("status", "=", 1));
 
 		// 如果是限时活动商品 且活动正在进行中，设置价格为活动价
 		if (acp != null && acp.getLeftNum() > 0) {

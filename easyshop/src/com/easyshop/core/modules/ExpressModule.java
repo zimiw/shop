@@ -23,13 +23,16 @@ import org.nutz.trans.Trans;
 
 import com.easy.core.filters.CheckBackUserLoginFilter;
 import com.easy.core.filters.CheckFrontUserLoginFilter;
+import com.easyshop.bean.Address;
 import com.easyshop.bean.Area;
 import com.easyshop.bean.City;
 import com.easyshop.bean.Order;
+import com.easyshop.bean.OrderExpress;
 import com.easyshop.bean.OrderProgress;
 import com.easyshop.bean.Province;
 import com.easyshop.bean.express.ExperssResult;
 import com.easyshop.core.modules.admin.OrderConstant;
+import com.easyshop.core.modules.admin.OrderUtil;
 import com.easyshop.utils.StringUtils;
 import com.easyshop.utils.TimeUtils;
 import com.easyshop.vo.ResultVo;
@@ -52,6 +55,9 @@ public class ExpressModule {
 	@Inject
 	private ExpressBsp expressBsp;
 
+	@Inject
+	protected OrderUtil orderUtil;
+
 	/**
 	 * 后台管理员发货
 	 * 
@@ -62,9 +68,11 @@ public class ExpressModule {
 	public Object endExpress(@Param("orderId") String orderId,
 			@Param("provinceCode") String provinceCode,
 			@Param("cityCode") String cityCode,
-			@Param("araCode") String araCode, @Param("street") String street,
-			@Param("phone") String phone, @Param("postcode") String postcode,
-			@Param("name") String name) {
+			@Param("araCode") String araCode,
+			@Param("street") final String street,
+			@Param("phone") final String phone,
+			@Param("postcode") final String postcode,
+			@Param("name") final String name) {
 
 		ResultVo resultVo = new ResultVo();
 		if (StringUtils.isEmpty(orderId) || StringUtils.isEmpty(provinceCode)
@@ -124,6 +132,16 @@ public class ExpressModule {
 					op.setTime(TimeUtils.dateToStr(new Date(),
 							TimeUtils.FORMAT14));
 					dao.insert(op);
+
+					OrderExpress oe = new OrderExpress();
+					oe.setAddressId(order.getAddressId());
+					oe.setOrderId(order.getOrderId());
+					oe.setName(name);
+					oe.setPhone(phone);
+					oe.setPostcode(postcode);
+					oe.setStreet(street);
+					oe.setTransportId(exRes.getMailno());
+					dao.insert(oe);
 				}
 			});
 
@@ -245,6 +263,49 @@ public class ExpressModule {
 		}
 
 		return expressBsp.queryOrderRoute(orderId);
+	}
+
+	/**
+	 * 订单详情 获取物流新
+	 * 
+	 * @return
+	 */
+	@At
+	@Filters(@By(type = CheckFrontUserLoginFilter.class))
+	public Object queryOrderExpressInfo(HttpSession session,
+			@Param("orderId") String orderId) {
+		ResultVo resultVo = new ResultVo();
+
+		String userId = String.valueOf(session
+				.getAttribute(OrderConstant.FRONT_USER_ID));
+
+		// 查询对应订单
+		final Order order = dao.fetch(Order.class,
+				Cnd.where("orderId", "=", orderId).and("userId", "=", userId));
+		if (order == null) {
+			resultVo.setStatus(ResultVo.STATUS_FAIL);
+			resultVo.setMsg("该订单不存在!");
+			return resultVo;
+		}
+
+		OrderExpress oe = dao.fetch(OrderExpress.class,
+				Cnd.where("orderId", "=", order.getOrderId()));
+		// 收货人信息
+		Address addr = orderUtil.getAdress(order.getAddressId());
+
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("transportId", oe.getTransportId());
+		// 收货人姓名、地址、电话
+		result.put("name", addr.getName());
+		result.put("addr", orderUtil.getAdressDesc(addr));
+		result.put("phone", addr.getCellPhoneNew());
+
+		// 发货人姓名、地址、电话
+		result.put("jName", oe.getName());
+		result.put("street", oe.getStreet());
+		result.put("jPhone", oe.getPhone());
+
+		return result;
 	}
 
 	/**

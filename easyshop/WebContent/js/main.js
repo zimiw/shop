@@ -455,6 +455,9 @@ $(function(){
                         if(avalon.vmodels.cart){
                             avalon.vmodels.cart.login = true;
                         }
+                        if(avalon.vmodels.list){
+                            avalon.vmodels.list.login = true;
+                        }
         	        }
         	    },
                 error: function(err){

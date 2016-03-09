@@ -1,0 +1,74 @@
+{
+    "total": 13,
+    "rows": [
+        {
+            "amount": 0.02,
+            "createTime": "2016-03-06 23:03:29",
+            "nickname": "aaa",
+            "orderId": 100000138,
+            "products": [
+                {
+                    "img": "http://buylll.oss-cn-qingdao.aliyuncs.com/productmain-2b2d4fe5-9c3b-77a6-974d-cee61f2487bf",
+                    "num": 1,
+                    "price": 0.02,
+                    "title": "11111"
+                },
+                {
+                    "img": "http://buylll.oss-cn-qingdao.aliyuncs.com/productmain-2b2d4fe5-9c3b-77a6-974d-cee61f2487bf",
+                    "num": 1,
+                    "price": 0.02,
+                    "title": "22222"
+                },
+                {
+                    "img": "http://buylll.oss-cn-qingdao.aliyuncs.com/productmain-2b2d4fe5-9c3b-77a6-974d-cee61f2487bf",
+                    "num": 1,
+                    "price": 0.02,
+                    "title": "33333"
+                }
+            ],
+            "status": 107,
+            "statusDesc": "管理员取消",
+            "userId": 1
+        },
+        {
+            "amount": 0.02,
+            "createTime": "2016-03-06 23:03:29",
+            "nickname": "aaa",
+            "orderId": 100000138,
+            "products": [
+                {
+                    "img": "http://buylll.oss-cn-qingdao.aliyuncs.com/productmain-2b2d4fe5-9c3b-77a6-974d-cee61f2487bf",
+                    "num": 1,
+                    "price": 0.02,
+                    "title": "44444"
+                }
+            ],
+            "status": 107,
+            "statusDesc": "管理员取消",
+            "userId": 1
+        },
+        {
+            "amount": 0.02,
+            "createTime": "2016-03-06 23:03:29",
+            "nickname": "aaa",
+            "orderId": 100000138,
+            "products": [
+                {
+                    "img": "http://buylll.oss-cn-qingdao.aliyuncs.com/productmain-2b2d4fe5-9c3b-77a6-974d-cee61f2487bf",
+                    "num": 1,
+                    "price": 0.02,
+                    "title": "55555"
+                },
+                {
+                    "img": "http://buylll.oss-cn-qingdao.aliyuncs.com/productmain-2b2d4fe5-9c3b-77a6-974d-cee61f2487bf",
+                    "num": 1,
+                    "price": 0.02,
+                    "title": "66666"
+                }
+            ],
+            "status": 107,
+            "statusDesc": "管理员取消",
+            "userId": 1
+        }
+    ]
+}

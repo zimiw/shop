@@ -16,7 +16,7 @@
         	<p class="yl-breadcrum">首页 &gt; 个人中心 &gt; 订单详情</p>
         	<div class="order-status">
         		<p>订单号：{{orderId}}</p>
-        		<p>下单时间：{{createTime}}</p>
+        		<p>下单时间：{{odate}}</p>
         		<p>状态：<span ms-class="ready: status==106">{{status | orderStatus}}</span></p>
         		<div class="btn-box" ms-visible="status==101">
         			<a class="cancel" href="javascript:;" ms-click="cancelOrder">取消订单</a>
@@ -117,7 +117,7 @@
                 var orderCtrl = avalon.define({
                     $id: "order",
                     orderId: "",
-                    createTime: "",
+                    odate: "",
                     status: "0",
                     orderProgress: [],
                     consigneeInfo: {
@@ -167,7 +167,7 @@
                     dataType: "json",
                     success: function(data){
                         orderCtrl.orderId = data.orderId;
-                        orderCtrl.createTime = data.createTime;
+                        orderCtrl.odate = data.odate;
                         orderCtrl.status = data.status;
                         orderCtrl.orderProgress = data.dateList;
                         orderCtrl.consigneeInfo.consignee = data.consignee;

@@ -37,7 +37,7 @@
         			<div class="user-box">
         				<div class="user-info">
 	        				<div class="img-box">
-	        					<img src="../img/demo_1.png" />
+	        					<img ms-attr-src="avatar" />
 	        					<div class="mask"></div>
 	        				</div>
 	        				<div class="info-box">
@@ -72,7 +72,7 @@
 		        							<p class="name">{{el.name}}</p>
 		        							<div class="buy-box">
 		        								<p>¥<span>{{el.price}}</span></p>
-		        								<a class="yl-btn small" ms-attr-href="'detail.html?productId=' + el.productId">立即购买</a>
+		        								<a class="yl-btn small" target="_blank" ms-attr-href="'detail.html?productId=' + el.productId">立即购买</a>
 		        							</div>
 		        						</div>
 		        					</div>
@@ -84,7 +84,9 @@
 	        					<p class="title">收藏的商品</p>
 	        					<div ms-visible="favorite.length">
 		        					<div class="goods-box">
-		        						<img class="item" ms-repeat="favorite" ms-attr-src="el.img" />
+		        					    <a class="item" target="_blank" ms-attr-href="'detail.html?productId=' + el.productId" ms-repeat="favorite">
+                                            <img ms-attr-src="el.img" />
+                                        </a>
 		        					</div>
 		        					<a class="view-all" href="personal_myFavorite.html">查看全部 ({{favoriteNum}})</a>
 	        					</div>
@@ -96,7 +98,9 @@
 	        					<p class="title">购物车</p>
 	        					<div ms-visible="cart.length">
 		        					<div class="goods-box">
-		        						<img class="item" ms-repeat="cart" ms-attr-src="el.img" />
+		        					    <a class="item" target="_blank" ms-attr-href="'detail.html?productId=' + el.productId" ms-repeat="cart">
+    		        						<img ms-attr-src="el.img" />
+		        					    </a>
 		        					</div>
 		        					<a class="view-all" href="balance_shoppingCart.html">查看全部 ({{cartNum}})</a>
 	        					</div>
@@ -106,11 +110,11 @@
 	        				</div>
 	        			</div>
 	        			<div class="footprint favorite-list">
-	        				<p class="title">收藏的商品</p>
+	        				<p class="title">最近浏览商品</p>
 	        				<div class="favorite-box">
-		        				<a class="item" href="javascript:;" ms-repeat="favoriteAll">
+		        				<a class="item" target="_blank" ms-attr-href="'detail.html?productId=' + el.productId" ms-repeat="scan">
 		        					<img ms-attr-src="el.img" />
-		        					<del ms-click="del(el)"></del>
+		        					<!--<del ms-click="del(el)"></del>-->
 		        				</a>
 	        				</div>
 	        			</div>
@@ -134,6 +138,7 @@
                 var homeCtrl = avalon.define({
                     $id: "home",
                     name: "",
+                    avatar: "img/demo_detail-11.png",
                     level: "0",
                     signature: "",
                     safe: "低",
@@ -143,7 +148,7 @@
                     recently: [],
                     favorite: [],
                     favoriteNum: 0,
-                    favoriteAll: [],
+                    scan: [],
                     cart: [],
                     cartNum: 0,
                     del: function(el){
@@ -179,6 +184,7 @@
                 			window.location.href = result.target;
                 		}else{
 	                		var result = data.personal;
+	                		homeCtrl.avatar = result.img;
 	                		homeCtrl.name = result.name || result.phone;
 	                		homeCtrl.level = result.level;
 	                		homeCtrl.signature = result.signature;
@@ -213,26 +219,34 @@
                 	}
                 });
                 
-                getFavorite();
                 //收藏的商品
-                function getFavorite(){
-	                $.ajax({
-	                	type: "post",
-	                	dataType: "json",
-	                	url: DI.getFavorite,
-	                	success: function(data){
-	                		var favoriteAll = data.favoriteAll,
-	                		    favorite = [];
-	                		    
-	                		homeCtrl.favoriteNum = data.favoriteNum; 
-	                		homeCtrl.favoriteAll = favoriteAll.slice(0, 6);
-	                		homeCtrl.favorite = favoriteAll.slice(0, 3);
-	                	},
-                        error: function(err){
-                            console.log(err)
-                        }
-	                });
-                }
+                $.ajax({
+                	type: "post",
+                	dataType: "json",
+                	url: DI.getFavorite,
+                	success: function(data){
+                		var favorite = [];
+                		    
+                		homeCtrl.favoriteNum = data.favoriteNum; 
+                		homeCtrl.favorite = data.favoriteAll.slice(0, 3);
+                	},
+                    error: function(err){
+                        console.log(err)
+                    }
+                });
+                
+                //收藏的商品
+                $.ajax({
+                	type: "post",
+                	dataType: "json",
+                	url: DI.getScan,
+                	success: function(data){
+                		homeCtrl.scan = data;
+                	},
+                    error: function(err){
+                        console.log(err)
+                    }
+                });
                 
               	//购物车
                 $.ajax({

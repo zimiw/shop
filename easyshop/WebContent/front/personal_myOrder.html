@@ -221,8 +221,8 @@
         						<div>
 	        						<div class="tb-body" ms-repeat="noReceiveList">
 	        							<div class="title-box">
-	        								<p>订单号：{{el.payno}}</p>
-	        								<p>下单时间：{{el.paydate}}</p>
+	        								<p>订单号：{{el.orderId}}</p>
+	        								<p>下单时间：{{el.createTime}}</p>
 	        							</div>
 	        							<div class="asTr">
                                             <div class="good-box">
@@ -266,8 +266,8 @@
         						<div>
 	        						<div class="tb-body" ms-repeat="noEvluateList">
 	        							<div class="title-box">
-	        								<p>订单号：{{el.payno}}</p>
-	        								<p>下单时间：{{el.paydate}}</p>
+	        								<p>订单号：{{el.orderId}}</p>
+	        								<p>下单时间：{{el.createTime}}</p>
 	        							</div>
 	        							<div class="asTr">
                                             <div class="good-box">
@@ -275,7 +275,7 @@
                                                     <div class="asTd col1">
                                                         <img ms-attr-src="good.imgs[0].imgsource" />
                                                     </div>
-                                                    <p class="asTd col2">{{good.title}}</p>
+                                                    <p class="asTd col2">{{good.name}}</p>
                                                     <p class="asTd col3">{{good.price}}</p>
                                                     <p class="asTd col4">{{good.num}}</p>
                                                     <a class="link-grey aftersale" href="javascript:;" ms-click="applySaleafter(good.productId, el.orderId)" ms-visible="el.status == 102 || el.status == 103 || el.status == 104">申请售后</a>
@@ -337,7 +337,7 @@
                 <div class="popup-cnt">
                     <p class="title">申请售后</p>
                     <a class="close" href="javascript:;" ms-click="popup.close"></a>
-                    <div class="cnt">
+                    <div class="cnt no-pdl">
                         <div class="dissatisfy-box">
                             <button class="btn-dissatisfy" ms-click="popup.changeFunc">我要换货</button>
                             <button class="btn-dissatisfy" ms-click="popup.returnFunc">我要退货</button>
@@ -595,7 +595,7 @@
                                 if(orderCtrl.allList[i].confirmTime){
                                     var confirmTime = new Date(orderCtrl.allList[i].confirmTime.replace(/-/g, "/")),
                                         now = new Date();
-                                    orderCtrl.allList[i].last = (now.getTime() - confirmTime.getTime()) / (24 * 60 * 60 * 1000);
+                                    orderCtrl.allList[i].last = 7 - Math.ceil((now.getTime() - confirmTime.getTime()) / (24 * 60 * 60 * 1000));
                                 }
                             }
                             

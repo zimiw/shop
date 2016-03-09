@@ -62,7 +62,7 @@
                                 fitColumns: true,
                                 rownumbers: true,
                                 nowrap: false,
-                                onLoadSuccess: orderOnLoadSuccess">
+                                pagination: true">
                         </table>
                     </div>
                     <div class="cnt" ms-visible="cnt == 102">
@@ -74,14 +74,14 @@
                                 fitColumns: true,
                                 rownumbers: true,
                                 nowrap: false,
-                                onLoadSuccess: orderOnLoadSuccess">
+                                pagination: true">
                             <thead>
                                 <tr>
                                     <th data-options="field:'orderId', width:150, align:'center'">订单编号</th>
                                     <th data-options="field:'createTime', width:150, align:'center'">创建时间</th>
-                                    <th data-options="field:'img', width:150, align:'center', formatter: function(value, row, index){
+                                    <!--<th data-options="field:'img', width:150, align:'center', formatter: function(value, row, index){
                                         return '&lt;img class=\'u-img\' src=\'' + value + '\' />';
-                                    }"></th>
+                                    }"></th>-->
                                     <th data-options="field:'title', width:150, align:'center'">商品</th>
                                     <th data-options="field:'price', width:150, align:'center'">单价（元）</th>
                                     <th data-options="field:'num', width:80, align:'center'">数量</th>
@@ -103,14 +103,14 @@
                                 fitColumns: true,
                                 rownumbers: true,
                                 nowrap: false,
-                                onLoadSuccess: orderOnLoadSuccess">
+                                pagination: true">
                             <thead>
                                 <tr>
                                     <th data-options="field:'orderId', width:150, align:'center'">订单编号</th>
                                     <th data-options="field:'createTime', width:150, align:'center'">创建时间</th>
-                                    <th data-options="field:'img', width:150, align:'center', formatter: function(value, row, index){
+                                    <!--<th data-options="field:'img', width:150, align:'center', formatter: function(value, row, index){
                                         return '&lt;img class=\'u-img\' src=\'' + value + '\' />';
-                                    }"></th>
+                                    }"></th>-->
                                     <th data-options="field:'title', width:150, align:'center'">商品</th>
                                     <th data-options="field:'price', width:150, align:'center'">单价（元）</th>
                                     <th data-options="field:'num', width:80, align:'center'">数量</th>
@@ -133,14 +133,14 @@
                                 fitColumns: true,
                                 rownumbers: true,
                                 nowrap: false,
-                                onLoadSuccess: orderOnLoadSuccess">
+                                pagination: true">
                             <thead>
                                 <tr>
                                     <th data-options="field:'orderId', width:150, align:'center'">订单编号</th>
                                     <th data-options="field:'createTime', width:150, align:'center'">创建时间</th>
-                                    <th data-options="field:'img', width:150, align:'center', formatter: function(value, row, index){
+                                    <!--<th data-options="field:'img', width:150, align:'center', formatter: function(value, row, index){
                                         return '&lt;img class=\'u-img\' src=\'' + value + '\' />';
-                                    }"></th>
+                                    }"></th>-->
                                     <th data-options="field:'title', width:150, align:'center'">商品</th>
                                     <th data-options="field:'price', width:150, align:'center'">单价（元）</th>
                                     <th data-options="field:'num', width:80, align:'center'">数量</th>
@@ -303,7 +303,6 @@
                         <th data-options="field:'price', width:150, align:'center'">单价（元）</th>
                         <th data-options="field:'num', width:80, align:'center'">数量</th>
                         <th data-options="field:'nickname', width:100, align:'center'">买家昵称</th>
-                        <th data-options="field:'status', width:100, align:'center'">订单状态</th>
                         <th data-options="field:'amount', width:100, align:'center'">实收金额</th>
                     </tr>
                 </thead>
@@ -399,20 +398,35 @@
                     orderId: "",
                     productName: "",
                     search: function(){
-                        queryOrderList(orderCtrl.param.productName, orderCtrl.param.orderId);
+                        var table = getTable();
+                        $("#dg-" + table).datagrid("load", {
+                            orderId: orderCtrl.param.productId,
+                            productName: orderCtrl.param.productName
+                        });
                     }
                 },
                 orderId: "",
                 step: 1,
                 cnt: 999,
-                allMerge: [],
-                noDeliverMerge:[],
-                noReceiveMerge:[],
-                noEvluateMerge:[],
-                returnMerge: [],
+                merges: [],
                 tab: function(idx){
                     orderCtrl.cnt = idx;
-                    queryOrderList();
+                    
+                    var table = getTable()
+                    
+                    setTimeout(function(){
+                        if(idx == 999){
+                            $("#dg-all").datagrid("load");
+                        }else{
+                            $("#dg-" + table).datagrid({
+                                url: DI.queryOrderList,
+                                queryParams: {
+                                    status: idx
+                                }
+                            });
+                        }
+                    }, 1000);
+                    
                 },
                 address: {
                     provinceAll: PLATFORM.province,
@@ -549,15 +563,13 @@
             $(function(){
                 PLATFORM.timepickerRange("#timepickerStart", "#timepickerEnd");
                 
-                queryOrderList();
-                
                 $("#dg-all").datagrid({
                     columns:[[
                         {field: "orderId", title: "订单编号", width: 150, align: "center"},
                         {field: "createTime", title: "创建时间", width: 150, align: "center"},
-                        {field: "img", title: "", width: 150, align: "center", formatter: function(value, row, index){
-                            return "<img class='u-img' src='" + value + "' />";
-                        }},
+                       // {field: "img", title: "", width: 150, align: "center", formatter: function(value, row, index){
+                       //     return "<img class='u-img' src='" + value + "' />";
+                       // }}
                         {field: "title", title: "商品", width: 150, align: "center"},
                         {field: "price", title: "单价（元）", width: 150, align: "center"},
                         {field: "num", title: "数量", width: 150, align: "center"},
@@ -566,7 +578,7 @@
                         {field: "operate", title: "交易状态", width: 150, align: "center", formatter: function(value, row, index){
                                 var status = "",
                                     detail = "<a href='javascript:;' class='btn-operate detail'>查看详情</a>",
-                                    operate = null;
+                                    operate = "";
                                 if(row.status == "101"){
                                     status = "待付款";
                                 }else if(row.status == "102"){
@@ -587,75 +599,27 @@
                                     operate = "<a href='javascript:;' class='btn-operate close'>关闭交易</a>";
                                 }else if(row.status == "102"){
                                     operate = "<button href='javascript:;' class='u-btn small btn-deliver'>发货</button>";
-                                }else{
+//                              }else{
 //                                  operate = "<a href='javascript:;' class='btn-operate btn-logistics'>查看物流</a>";
                                 }
                                 return status + detail + operate;
                             }
                         }
-                    ]]
+                    ]],
+                    url: DI.queryOrderList
                 });
+                
+                $("#dg-noDeliver").datagrid({url: DI.queryOrderList});
+                $("#dg-noReceive").datagrid({url: DI.queryOrderList});
+                $("#dg-noEvluate").datagrid({url: DI.queryOrderList});
+                $("#dg-return").datagrid({url: DI.queryOrderList});
                 
                 var param = PLATFORM.getUrlArgs();
                 if(param.orderId){
                     orderCtrl.detail.check({"orderId": param.orderId});
                 }
             });
-            
-            function queryOrderList(productName, orderId){
-                $.ajax({
-                    type: "post",
-                    url: DI.queryOrderList,
-                    data: {
-                        productName: productName ? productName : "",
-                        orderId: orderId ? orderId : "",
-                        status: orderCtrl.cnt == "999" ? "" : orderCtrl.cnt
-                    },
-                    dataType: "json",
-                    success: function(data){
-                        var merges = [],
-                            table = null;
-                            products = [],
-                            product = null,
-                            index = 0;
-                        for(var i=0; i<data.data.length; i++){
-                            for(var j=0; j<data.data[i].products.length; j++){
-                                product = data.data[i].products[j];
-                                product.nickname = data.data[i].nickname;
-                                product.status = data.data[i].status;
-                                product.amount = data.data[i].amount;
-                                product.orderId = data.data[i].orderId;
-                                product.createTime = data.data[i].createTime;
-                                
-                                product.img = product.img;
-                                products.push(product);
-                            }
-                            merges.push({
-                                index: index,
-                                rowspan: data.data[i].products.length
-                            });
-                            index += data.data[i].products.length;
-                        }
-                        if(orderCtrl.cnt == "102"){
-                            orderCtrl.noDeliverMerge = merges;
-                            table = "noDeliver";
-                        }else if(orderCtrl.cnt == "103"){
-                            orderCtrl.noReceiveMerge = merges;
-                            table = "noReceive";
-                        }else if(orderCtrl.cnt == "104"){
-                            orderCtrl.noEvluateMerge = merges;
-                            table = "noEvluate";
-                        }else if(orderCtrl.cnt == "105"){
-                            orderCtrl.returnMerge = merges;
-                            table = "return";
-                        }else if(orderCtrl.cnt == "999"){
-                            orderCtrl.allMerge = merges;
-                            table = "all";
-                        }
-                        $("#dg-" + table).datagrid({}).datagrid("loadData", products);
-                    }
-                });
-            }
+    
             function detailOnLoadSuccess(data){
                 var merges = ["nickname","status","amount"];
                 for(var i=0; i<merges.length; i++){
@@ -666,52 +630,70 @@
                     });
                 }
             }
-            function orderOnLoadSuccess(data){
-                var merges = null;
-                if(orderCtrl.cnt == "102"){
-                    merges = orderCtrl.noDeliverMerge;
-                }else if(orderCtrl.cnt == "103"){
-                    merges = orderCtrl.noReceiveMerge;
-                }else if(orderCtrl.cnt == "104"){
-                    merges = orderCtrl.noEvluateMerge;
-                }else if(orderCtrl.cnt == "105"){
-                    merges = orderCtrl.returnMerge;
-                }else if(orderCtrl.cnt == "999"){
-                    merges = orderCtrl.allMerge;
-                }
-                for(var i=0; i<merges.length; i++){
-                    $(this).datagrid('mergeCells', {
-                        index: merges[i].index,
-                        field: "orderId",
-                        rowspan: merges[i].rowspan
-                    });
-                    $(this).datagrid('mergeCells', {
-                        index: merges[i].index,
-                        field: "createTime",
-                        rowspan: merges[i].rowspan
-                    });
-                    $(this).datagrid('mergeCells', {
-                        index: merges[i].index,
-                        field: "nickname",
-                        rowspan: merges[i].rowspan
-                    });
-                    $(this).datagrid('mergeCells', {
-                        index: merges[i].index,
-                        field: "status",
-                        rowspan: merges[i].rowspan
-                    });
-                    $(this).datagrid('mergeCells', {
-                        index: merges[i].index,
-                        field: "amount",
-                        rowspan: merges[i].rowspan
-                    });
-                    $(this).datagrid('mergeCells', {
-                        index: merges[i].index,
-                        field: "operate",
-                        rowspan: merges[i].rowspan
-                    });
-                }
-            }
+            
+//          function orderLoadFilter(data){
+//              var product = null,
+//                  products = [],
+//                  row = null,
+//                  index = 0;
+//                  
+//              orderCtrl.merges = [];
+//              for(var i=0; i<data.rows.length; i++){
+//                  for(var j=0; j<data.rows[i].products.length; j++){
+//                      row = data.rows[i];
+//                      product = row.products[j];
+//                      product.nickname = row.nickname;
+//                      product.status = row.status;
+//                      product.amount = row.amount;
+//                      product.orderId = row.orderId;
+//                      product.createTime = row.createTime;
+//                      products.push(product);
+//                  }
+//                  orderCtrl.merges.push({
+//                      index: index,
+//                      rowspan: row.products.length
+//                  });
+//                  index += row.products.length;
+//              }
+//              return {
+//                  total: data.total,
+//                  rows: products
+//              }
+//          }
+//          function orderOnLoadSuccess(){
+//              for(var k=0; k<orderCtrl.merges.length; k++){
+//                  $(this).datagrid('mergeCells', {
+//                      index: orderCtrl.merges[k].index,
+//                      field: "orderId",
+//                      rowspan: orderCtrl.merges[k].rowspan
+//                  });
+//                  $(this).datagrid('mergeCells', {
+//                      index: orderCtrl.merges[k].index,
+//                      field: "createTime",
+//                      rowspan: orderCtrl.merges[k].rowspan
+//                  });
+//                  $(this).datagrid('mergeCells', {
+//                      index: orderCtrl.merges[k].index,
+//                      field: "nickname",
+//                      rowspan: orderCtrl.merges[k].rowspan
+//                  });
+//                  $(this).datagrid('mergeCells', {
+//                      index: orderCtrl.merges[k].index,
+//                      field: "status",
+//                      rowspan: orderCtrl.merges[k].rowspan
+//                  });
+//                  $(this).datagrid('mergeCells', {
+//                      index: orderCtrl.merges[k].index,
+//                      field: "amount",
+//                      rowspan: orderCtrl.merges[k].rowspan
+//                  });
+//                  $(this).datagrid('mergeCells', {
+//                      index: orderCtrl.merges[k].index,
+//                      field: "operate",
+//                      rowspan: orderCtrl.merges[k].rowspan
+//                  });
+//              }
+//          }
             function getTable(){
                 var table = "";
                 if(orderCtrl.cnt == "102"){

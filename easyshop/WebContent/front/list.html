@@ -41,18 +41,18 @@
                             <span>{{el.country | area}}</span>
                         </div>
                         <del class="reference">¥{{el.originPrice}}</del>
-                        <span class="price">¥{{el.price}}</span>
+                        <span class="price">¥{{el.minPrice}}</span>
                     </div>
                 </a>
             </div>
             <div class="pagination" id="pagination"></div>
-            <div class="recent-box" ms-visible="recent.length != 0">
+            <div class="recent-box" ms-visible="login && recent.length != 0">
                 <p class="title">最近浏览</p>
                 <div class="table-box">
                     <table>
                         <tr>
                             <td ms-repeat="recent">
-                                <a class="list-item" ms-attr-href="'detail.html?productId=' + el.productId">
+                                <a class="list-item" target="_blank" ms-attr-href="'detail.html?productId=' + el.productId">
                                     <img class="product" ms-attr-src="el.img" />
                                     <p class="name">{{el.name}}</p>
                                     <div class="info-box">
@@ -92,6 +92,7 @@
                     recent: [],
                     keyword: "",
                     noResult: false,
+                    login: false,
                     getProducts: function(id){
                         param.currentPage = 1;
                         param.brandId = id;

@@ -339,6 +339,9 @@
 .popup-cnt .cnt {
     padding-left: 40px;
 }
+.popup-cnt .cnt.no-pdl {
+    padding-left: 0;
+}
 
 
 
