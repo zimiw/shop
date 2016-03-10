@@ -316,6 +316,7 @@ public class ExpressModule {
 	@At
 	@Ok("raw:json")
 	public Object routePush(@Param("content") String content) {
+	    System.out.println("物流推送信息 routePush:" + content);
 		return expressBsp.routePush(content);
 	}
 
