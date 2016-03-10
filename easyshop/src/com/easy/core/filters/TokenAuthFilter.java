@@ -55,13 +55,14 @@ public class TokenAuthFilter implements Filter {
 						+ "/views/login.html");
 				return;
 			}
-		} else if (antPath.match("/front/personal_*.html", matchUrl)||antPath.match("/front/balance_writeOrder.html", matchUrl)) {// 前台管理页面
+		} else if (antPath.match("/front/personal_*.html", matchUrl)
+				|| antPath.match("/front/balance_writeOrder.html", matchUrl)) {// 前台管理页面
 			HttpSession session = request.getSession();
 			if (session == null
 					|| null == session
 							.getAttribute(OrderConstant.FRONT_USER_ID)) {
 				response.sendRedirect(request.getContextPath()
-						+ "/front/login.html");
+						+ "/front/login.html?path=" + matchUrl);
 				return;
 			}
 		}
