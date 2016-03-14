@@ -370,26 +370,26 @@ public class ActivityAdminModule {
 					ap.setStatus(1);
 					ap.setLeftNum(ap.getNum());// 剩余数量和活动数量相关
 					dao.insert(ap);
-					
+
 					String sqlStr = " update producttype set storeCount  = storeCount-@num "
-                            + " where  productTypeId = @productTypeId "
-                            + " and storeCount- @num  >0 ";
+							+ " where  productTypeId = @productTypeId "
+							+ " and storeCount- @num  >0 ";
 					Sql sql = Sqls.create(sqlStr);
-			        sql.params().set("num", ap.getNum());
-			        sql.params().set("productTypeId", ap.getProductTypeId());
-			        dao.execute(sql);
-//			        sql.setCallback(Sqls.callback.integer());
-//			        int res =  dao.execute(sql);
-//
-//					int res = dao.update(Cnd
-//							.wrap(" update producttype set storeCount  = storeCount- "
-//									+ ap.getNum()
-//									+ " where  productTypeId = "
-//									+ ap.getProductTypeId()
-//									+ " and storeCount- " + ap.getNum() + ">0 "));
-//					if (res != 1) {
-//						throw new RuntimeException("该商品库存不足!");
-//					}
+					sql.params().set("num", ap.getNum());
+					sql.params().set("productTypeId", ap.getProductTypeId());
+					dao.execute(sql);
+					// sql.setCallback(Sqls.callback.integer());
+					// int res = dao.execute(sql);
+					//
+					// int res = dao.update(Cnd
+					// .wrap(" update producttype set storeCount  = storeCount- "
+					// + ap.getNum()
+					// + " where  productTypeId = "
+					// + ap.getProductTypeId()
+					// + " and storeCount- " + ap.getNum() + ">0 "));
+					// if (res != 1) {
+					// throw new RuntimeException("该商品库存不足!");
+					// }
 				}
 
 				// 根据商品中对应的状态
@@ -630,6 +630,50 @@ public class ActivityAdminModule {
 
 		result.put("status", ResultVo.STATUS_SUCCESS);
 		result.put("msg", "数据删除成功");
+		return result;
+	}
+
+	/**
+	 * 获取配置信息
+	 * 
+	 * @return
+	 */
+	@At
+	public Object getLotteryConfig() {
+
+		String sqlStr = "SELECT COUNT(1)         numAll, "
+				+ "    COUNT(b.orderId) lotNum  FROM  orders a "
+				+ "LEFT JOIN  activitylottery b "
+				+ "ON   a.orderId = b.orderId "
+				+ "WHERE  DATE_FORMAT(a.chargePaidTime, '%Y-%m-%d') = @day ";
+
+		Sql sql = Sqls.create(sqlStr);
+		sql.params().set(
+				"day",
+				TimeUtils.dateToStr(TimeUtils.getNextDay(new Date(), -1),
+						TimeUtils.FORMAT10));// 昨天的时间
+
+		sql.setCallback(Sqls.callback.maps());
+		dao.execute(sql);
+		List<Map> list = sql.getList(Map.class);
+		Map<String, Object> result = new HashMap<String, Object>();
+		String numAll = "0";
+		String lotNum = "0";
+
+		if (list != null && list.size() > 0) {
+			Map map = list.get(0);
+			numAll = String.valueOf(map.get("numAll"));
+			lotNum = String.valueOf(map.get("lotNum"));
+		}
+
+		ActivityLotteryConf conf = dao.fetch(ActivityLotteryConf.class,
+				Cnd.NEW());
+
+		result.put("numAll", numAll);
+		result.put("lotNum", lotNum);
+		result.put("lotteryTime", conf.getLotteryTime());
+		result.put("rate", conf.getRate());
+
 		return result;
 	}
 
