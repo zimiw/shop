@@ -290,7 +290,7 @@ public class HomeModule {
 				+ " t.currentPrice, b.price, b.endTime external "
 				+ "  from product a, producttype t, activityproduct b "
 				+ " where a.productId = b.productId "
-				+ " and a.productId = t.productId "
+				+ " and t.productTypeId = b.productTypeId "
 				+ " and b.status = 1 and  b.beginTime<= @dayTime and b.endTime>=@dayTime"
 				+ " and b.leftNum >0 order by b.beginTime, b.endTime ";
 

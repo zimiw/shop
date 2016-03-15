@@ -641,7 +641,7 @@ public class ActivityAdminModule {
 	@At
 	public Object getLotteryConfig() {
 
-		String sqlStr = "SELECT COUNT(1)         numAll, "
+		String sqlStr = "SELECT COUNT(1) numAll, "
 				+ "    COUNT(b.orderId) lotNum  FROM  orders a "
 				+ "LEFT JOIN  activitylottery b "
 				+ "ON   a.orderId = b.orderId "
